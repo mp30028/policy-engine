@@ -19,7 +19,8 @@
 		<maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
 		<node.version>v18.12.1</node.version>
 		<yarn.version>v1.22.19</yarn.version>
-		<frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
+		<npm.version>9.6.4</npm.version>
+		<frontend-maven-plugin.version>1.14.0</frontend-maven-plugin.version>
 		<maven-resources-plugin.version>3.3.0</maven-resources-plugin.version>
 		<mysql-connector-java.version>8.0.33</mysql-connector-java.version>		
 	</properties>
@@ -40,11 +41,6 @@
 			<artifactId>spring-boot-starter-webflux</artifactId>
 			<version>${springboot.version}</version>
 		</dependency>
-<!-- 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
-			<version>${springboot.version}</version>
-		</dependency> -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -58,12 +54,6 @@
 			<optional>true</optional>
 			<version>${springboot.version}</version>
 		</dependency>
-<!-- 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-configuration-processor</artifactId>
-			<optional>true</optional>
-			<version>${springboot.version}</version>
-		</dependency> -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -75,11 +65,11 @@
 	      <artifactId>junit-jupiter</artifactId>
 	      <scope>test</scope>
 	    </dependency>
-<!-- 	    <dependency>
+ 	    <dependency>
 	      <groupId>org.testcontainers</groupId>
-	      <artifactId>mongodb</artifactId>
+	      <artifactId>mysql</artifactId>
 	      <scope>test</scope>
-	    </dependency> -->
+	    </dependency> 
 	</dependencies>
 
 	<dependencyManagement>
