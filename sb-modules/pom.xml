@@ -1,0 +1,106 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.zonesoft</groupId>
+  <artifactId>policy-engine</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>policy-engine</name>
+  <description>A generalised suite of APIs to manage and apply policy based rules to a wide range of scenarios</description>
+  
+	<properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+		<springboot.version>3.1.4</springboot.version>
+		<testcontainers.version>1.17.6</testcontainers.version>
+ 		<maven.version>3.0.2</maven.version> 
+		<mavensurefire.version>3.0.0-M7</mavensurefire.version>
+		<maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
+		<node.version>v18.12.1</node.version>
+		<yarn.version>v1.22.19</yarn.version>
+		<npm.version>9.6.4</npm.version>
+		<frontend-maven-plugin.version>1.14.0</frontend-maven-plugin.version>
+		<maven-resources-plugin.version>3.3.0</maven-resources-plugin.version>
+		<mysql-connector-java.version>8.0.33</mysql-connector-java.version>		
+	</properties>
+
+    <modules>
+    	<module>policy-engine-api</module>
+    	<module>policy-engine-ui</module>
+    </modules>
+
+	<dependencies>
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot</artifactId>
+		    <version>${springboot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+			<version>${springboot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+			<version>${mysql-connector-java.version}</version>
+		</dependency>		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+			<version>${springboot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<version>${springboot.version}</version>
+		</dependency>
+	    <dependency>
+	      <groupId>org.testcontainers</groupId>
+	      <artifactId>junit-jupiter</artifactId>
+	      <scope>test</scope>
+	    </dependency>
+ 	    <dependency>
+	      <groupId>org.testcontainers</groupId>
+	      <artifactId>mysql</artifactId>
+	      <scope>test</scope>
+	    </dependency> 
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.testcontainers</groupId>
+				<artifactId>testcontainers-bom</artifactId>
+				<version>${testcontainers.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${maven.version}</version>
+			</plugin>		
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${mavensurefire.version}</version>
+<!-- 				<configuration>
+					<excludedGroups>DataGenerator</excludedGroups>
+				</configuration> -->
+			</plugin>
+		</plugins>
+	</build> 
+  
+</project>
