@@ -19,6 +19,13 @@
 <!--	<version>0.0.1-SNAPSHOT</version>-->
 <!--	<name>demo</name>-->
 <!--	<description>Demo project for Spring Boot</description>-->
+	<modules>
+		<module>policy-engine-api</module>
+		<module>policy-engine-ui</module>
+		<module>policy-engine-ui-2</module>
+	</modules>
+
+
 	<properties>
 		<java.version>17</java.version>
 	</properties>
@@ -89,5 +96,4 @@
 			</plugin>
 		</plugins>
 	</build> 
-
 </project>

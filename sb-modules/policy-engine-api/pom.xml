@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<parent>
 		<groupId>com.zonesoft</groupId>
 		<artifactId>policy-engine</artifactId>
@@ -9,6 +8,7 @@
 	</parent>
 	<artifactId>policy-engine-api</artifactId>
 	<name>policy-engine-api</name>
+	<description>api</description>	
 	<properties>
 		<mysql-connector-java.version>8.0.33</mysql-connector-java.version>
 	</properties>
