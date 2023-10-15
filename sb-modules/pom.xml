@@ -9,20 +9,14 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
   <groupId>com.zonesoft</groupId>
-  <artifactId>policy-engine</artifactId>
+  <artifactId>policy-engine-modules</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>policy-engine</name>
+  <name>policy-engine-modules</name>
   <description>A generalised suite of APIs to manage and apply policy based rules to a wide range of scenarios</description>	
-<!--	<groupId>com.example</groupId>-->
-<!--	<artifactId>demo</artifactId>-->
-<!--	<version>0.0.1-SNAPSHOT</version>-->
-<!--	<name>demo</name>-->
-<!--	<description>Demo project for Spring Boot</description>-->
 	<modules>
 		<module>policy-engine-api</module>
 		<module>policy-engine-ui</module>
-		<module>policy-engine-ui-2</module>
 	</modules>
 
 
