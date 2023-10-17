@@ -16,6 +16,7 @@
 		<frontend-maven-plugin.version>1.14.0</frontend-maven-plugin.version>
 		<node.version>v18.12.1</node.version>
 		<nmp.version>9.6.4</nmp.version>
+		<maven-resources-plugin.version>3.3.0</maven-resources-plugin.version>		
 	</properties>
 <!--	<dependencies>-->
 <!--		<dependency>-->
@@ -28,8 +29,6 @@
 	<build>
 		<plugins>
 			<plugin>
-			
-			
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
 				<version>1.12.1</version>
@@ -42,7 +41,6 @@
 				</configuration>
 
 				<executions>
-
 					<execution>
 						<goals>
 							<goal>install-node-and-npm</goal>
@@ -68,18 +66,40 @@
 						</goals>
 						<phase>generate-resources</phase>
 						<configuration>
-							<!-- arguments>run-script build</arguments-->
+							<arguments>run build</arguments>
 						</configuration>
 					</execution>
-
 				</executions>
-
 			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>position-react-build</id>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<phase>prepare-package</phase>
+						<configuration>
+								<outputDirectory>${project.build.directory}/classes/static</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${frontend-src-dir}/build</directory>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>			
+			
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.zonesoft.policyengine.api.PolicyEngineUiApp</mainClass>
+					<mainClass>com.zonesoft.policyengine.ui.PolicyEngineUIApp</mainClass>                               
 					<layout>JAR</layout>
 				</configuration>
 				<executions>
