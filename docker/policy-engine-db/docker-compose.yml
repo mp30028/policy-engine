@@ -1,26 +1,26 @@
 version: "3.8"
 services:
-  tryout-db:
-    container_name: tryout-db
+  policy-engine-db:
+    container_name: policy-engine-db
     image: mysql:8.0.33
     command: --default-authentication-plugin=mysql_native_password
     stdin_open: false
     tty: false
     environment:
-      MYSQL_ROOT_PASSWORD: ${TRYOUT_DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${TRYOUT_DB_DATABASE}
-      MYSQL_USER: ${TRYOUT_DB_USER}
-      MYSQL_PASSWORD: ${TRYOUT_DB_PASSWORD}
-      MYSQL_TCP_PORT: ${TRYOUT_DB_TCP_PORT}                  
+      MYSQL_ROOT_PASSWORD: ${POLICY_ENGINE_DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${POLICY_ENGINE_DB_SCHEMA}
+      MYSQL_USER: ${POLICY_ENGINE_DB_USER}
+      MYSQL_PASSWORD: ${POLICY_ENGINE_DB_PASSWORD}
+      MYSQL_TCP_PORT: ${POLICY_ENGINE_DB_TCP_PORT}                  
     ports:
-       - ${TRYOUT_DB_TCP_PORT}:${TRYOUT_DB_TCP_PORT}
+       - ${POLICY_ENGINE_DB_TCP_PORT}:${POLICY_ENGINE_DB_TCP_PORT}
     volumes:
       - type: bind      
-        source: ${TRYOUT_DB_DATAFILES_DIR}
+        source: ${POLICY_ENGINE_DB_DATAFILES_DIR}
         target: /var/lib/mysql
         read_only: false      
       - type: bind
-        source: ${TRYOUT_DB_INIT}
+        source: ${POLICY_ENGINE_DB_INIT}
         target: /docker-entrypoint-initdb.d/initdb.sql
         read_only: true
     healthcheck:
