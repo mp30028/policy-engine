@@ -1,18 +1,11 @@
 import * as React from 'react';
-import { Routes, Route, NavLink, Outlet } from 'react-router-dom';
-import AppHome from "./Home";
+import { Routes, Route, Outlet } from 'react-router-dom';
+import PolicyEngineApp from "./policy-engine-app/PolicyEngineApp"
 const App = () => {	return (
 		<>
-		    <h1>Policy-Engine-App</h1>
-		    
-			<nav>					
-				<NavLink to="/" >Home</NavLink><br /><br />
-			</nav>
-
 			<Routes>
-				<Route path="/" element={<AppHome />} />
-				<Route index element={<AppHome />} />
-				<Route path="*" element={<p>There's nothing here: 404!</p>} />
+				<Route path="/" element={<PolicyEngineApp />} />			
+				<Route path="*" element={<p>There's nothing here: 404!</p>} />			
 			</Routes>
 			
 			<main>

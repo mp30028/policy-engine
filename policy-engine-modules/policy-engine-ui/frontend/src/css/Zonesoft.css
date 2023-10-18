@@ -1,0 +1,152 @@
+table.zsft-table {
+	font-family: Arial;
+	font-size: 9pt;
+	width: 90%;
+}
+
+table.zsft-table input {
+	border-style: none;
+}
+
+table.zsft-table th.id {
+	background-color: #575757;
+	color: white;
+	font-weight: bold;
+}
+
+table.zsft-table td {
+	border-style: solid;
+	border-color: grey;
+	border-width: 1pt;
+}
+
+table.zsft-table th {
+	background-color: rgb(87, 87, 87);
+	color: white;
+	font-weight: bold;
+	text-align: center;
+	padding: 5pt;
+}
+
+table.zsft-table table.info {
+	border-style: solid;
+	border-width: 1pt;
+	border-color: rgb(87, 87, 87);
+	font-family: Arial;
+	font-size: 9pt;
+	width: 60%;
+}
+
+table.zsft-table table.info th {
+	background-color: #575757;
+	color: white;
+	font-weight: bold;
+	text-align: center;
+}
+
+table.zsft-table table.info td {
+	border-style: none;
+}
+
+table.zsft-table td.subtableContainer {
+	border-style: solid;
+	border-color: grey;
+	border-width: 1pt;
+}
+
+table.zsft-table td.subtableContainer table {
+	width: 100%;
+	border-style: none;
+}
+
+table.zsft-table td.subtableContainer tr {
+	border-style: none;
+}
+
+table.zsft-table td.subtableContainer table td {
+	border-style: none;
+}
+
+nav.zsft-menu {
+	border-bottom: solid;
+	border-bottom-width: 1px;
+	padding-bottom: 1rem;
+}
+
+nav.zsft-explorer {
+	border-right: solid;
+	border-right-width: 1px;
+	padding: 1rem;
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+input[type="radio"]:checked + label {
+    border: 1px solid red;
+    background-color: red;
+}
+
+.ellipses {
+	font-size: 12pt;
+	font-weight: bold;
+	text-align: center;
+	padding-left: 16pt;
+	padding-right: 16pt;
+}
+
+.ellipses:hover {
+  background-color: grey;
+}
+
+button.deleteButton{
+	background-image: url(../icons/delete_grey.svg);
+	background-size: cover;
+	background-color: white;
+	height: 20px;
+	width: 50px;
+	border: none;
+}
+
+button.deleteButton:hover{
+	background-image: url(../icons/delete_colour.svg);
+	background-size: cover;
+/* 	background-color: #d2d2d2; */
+	height: 20px;
+	width: 50px;
+	border: none;
+}
+
+button.addNewButton{
+	background-image: url(../icons/addnew_grey.svg);
+	background-size: cover;
+	background-color: white;
+	height: 30px;
+	width: 50px;
+	border: none;
+}
+
+button.addNewButton:hover{
+	background-image: url(../icons/addnew_colour.svg);
+	background-size: cover;
+	height: 30px;
+	width: 50px;
+	border: none;
+}
+
+
+.collapsible {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+}
+
+.collapsible:hover {
+  background-color: #555;
+}
+
+.collapsibleContent {
+  display: none;
+  overflow: hidden;
+}

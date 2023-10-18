@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="50"
+   height="30"
+   version="1.1"
+   viewBox="0 0 37.499999 22.5"
+   id="svg171"
+   sodipodi:docname="addnew.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
+  <metadata
+     id="metadata175">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1680"
+     inkscape:window-height="987"
+     id="namedview173"
+     showgrid="false"
+     inkscape:zoom="11.443008"
+     inkscape:cx="29.085016"
+     inkscape:cy="10.53268"
+     inkscape:window-x="1912"
+     inkscape:window-y="137"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g1031"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     units="px"
+     fit-margin-top="0"
+     fit-margin-bottom="0" />
+  <defs
+     id="defs71">
+    <symbol
+       id="w"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="M 0.03125,0 H 0 V -0.015625 -0.03125 C 0.0078125,-0.0390625 0.019531,-0.046875 0.03125,-0.046875 V -0.03125 H 0.015625 V -0.015625 0 H 0.03125 v -0.015625 z"
+         id="path2"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="b"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="M 0.03125,-0.015625 H 0.015625 V 0 H 0 V -0.03125 H 0.015625 0.03125 Z"
+         id="path5"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="a"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="M 0.03125,-0.015625 H 0.015625 V 0 C 0.0234375,0 0.03125,-0.0039062 0.03125,-0.015625 V 0 H 0.015625 0 V -0.015625 L 0.015625,-0.03125 c 0.0078125,0 0.015625,0.0078125 0.015625,0.015625 z m 0,0 H 0.015625 v -0.015625 0.015625 z"
+         id="path8"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="e"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="M 0.015625,-0.015625 V 0 Z m 0.015625,0 V 0 H 0.015625 0 V -0.015625 H 0.015625 V -0.03125 L 0,-0.015625 V -0.03125 H 0.015625 0.03125 Z"
+         id="path11"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="c"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="M 0.015625,-0.03125 H 0.03125 v 0.015625 H 0.015625 V 0 H 0.03125 0.015625 0 V -0.015625 -0.03125 Z"
+         id="path14"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="k"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="M 0.03125,-0.03125 V -0.046875 0 H 0.015625 0 V -0.015625 L 0.015625,-0.03125 Z M 0.015625,0 0.03125,-0.015625 H 0.015625 v -0.015625 0.015625 z"
+         id="path17"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="j"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="M 0.015625,0 H 0.03125 v -0.015625 c 0,-0.0078125 -0.0078125,-0.015625 -0.015625,-0.015625 v 0.015625 z m 0,-0.03125 H 0.03125 V -0.015625 0 H 0.015625 0 v -0.046875 h 0.015625 z"
+         id="path20"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="i"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="m 0,-0.03125 h 0.015625 v 0.015625 L 0.03125,-0.03125 0.015625,0 V 0.015625 H 0 V 0 h 0.015625 z"
+         id="path23"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="h"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="M 0.03125,0 H 0 L 0.015625,-0.046875 H 0.03125 L 0.046875,0 Z M 0.015625,-0.015625 H 0.03125 L 0.015625,-0.03125 Z"
+         id="path26"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="v"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="M 0,-0.046875 H 0.015625 V 0 H 0 Z"
+         id="path29"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="u"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="M 0.015625,-0.015625 0,-0.03125 h 0.015625 v 0.015625 L 0.03125,-0.03125 0.015625,-0.015625 0.03125,0 0.015625,-0.015625 V 0 H 0 Z"
+         id="path32"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="t"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="m 0,-0.046875 h 0.015625 l 0.015625,0.03125 v -0.03125 H 0.046875 V 0 -0.03125 L 0.03125,0 0.015625,-0.03125 V 0 H 0 Z"
+         id="path35"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="g"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="M 0,-0.015625 V -0.03125 H 0.015625 V -0.015625 0 L 0.03125,-0.015625 V -0.03125 0 H 0.015625 0 Z"
+         id="path38"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="f"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="m 0,-0.03125 h 0.015625 v 0.015625 L 0.03125,-0.03125 0.015625,0 Z"
+         id="path41"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="s"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="M 0.03125,-0.046875 V -0.03125 H 0.015625 0.03125 v 0.015625 H 0.015625 V 0 H 0 v -0.03125 l 0.015625,-0.015625 z"
+         id="path44"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="d"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="M 0.015625,-0.03125 V -0.015625 0 L 0.03125,-0.015625 H 0.015625 Z m 0,0 c 0.0078125,0 0.015625,0.0078125 0.015625,0.015625 V 0 H 0.015625 0 v -0.015625 z"
+         id="path47"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="r"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="M 0.03125,-0.03125 H 0.046875 V -0.015625 0 -0.015625 H 0.03125 V 0 -0.015625 H 0.015625 V 0 H 0 v -0.03125 h 0.015625 z"
+         id="path50"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="q"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="M 0.03125,-0.015625 V 0 -0.015625 H 0.015625 V 0 H 0 V -0.046875 H 0.015625 V -0.03125 H 0.03125 Z"
+         id="path53"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="p"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="m 0,-0.046875 h 0.015625 l 0.015625,0.03125 v -0.03125 H 0.046875 V 0 H 0.03125 L 0.015625,-0.03125 V 0 H 0 Z"
+         id="path56"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="o"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="M 0.03125,-0.015625 V 0 -0.015625 H 0.015625 V 0 H 0 V -0.03125 H 0.015625 0.03125 Z"
+         id="path59"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="n"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="m 0,-0.046875 h 0.015625 c 0.0078125,0 0.015625,0.0078125 0.015625,0.015625 v 0.015625 H 0.015625 V 0 H 0 Z m 0.015625,0.015625 v 0.015625 H 0.03125 V -0.03125 Z"
+         id="path62"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="m"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="M 0,-0.03125 H 0.015625 V 0 C 0.015625,0.0078125 0.0078125,0.015625 0,0.015625 Z M 0,-0.046875 H 0.015625 V -0.03125 H 0 Z"
+         id="path65"
+         inkscape:connector-curvature="0" />
+    </symbol>
+    <symbol
+       id="l"
+       overflow="visible"
+       style="overflow:visible">
+      <path
+         d="m 0.03125,-0.03125 v 0.015625 H 0.015625 V -0.03125 -0.015625 0 C 0.0234375,0 0.03125,-0.0039062 0.03125,-0.015625 V 0 H 0.015625 0 V -0.015625 L 0.015625,-0.03125 Z"
+         id="path68"
+         inkscape:connector-curvature="0" />
+    </symbol>
+  </defs>
+  <g
+     id="g1031"
+     transform="matrix(1.1942099,0,0,1.1170793,-245.83454,-652.11482)"
+     style="stroke:#008000">
+    <g
+       id="g135"
+       transform="matrix(0.0297305,0,0,0.03189946,207.20643,584.4113)">
+      <path
+         inkscape:connector-curvature="0"
+         d="m 737.57564,87.1519 6.55442,-53.897591 M 687.98066,7.5469625 744.13167,33.254546 M 627.67738,34.31568 687.83322,7.5467277 M 419.319,396.4684 744.12871,33.255489 M 363.17095,370.75964 687.98066,7.5467277 M 264.59318,497.28684 c 4.02135,0.11699 7.89482,0.23401 12.21167,0.70619 4.1691,0.5892 8.63891,1.53357 11.76844,3.30123 3.27715,1.76764 5.21403,4.36258 6.99767,7.19573 1.93673,2.95013 3.87346,6.36835 5.95809,9.66956 m 116.89635,-120.62979 -6.10585,53.64641 -169.32281,102.36214 60.00244,-156.00972 60.01883,-26.89042 -3.12419,52.48007 z m 0,0 M 412.31911,451.17617 736.97988,87.975053 M 303.0017,397.52976 627.82631,34.31686"
+         style="fill:#ffffff;stroke:#008000;stroke-width:18.73526955;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none"
+         id="path89" />
+      <path
+         style="fill:#008000;fill-rule:evenodd;stroke:#000000"
+         inkscape:connector-curvature="0"
+         d="m 706.05305,491.19505 c -3.375,0.83594 -6.8672,2.1836 -10.363,3.5273 -20.055,7.8945 -40.105,15.797 -56.816,25.508 -16.711,9.7227 -30.074,21.277 -46.488,25.52 -16.402,4.2539 -35.852,1.2227 -52.266,-8.2031 -16.402,-9.4141 -29.766,-25.211 -50.125,-32.203 -20.352,-6.9883 -47.699,-5.1602 -73.223,2.7344 -25.52,7.9023 -49.211,21.871 -76.254,33.117 -27.043,11.246 -57.426,19.754 -87.805,28.266 -7.8164,2.3906 -15.621,4.7852 -19.566,8.6523 -3.9453,3.8789 -4.0234,9.2266 -3.0312,13.438 0.98047,4.2227 3.043,7.3086 6.9883,8.2148 3.9375,0.91406 9.7773,-0.33984 15.609,-1.5977 30.383,-8.5117 60.766,-17.02 87.805,-28.266 27.043,-11.246 50.734,-25.211 76.254,-33.117 25.52,-7.8945 52.871,-9.7227 73.223,-2.7344 20.363,6.9883 33.723,22.785 50.125,32.203 16.414,9.4258 35.859,12.457 52.266,8.2031 16.414,-4.2461 29.777,-15.797 46.488,-25.52 16.711,-9.7109 36.766,-17.617 56.816,-25.508 l 9.082,-4 9.1406,-3.5703 c 3.0742,-1.168 6.1953,-2.3828 8.3906,-4.1328 2.2031,-1.7422 3.5039,-4.0234 3.8477,-6.6484 0.33984,-2.625 -0.26562,-5.5781 -1.2578,-7.9375 -0.98047,-2.3477 -2.3594,-4.1016 -3.9141,-5.2383 -1.5547,-1.1367 -3.3086,-1.6758 -5.8086,-1.7734 -2.4922,-0.0977 -5.7422,0.23047 -9.1172,1.0703 z"
+         id="path91" />
+      <g
+         transform="translate(121.70305,58.415045)"
+         style="stroke:#008000"
+         id="g169">
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70"
+           y="560.16406"
+           xlink:href="#w"
+           id="use93" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.039062"
+           y="560.16406"
+           xlink:href="#b"
+           id="use95" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.066406"
+           y="560.16406"
+           xlink:href="#a"
+           id="use97" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.105469"
+           y="560.16406"
+           xlink:href="#e"
+           id="use99" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.140625"
+           y="560.16406"
+           xlink:href="#c"
+           id="use101" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.167969"
+           y="560.16406"
+           xlink:href="#a"
+           id="use103" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.207031"
+           y="560.16406"
+           xlink:href="#k"
+           id="use105" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.265625"
+           y="560.16406"
+           xlink:href="#j"
+           id="use107" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.304688"
+           y="560.16406"
+           xlink:href="#i"
+           id="use109" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.359375"
+           y="560.16406"
+           xlink:href="#h"
+           id="use111" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.402344"
+           y="560.16406"
+           xlink:href="#v"
+           id="use113" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.421875"
+           y="560.16406"
+           xlink:href="#a"
+           id="use115" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.457031"
+           y="560.16406"
+           xlink:href="#u"
+           id="use117" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.511719"
+           y="560.16406"
+           xlink:href="#t"
+           id="use119" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.566406"
+           y="560.16406"
+           xlink:href="#g"
+           id="use121" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.605469"
+           y="560.16406"
+           xlink:href="#b"
+           id="use123" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.632812"
+           y="560.16406"
+           xlink:href="#e"
+           id="use125" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.671875"
+           y="560.16406"
+           xlink:href="#f"
+           id="use127" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.707031"
+           y="560.16406"
+           xlink:href="#a"
+           id="use129" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.746094"
+           y="560.16406"
+           xlink:href="#f"
+           id="use131" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70"
+           y="560.21875"
+           xlink:href="#s"
+           id="use133" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.023438"
+           y="560.21875"
+           xlink:href="#b"
+           id="use135" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.050781"
+           y="560.21875"
+           xlink:href="#d"
+           id="use137" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.089844"
+           y="560.21875"
+           xlink:href="#r"
+           id="use139" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.164062"
+           y="560.21875"
+           xlink:href="#c"
+           id="use141" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.191406"
+           y="560.21875"
+           xlink:href="#q"
+           id="use143" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.230469"
+           y="560.21875"
+           xlink:href="#a"
+           id="use145" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.289062"
+           y="560.21875"
+           xlink:href="#p"
+           id="use147" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.332031"
+           y="560.21875"
+           xlink:href="#d"
+           id="use149" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.371094"
+           y="560.21875"
+           xlink:href="#g"
+           id="use151" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.410156"
+           y="560.21875"
+           xlink:href="#o"
+           id="use153" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.46875"
+           y="560.21875"
+           xlink:href="#n"
+           id="use155" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.511719"
+           y="560.21875"
+           xlink:href="#b"
+           id="use157" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.535156"
+           y="560.21875"
+           xlink:href="#d"
+           id="use159" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.574219"
+           y="560.21875"
+           xlink:href="#m"
+           id="use161" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.59375"
+           y="560.21875"
+           xlink:href="#a"
+           id="use163" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.632812"
+           y="560.21875"
+           xlink:href="#l"
+           id="use165" />
+        <use
+           style="stroke:#008000"
+           height="100%"
+           width="100%"
+           x="70.664062"
+           y="560.21875"
+           xlink:href="#c"
+           id="use167" />
+      </g>
+    </g>
+  </g>
+</svg>
