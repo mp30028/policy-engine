@@ -8,10 +8,12 @@ public class ToStringBuilder {
 	public static final String lBrace = "{";
 	public static final String rBrace = "}";
 	public static final String indent = "\t";
+	private static final String doubleIndent = "\t\t";
 	public static final String newline = "\n";
 	public static final String quote = "\"";
 	public static final String equals = "=";
 	public static final String space = " ";
+	
 
 	
 	public String build(String ... args) {
@@ -38,6 +40,7 @@ public class ToStringBuilder {
 			}
 		}
 		if (isClosed) sb.append(newline); sb.append(rBrace);
+		
 		return sb.toString();
 	}
 		
@@ -63,7 +66,7 @@ public class ToStringBuilder {
 		}
 	}
 	
-	public static String objectValue(Object in) {
+	public static String value(Object in) {
 		if(Objects.isNull(in)) {
 			return "null";
 		}else{ 
@@ -71,11 +74,12 @@ public class ToStringBuilder {
 		}
 	};
 	
-	public static String value(Object in) {
+	public static String value(String in) {
 		if(Objects.isNull(in)) {
 			return "null";
 		}else{ 
 			return "\"" + in.toString() + ("\"") ;
+//			return in.toString();
 		}
 	}
 }

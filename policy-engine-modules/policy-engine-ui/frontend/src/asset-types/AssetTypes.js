@@ -2,29 +2,29 @@ import React, { useState, useEffect, /*useRef*/ } from 'react';
 import "../css/Zonesoft.css"
 import * as DataService from "./DataService";
 
-function Policies() {
+function AssetTypes() {
 
-	const [policies, setPolicies] = useState([]);
+	const [assetTypes, setAssetTypes] = useState([]);
 
 	useEffect(() => {
-		DataService.fetchAll().then((data) => setPolicies(data));
-	}, [setPolicies]);
+		DataService.fetchAll().then((data) => setAssetTypes(data));
+	}, [setAssetTypes]);
 	
 	return (
 		<table className="zsft-table" style={{ width: "100%" }}>
 			<thead>
 				<tr>
 					<th>ID</th>
-					<th>Policy</th>
+					<th>Asset-Type</th>
 					<th>Description</th>
 				</tr>
 			</thead>
 			<tbody>
-				{policies.map(p =>
+				{assetTypes.map(at =>
 					<tr>
-						<td>{p.id}</td>
-						<td>{p.policy}</td>
-						<td>{p.description}</td>
+						<td>{at.id}</td>
+						<td>{at.asset_type}</td>
+						<td>{at.description}</td>
 					</tr>
 				)}
 			</tbody>
@@ -32,4 +32,4 @@ function Policies() {
 	);
 }
 
-export default Policies;
+export default AssetTypes;

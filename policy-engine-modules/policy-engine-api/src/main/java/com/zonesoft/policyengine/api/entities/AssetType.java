@@ -1,12 +1,16 @@
 package com.zonesoft.policyengine.api.entities;
 
-import static com.zonesoft.policyengine.api.utilities.ToStringBuilder.lastLine;
-import static com.zonesoft.policyengine.api.utilities.ToStringBuilder.line;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import com.zonesoft.policyengine.api.utilities.ToStringBuilder;
+import com.zonesoft.policyengine.api.utilities.ToStringHelper;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -14,8 +18,9 @@ import jakarta.persistence.Table;
 public class AssetType {
 
 	private Long id;
-	private String assetType;
+	private String name;
 	private String description;
+	private List<Policy> policies;
 	
 	@Id
 	public Long getId() {
@@ -26,12 +31,13 @@ public class AssetType {
 		this.id = id;
 	}
 	
-	public String getAssetType() {
-		return assetType;
+	@Column(name="asset_type")
+	public String getName() {
+		return name;
 	}
 	
-	public void setAssetType(String assetType) {
-		this.assetType = assetType;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public String getDescription() {
@@ -42,15 +48,33 @@ public class AssetType {
 		this.description = description;
 	}
 	
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "assetTypes", cascade = CascadeType.ALL) //This is property in Policy
+	public List<Policy> getPolicies() {
+		return policies;
+	}
+
+	public void setPolicies(List<Policy> policies) {
+		this.policies = policies;
+	}
+
 	@Override
 	public String toString(){
-		ToStringBuilder b = new ToStringBuilder();
-		return b.build(
-				line("id", id),
-				line("assetType", assetType),
-				lastLine("description", description)
-				
-		);
+		ToStringHelper h= new ToStringHelper();
+		return h.blockStart()
+			.wrLn("id", id)
+			.wrLn("name", name)
+			.wrLn("description", description)
+			.wr("policies-applied", listOfPolicies())
+//			.key("policies").lSqBrace()
+//				.value(policiesAsString())
+//			.rSqBrace()			
+		.blockEnd();
+	}
+
+	private String listOfPolicies() {
+		return policies.stream()				
+				.map(p -> p.getName())
+                .collect(Collectors.joining(", ","[","]"));//Collectors.joining("-", "{", "}")
 	}
 	
 }

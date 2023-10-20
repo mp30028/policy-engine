@@ -1,20 +1,26 @@
 package com.zonesoft.policyengine.api.entities;
 
-import static com.zonesoft.policyengine.api.utilities.ToStringBuilder.lastLine;
-import static com.zonesoft.policyengine.api.utilities.ToStringBuilder.line;
+//import java.util.Set;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import com.zonesoft.policyengine.api.utilities.ToStringBuilder;
+import com.zonesoft.policyengine.api.utilities.ToStringHelper;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "t_attribute")
 public class Attribute {
 	private Long id;
-	private String attribute;
+	private String name;
 	private String description;
+	private List<Policy> policies;
 	
 	@Id
 	public Long getId() {
@@ -25,12 +31,13 @@ public class Attribute {
 		this.id = id;
 	}
 	
-	public String getAttribute() {
-		return attribute;
+	@Column(name="attribute")
+	public String getName() {
+		return name;
 	}
 	
-	public void setAttribute(String attribute) {
-		this.attribute = attribute;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public String getDescription() {
@@ -41,15 +48,29 @@ public class Attribute {
 		this.description = description;
 	}
 	
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "attributes", cascade = CascadeType.ALL)//This is property in Policy
+	public List<Policy> getPolicies() {
+		return policies;
+	}
+
+	public void setPolicies(List<Policy> policies) {
+		this.policies = policies;
+	}
+	
 	@Override
 	public String toString(){
-		ToStringBuilder b = new ToStringBuilder();
-		return b.build(
-				line("id", id),
-				line("attribute", attribute),
-				lastLine("description", description)
-				
-		);
-	}	
+		ToStringHelper h= new ToStringHelper();
+		return h.blockStart()
+			.wrLn("id", id)
+			.wrLn("name", name)
+			.wrLn("description", description)
+			.wr("used-by", listOfPolicies())			
+		.blockEnd();		
+	}
 	
+	private String listOfPolicies() {
+		return policies.stream()				
+				.map(p -> p.getName())
+                .collect(Collectors.joining(", ","[","]"));//Collectors.joining("-", "{", "}")
+	}	
 }

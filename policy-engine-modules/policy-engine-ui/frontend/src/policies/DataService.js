@@ -1,10 +1,24 @@
 
 
 export const fetchAll = async () => {
-	return [
-		{ "id": 1, "policy": "example-policy-001", "description": "This is a dummy entry from some static data for experimental and testing purposes" },
-		{ "id": 2, "policy": "example-policy-002", "description": "This is a second dummy entry from static data for experimental and testing purposes" },
-		{ "id": 2, "policy": "example-policy-003", "description": "In reality there would some helpful and instructive text that would go here" }
-	];
+	const data =[
+					{
+						"id" : 1,
+						"policy" : "default",
+						"description" : "default policy that applies to all asset types"
+					},
+					{
+						"id" : 2,
+						"policy" : "subscription",
+						"description" : "subscription policy to be applied to resources"
+					},
+					{
+						"id" : 3,
+						"policy" : "ownership",
+						"description" : "ownership of resources"
+					}
+				];
+	
+	return data;
 
 }
