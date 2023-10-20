@@ -17,14 +17,20 @@ function AssetTypes() {
 					<th>ID</th>
 					<th>Asset-Type</th>
 					<th>Description</th>
+					<th>Associated-Policies</th>
 				</tr>
 			</thead>
 			<tbody>
 				{assetTypes.map(at =>
 					<tr>
 						<td>{at.id}</td>
-						<td>{at.asset_type}</td>
+						<td>{at.name}</td>
 						<td>{at.description}</td>
+						<td>
+							{at.associatedPolicies.map(p =>
+								p.name + "         [id=" + p.id + "]" 
+							)}
+						</td>
 					</tr>
 				)}
 			</tbody>

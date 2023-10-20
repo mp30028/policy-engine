@@ -1,24 +1,15 @@
 
-
 export const fetchAll = async () => {
-	const data =[
-					{
-						"id" : 1,
-						"policy" : "default",
-						"description" : "default policy that applies to all asset types"
-					},
-					{
-						"id" : 2,
-						"policy" : "subscription",
-						"description" : "subscription policy to be applied to resources"
-					},
-					{
-						"id" : 3,
-						"policy" : "ownership",
-						"description" : "ownership of resources"
-					}
-				];
-	
-	return data;
-
+	const fetchUrl = "http://localhost:8083/policy-engine/api/policy";
+	console.log("fetch-url = ", fetchUrl);
+	const response = await fetch(
+		fetchUrl, 
+		{	method: 'GET',
+			headers: {
+				'Content-Type': 'application/json;charset=U-8',
+				'Accept': 'application/json, text/plain'
+			}
+		}
+	);
+	return await response.json();
 }

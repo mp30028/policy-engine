@@ -17,14 +17,20 @@ function Policies() {
 					<th>ID</th>
 					<th>Policy</th>
 					<th>Description</th>
+					<th>Attributes</th>
 				</tr>
 			</thead>
 			<tbody>
 				{policies.map(p =>
 					<tr>
 						<td>{p.id}</td>
-						<td>{p.policy}</td>
+						<td>{p.name}</td>
 						<td>{p.description}</td>
+						<td>
+							{p.associatedAttributes.map(a =>
+								<div>{a.name}</div> 
+							)}
+						</td>						
 					</tr>
 				)}
 			</tbody>
