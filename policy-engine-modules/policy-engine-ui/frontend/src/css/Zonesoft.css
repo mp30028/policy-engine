@@ -1,6 +1,6 @@
 table.zsft-table {
 	font-family: Arial;
-	font-size: 12pt;
+	font-size: 9pt;
 	width: 90%;
 }
 
@@ -9,14 +9,14 @@ table.zsft-table input {
 }
 
 table.zsft-table th.id {
-	background-color: rgb(255, 255, 0);
+	background-color: #575757;
 	color: white;
 	font-weight: bold;
 }
 
 table.zsft-table td {
 	border-style: solid;
-	border-color: rgb(255, 255, 0);
+	border-color: grey;
 	border-width: 1pt;
 }
 
