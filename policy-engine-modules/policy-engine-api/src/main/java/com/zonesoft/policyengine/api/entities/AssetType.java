@@ -64,17 +64,14 @@ public class AssetType {
 			.wrLn("id", id)
 			.wrLn("name", name)
 			.wrLn("description", description)
-			.wr("policies-applied", listOfPolicies())
-//			.key("policies").lSqBrace()
-//				.value(policiesAsString())
-//			.rSqBrace()			
+			.wr("policies-applied", listOfPolicies())		
 		.blockEnd();
 	}
 
 	private String listOfPolicies() {
 		return policies.stream()				
 				.map(p -> p.getName())
-                .collect(Collectors.joining(", ","[","]"));//Collectors.joining("-", "{", "}")
+                .collect(Collectors.joining(", ","[","]"));
 	}
 	
 }

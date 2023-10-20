@@ -98,7 +98,7 @@ public class Policy {
 	private String listOfAssetTypes() {
 		return assetTypes.stream()				
 				.map(a -> a.getName())
-                .collect(Collectors.joining(", ","[","]"));//Collectors.joining("-", "{", "}")
+                .collect(Collectors.joining(", ","[","]"));
 	}	
 	
 }

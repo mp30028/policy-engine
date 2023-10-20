@@ -1,6 +1,5 @@
 package com.zonesoft.policyengine.api.entities;
 
-//import java.util.Set;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,6 +70,6 @@ public class Attribute {
 	private String listOfPolicies() {
 		return policies.stream()				
 				.map(p -> p.getName())
-                .collect(Collectors.joining(", ","[","]"));//Collectors.joining("-", "{", "}")
+                .collect(Collectors.joining(", ","[","]"));
 	}	
 }

@@ -124,35 +124,4 @@ public class ToStringHelper {
 		this.pad().key(key).value(value).endLn();
 		return this;
 	}	
-	
-	
-//	public String entry(String key, String value) {
-//		return entry(key, value, false);
-//	}
-//	
-//	public String entry(String key, Object value) {
-//		return entry(key, value, false);
-//	}
-//	
-//	public String entry(String key, String value, boolean isLast) {
-//		if (isLast) {
-//			return indent + key(key) + value(value) ;
-//		}else {
-//			return indent + key(key) + value(value) + comma + newline;
-//		}
-//	}
-//	
-//	public String entry(String key, Object value, boolean isLast) {
-//		if (isLast) {
-//			return indent + key(key) + objValue(value) ;
-//		}else {
-//			return indent + key(key) + objValue(value) + comma + newline;
-//		}
-//	}
-//
-//	public<E> String listToString(List<E> items) {
-//		return items.stream().map(i -> objValue(i))
-//                .collect(Collectors.joining(", "));
-//	}
-
 }
