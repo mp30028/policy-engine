@@ -20,7 +20,7 @@ public class ToStringHelper {
 	private static final String newline = "\n";
 	private static final String indent = "\t";
 	private static final String comma = ",";
-	private static final String newlineAndIndent = "\n\t";
+//	private static final String newlineAndIndent = "\n\t";
 	private static final String lSqBrace = "[";
 	private static final String rSqBrace = "]";	
 	public ToStringHelper begin() {
@@ -69,7 +69,8 @@ public class ToStringHelper {
 		if(Objects.isNull(in)) {
 			sb.append(nullValue);
 		}else{
-			sb.append(in.toString().replace(newline,newlineAndIndent));
+//			sb.append(in.toString().replace(newline,newlineAndIndent));
+			sb.append(in.toString());
 		}
 		return this;
 	};
@@ -100,7 +101,10 @@ public class ToStringHelper {
 	}		
 	
 	public ToStringHelper blockStart() {
-		return this.endLn().begin().endLn();
+//		return this.endLn().begin().endLn();
+//		return begin();
+		sb.append(startString);
+		return this;
 	}	
 	
 	public String blockEnd() {
@@ -108,34 +112,40 @@ public class ToStringHelper {
 	}	
 	
 	public ToStringHelper wrLn(String key, String value) {
-		this.pad().key(key).value(value).comma().endLn();
+//		this.pad().key(key).value(value).comma().endLn();
+		this.key(key).value(value).comma();
 		return this;
 	}
 	
 	public ToStringHelper wrLn(String key, Object value) {
-		this.pad().key(key).value(value).comma().endLn();
+//		this.pad().key(key).value(value).comma().endLn();
+		this.key(key).value(value).comma();
 		return this;
 	}
 	
 	public<E> ToStringHelper wrLn(String key, List<E> value, Function<E, String> mapper) {
 		String valueAsString = this.<E>listToString(value, mapper);
-		this.pad().key(key).value((Object)valueAsString).comma().endLn();
+//		this.pad().key(key).value((Object)valueAsString).comma().endLn();
+		this.key(key).value((Object)valueAsString).comma();
 		return this;
 	}	
 	
 	public ToStringHelper wr(String key, String value) {
-		this.pad().key(key).value(value).endLn();
+//		this.pad().key(key).value(value).endLn();
+		this.key(key).value(value);
 		return this;
 	}
 
 	public ToStringHelper wr(String key, Object value) {
-		this.pad().key(key).value(value).endLn();
+		//this.pad().key(key).value(value).endLn();
+		this.key(key).value(value);
 		return this;
 	}
 	
 	public<E> ToStringHelper wr(String key, List<E> value, Function<E, String> mapper) {
 		String valueAsString = this.<E>listToString(value, mapper);
-		this.pad().key(key).value((Object)valueAsString).endLn();
+//		this.pad().key(key).value((Object)valueAsString).endLn();
+		this.key(key).value((Object)valueAsString);
 		return this;
 	}	
 	

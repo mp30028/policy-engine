@@ -1,7 +1,10 @@
 package com.zonesoft.policyengine.api.entities;
 
-
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.zonesoft.policyengine.api.entities.wrappers.SimpleFacadeWrapper;
+import com.zonesoft.policyengine.api.entities.wrappers.SimpleFacade;
 import com.zonesoft.policyengine.api.utilities.ToStringHelper;
 
 import jakarta.persistence.CascadeType;
@@ -13,10 +16,11 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "t_policy")
-public class Policy {
+public class Policy implements SimpleFacade{
 	private Long id;
 	private String name;
 	private String description;
@@ -24,6 +28,7 @@ public class Policy {
 	private List<Attribute> attributes;
 	
 	@Id
+	@Override
 	public Long getId() {
 		return id;
 	}
@@ -33,6 +38,7 @@ public class Policy {
 	}
 	
 	@Column(name="policy")
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -49,6 +55,7 @@ public class Policy {
 		this.description = description;
 	}	
 
+	@JsonIgnore
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(			
 	  name = "t_asset_type_policy",                                //this is the intermediate table
@@ -62,6 +69,15 @@ public class Policy {
 		this.assetTypes = assetTypes;
 	}
 
+	@Transient
+	public List<SimpleFacadeWrapper<AssetType>> getAssociatedAssetTypes() {
+		return assetTypes
+					.stream()
+					.map(a -> new SimpleFacadeWrapper<AssetType>(a))
+					.toList();
+	}	
+
+	@JsonIgnore
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(
 	  name = "t_policy_attribute",                                //this is the intermediate table
@@ -74,6 +90,14 @@ public class Policy {
 	public void setAttributes(List<Attribute> attributes) {
 		this.attributes = attributes;
 	}
+	
+	@Transient
+	public List<SimpleFacadeWrapper<Attribute>> getAssociatedAttributes() {
+		return attributes
+					.stream()
+					.map(a -> new SimpleFacadeWrapper<Attribute>(a))
+					.toList();
+	}	
 	
 	@Override
 	public String toString(){
