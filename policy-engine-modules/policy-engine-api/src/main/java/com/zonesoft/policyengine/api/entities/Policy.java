@@ -2,8 +2,6 @@ package com.zonesoft.policyengine.api.entities;
 
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 import com.zonesoft.policyengine.api.utilities.ToStringHelper;
 
 import jakarta.persistence.CascadeType;
@@ -84,21 +82,9 @@ public class Policy {
 			.wrLn("id", id)
 			.wrLn("name", name)
 			.wrLn("description", description)
-			.wrLn("policy-attributes", listOfAttributes())
-			.wr("policy-applied-to", listOfAssetTypes())
+			.<Attribute>wrLn("policy-attributes", attributes, a -> a.getName())
+			.<AssetType>wr("policy-applied-to", assetTypes, a -> a.getName())
 		.blockEnd();		
 	}
-	
-	private String listOfAttributes() {
-		return attributes.stream()				
-				.map(a -> a.getName())
-                .collect(Collectors.joining(", ","[","]"));
-	}	
-	
-	private String listOfAssetTypes() {
-		return assetTypes.stream()				
-				.map(a -> a.getName())
-                .collect(Collectors.joining(", ","[","]"));
-	}	
-	
+
 }

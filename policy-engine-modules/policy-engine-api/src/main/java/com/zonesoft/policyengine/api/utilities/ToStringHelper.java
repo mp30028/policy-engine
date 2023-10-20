@@ -1,12 +1,14 @@
 package com.zonesoft.policyengine.api.utilities;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class ToStringHelper {	
 	
 	private final StringBuilder sb = new StringBuilder();
-	
-	
+		
 	private static final String startString = "{";
 	private static final String endString = "}";
 	private static final String invalidKey = "\"key_invalid\": ";
@@ -115,6 +117,12 @@ public class ToStringHelper {
 		return this;
 	}
 	
+	public<E> ToStringHelper wrLn(String key, List<E> value, Function<E, String> mapper) {
+		String valueAsString = this.<E>listToString(value, mapper);
+		this.pad().key(key).value((Object)valueAsString).comma().endLn();
+		return this;
+	}	
+	
 	public ToStringHelper wr(String key, String value) {
 		this.pad().key(key).value(value).endLn();
 		return this;
@@ -123,5 +131,17 @@ public class ToStringHelper {
 	public ToStringHelper wr(String key, Object value) {
 		this.pad().key(key).value(value).endLn();
 		return this;
+	}
+	
+	public<E> ToStringHelper wr(String key, List<E> value, Function<E, String> mapper) {
+		String valueAsString = this.<E>listToString(value, mapper);
+		this.pad().key(key).value((Object)valueAsString).endLn();
+		return this;
 	}	
+	
+	private <E> String listToString(List<E> list, Function<E, String> mapper) {
+		return list.stream()				
+				.map(mapper)
+                .collect(Collectors.joining(", ","[","]"));
+	}
 }

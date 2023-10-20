@@ -1,8 +1,6 @@
 package com.zonesoft.policyengine.api.entities;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 import com.zonesoft.policyengine.api.utilities.ToStringHelper;
 
 import jakarta.persistence.CascadeType;
@@ -63,13 +61,8 @@ public class Attribute {
 			.wrLn("id", id)
 			.wrLn("name", name)
 			.wrLn("description", description)
-			.wr("used-by", listOfPolicies())			
+			.<Policy>wr("used-by", policies, p -> p.getName())			
 		.blockEnd();		
 	}
-	
-	private String listOfPolicies() {
-		return policies.stream()				
-				.map(p -> p.getName())
-                .collect(Collectors.joining(", ","[","]"));
-	}	
+
 }
