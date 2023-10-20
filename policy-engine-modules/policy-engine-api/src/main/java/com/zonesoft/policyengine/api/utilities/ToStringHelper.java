@@ -142,6 +142,7 @@ public class ToStringHelper {
 	private <E> String listToString(List<E> list, Function<E, String> mapper) {
 		return list.stream()				
 				.map(mapper)
+				.map(s -> quote + s + quote)
                 .collect(Collectors.joining(", ","[","]"));
 	}
 }
