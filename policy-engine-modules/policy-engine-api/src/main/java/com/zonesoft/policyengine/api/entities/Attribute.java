@@ -63,11 +63,8 @@ public class Attribute implements Identifier{
 	}
 	
 	@Transient
-	public List<Identifier> getAssociatedPolicies() {		
-		return policies
-					.stream()					
-					.map(p -> IdentifierWrapper.wrap(p))
-					.toList();
+	public List<Identifier> getAssociatedPolicies() {
+		return IdentifierWrapper.wrap(policies);
 	}	
 	
 	@Override

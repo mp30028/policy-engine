@@ -70,11 +70,8 @@ public class Policy implements Identifier{
 	}
 
 	@Transient
-	public List<Identifier> getAssociatedAssetTypes() {	
-		return assetTypes
-					.stream()					
-					.map(a -> IdentifierWrapper.wrap(a))
-					.toList();
+	public List<Identifier> getAssociatedAssetTypes() {
+		return IdentifierWrapper.wrap(assetTypes);
 	}	
 	
 	@JsonIgnore
@@ -92,11 +89,8 @@ public class Policy implements Identifier{
 	}
 	
 	@Transient
-	public List<Identifier> getAssociatedAttributes() {	
-		return attributes
-					.stream()					
-					.map(a -> IdentifierWrapper.wrap(a))
-					.toList();
+	public List<Identifier> getAssociatedAttributes() {
+		return IdentifierWrapper.wrap(attributes);
 	}	
 	
 	@Override

@@ -60,15 +60,12 @@ public class AssetType implements Identifier {
 	public void setPolicies(List<Policy> policies) {
 		this.policies = policies;
 	}
-	
-	@Transient
-	public List<Identifier> getAssociatedPolicies() {		
-		return policies
-					.stream()					
-					.map(p -> IdentifierWrapper.wrap(p))
-					.toList();
-	}
 
+	@Transient
+	public List<Identifier> getAssociatedPolicies() {
+		return IdentifierWrapper.wrap(policies);
+	}		
+	
 	@Override
 	public String toString(){
 		ToStringHelper h= new ToStringHelper();
