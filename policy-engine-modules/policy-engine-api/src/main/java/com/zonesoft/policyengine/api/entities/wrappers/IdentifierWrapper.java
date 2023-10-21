@@ -2,6 +2,8 @@ package com.zonesoft.policyengine.api.entities.wrappers;
 
 import java.util.List;
 
+import com.zonesoft.policyengine.api.utilities.ToStringHelper;
+
 public class IdentifierWrapper <T extends Identifier> implements Identifier {
 	private final T entity;
 	
@@ -19,6 +21,15 @@ public class IdentifierWrapper <T extends Identifier> implements Identifier {
 	public String getName() {
 		return entity.getName();
 	}
+	
+	@Override
+	public String toString(){
+		ToStringHelper h= new ToStringHelper();
+		return h.blockStart()
+			.wrLn("id", getId())
+			.wr("name", getName())
+		.blockEnd();
+	}	
 	
 	public static <E> Identifier wrap(E entity) {
 		return new IdentifierWrapper<Identifier>((Identifier) entity);
