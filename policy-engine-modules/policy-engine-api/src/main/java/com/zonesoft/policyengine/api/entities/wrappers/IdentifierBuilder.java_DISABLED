@@ -1,18 +1,19 @@
 package com.zonesoft.policyengine.api.entities.wrappers;
 
-public class SimpleFacadeWrapper <T extends SimpleFacade> {
+public class IdentifierBuilder <T extends Identifier> implements Identifier {
 	private final T entity;
 	
-	public SimpleFacadeWrapper(T entity) {
+	public IdentifierBuilder(T entity) {
 		super();
 		this.entity = entity;
 	}
 	
+	@Override
 	public Long getId() {
 		return entity.getId();
 	}	
 	
-
+	@Override
 	public String getName() {
 		return entity.getName();
 	}

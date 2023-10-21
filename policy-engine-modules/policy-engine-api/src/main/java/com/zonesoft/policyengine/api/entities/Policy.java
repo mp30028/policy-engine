@@ -3,8 +3,8 @@ package com.zonesoft.policyengine.api.entities;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.zonesoft.policyengine.api.entities.wrappers.SimpleFacadeWrapper;
-import com.zonesoft.policyengine.api.entities.wrappers.SimpleFacade;
+import com.zonesoft.policyengine.api.entities.wrappers.IdentifierWrapper;
+import com.zonesoft.policyengine.api.entities.wrappers.Identifier;
 import com.zonesoft.policyengine.api.utilities.ToStringHelper;
 
 import jakarta.persistence.CascadeType;
@@ -20,7 +20,7 @@ import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "t_policy")
-public class Policy implements SimpleFacade{
+public class Policy implements Identifier{
 	private Long id;
 	private String name;
 	private String description;
@@ -70,13 +70,13 @@ public class Policy implements SimpleFacade{
 	}
 
 	@Transient
-	public List<SimpleFacadeWrapper<AssetType>> getAssociatedAssetTypes() {
+	public List<Identifier> getAssociatedAssetTypes() {	
 		return assetTypes
-					.stream()
-					.map(a -> new SimpleFacadeWrapper<AssetType>(a))
+					.stream()					
+					.map(a -> IdentifierWrapper.wrap(a))
 					.toList();
 	}	
-
+	
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(
@@ -92,10 +92,10 @@ public class Policy implements SimpleFacade{
 	}
 	
 	@Transient
-	public List<SimpleFacadeWrapper<Attribute>> getAssociatedAttributes() {
+	public List<Identifier> getAssociatedAttributes() {	
 		return attributes
-					.stream()
-					.map(a -> new SimpleFacadeWrapper<Attribute>(a))
+					.stream()					
+					.map(a -> IdentifierWrapper.wrap(a))
 					.toList();
 	}	
 	

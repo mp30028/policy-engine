@@ -2,10 +2,9 @@ package com.zonesoft.policyengine.api.entities;
 
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.zonesoft.policyengine.api.entities.wrappers.SimpleFacadeWrapper;
-import com.zonesoft.policyengine.api.entities.wrappers.SimpleFacade;
+import com.zonesoft.policyengine.api.entities.wrappers.IdentifierWrapper;
+import com.zonesoft.policyengine.api.entities.wrappers.Identifier;
 import com.zonesoft.policyengine.api.utilities.ToStringHelper;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +16,7 @@ import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "t_asset_type")
-public class AssetType implements SimpleFacade {
+public class AssetType implements Identifier {
 
 	private Long id;
 	private String name;
@@ -63,10 +62,10 @@ public class AssetType implements SimpleFacade {
 	}
 	
 	@Transient
-	public List<SimpleFacadeWrapper<Policy>> getAssociatedPolicies() {
+	public List<Identifier> getAssociatedPolicies() {		
 		return policies
-					.stream()
-					.map(p -> new SimpleFacadeWrapper<Policy>(p))
+					.stream()					
+					.map(p -> IdentifierWrapper.wrap(p))
 					.toList();
 	}
 
