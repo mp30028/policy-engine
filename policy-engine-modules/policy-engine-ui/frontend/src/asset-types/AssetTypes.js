@@ -11,13 +11,16 @@ function AssetTypes(props) {
 		DataService.fetchAll().then((data) => setAssetTypes(data));
 	}, [setAssetTypes]);
 	
+	useEffect(() => {
+		props.selectedAssetTypesSetter(listOfSelected);
+	}, [props, listOfSelected]);
+	
 	const onAddNewClick = () =>{
-		//const {name, value} = event.target;
-		//props.onSubmit({event, name, value});
+		//to-do
 	}
 	
 	const onSelectionChange = (event) =>{
-		multiSelectHandler(event, assetTypes, listOfSelected, setListOfSelected);				
+		multiSelectHandler(event, assetTypes, listOfSelected, setListOfSelected);		
 	}
 		
 	const isChecked = (id) =>{		
@@ -51,7 +54,7 @@ function AssetTypes(props) {
 					</tr>
 				)}
 				<tr>
-					<td colSpan={4}  style={{textAlign:"right"}}>
+					<td colSpan={5}  style={{textAlign:"right"}}>
 						<button type="button" onClick={onAddNewClick}>Add New</button>
 					</td>
 				</tr>
