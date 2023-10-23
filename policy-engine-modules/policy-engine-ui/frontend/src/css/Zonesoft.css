@@ -79,11 +79,11 @@ nav.zsft-explorer {
 	padding: 1rem;
 }
 
-input[type="radio"] {
+input[type="radio"].ellipses {
     display: none;
 }
 
-input[type="radio"]:checked + label {
+input[type="radio"].ellipses:checked + label {
     border: 1px solid red;
     background-color: red;
 }
@@ -94,6 +94,7 @@ input[type="radio"]:checked + label {
 	text-align: center;
 	padding-left: 16pt;
 	padding-right: 16pt;
+	width: 30px;
 }
 
 .ellipses:hover {
@@ -121,10 +122,14 @@ button.deleteButton:hover{
 button.addNewButton{
 	background-image: url(../icons/addnew_grey.svg);
 	background-size: cover;
-	background-color: white;
+	background-color: rgb(192, 192, 192);
 	height: 30px;
 	width: 50px;
-	border: none;
+	padding-top: 20px;	
+/*	border: none;*/
+	border-style: solid;
+	border-color: grey;
+	border-width: 1pt;
 }
 
 button.addNewButton:hover{

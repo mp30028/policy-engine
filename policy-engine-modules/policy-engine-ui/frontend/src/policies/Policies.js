@@ -22,13 +22,13 @@ function Policies() {
 			</thead>
 			<tbody>
 				{policies.map(p =>
-					<tr>
+					<tr key={p.id}>
 						<td>{p.id}</td>
 						<td>{p.name}</td>
 						<td>{p.description}</td>
 						<td>
 							{p.associatedAttributes.map(a =>
-								<div>{a.name}</div> 
+								<div key={a.id}>{a.name}</div> 
 							)}
 						</td>						
 					</tr>
