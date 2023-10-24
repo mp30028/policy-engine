@@ -3,18 +3,28 @@ import "../../../static/css/Zonesoft.css"
 import * as DataService from "./DataService";
 
 function Attributes(props) {
-
 	const [attributes, setAttributes] = useState([]);
-	const [selectedPolicy, setSelectedPolicy] = useState([]);
 
 	useEffect(() => {
-		console.log("FROM Attributes-useEffect[selectedPolicy]: selectedPolicy =", selectedPolicy)
-		DataService.fetchAll().then((data) => setAttributes(data));
-	}, [selectedPolicy]);
+		const getAssociatedAttributeIdsFromPolicies = (policy) =>{
+			if(policy){
+				if(policy.associatedAttributes){
+					return policy.associatedAttributes.map(a => a.id);	
+				}else{
+					return [];
+				}				
+			} else{
+				return [];
+			}			
+		}
+				
+		if(props.selectedPolicy){		
+			DataService.fetchByIds(getAssociatedAttributeIdsFromPolicies(props.selectedPolicy)).then((data) => setAttributes(data));
+		}else{
+			console.warn("Policies:useEffect:props.selectedAssetTypes is not set");
+		}
+	}, [props.selectedPolicy]);		
 	
-	useEffect(() => {
-		setSelectedPolicy(props.selectedPolicy);
-	}, [props.selectedPolicy]);	
 	
 	return (
 		<table className="zsft-table" style={{ width: "100%" }}>
