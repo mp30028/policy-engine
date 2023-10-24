@@ -1,9 +1,12 @@
-import React, { useState, useEffect, /*useRef*/ } from 'react';
+import { useState, useEffect } from 'react';
 import "../../../static/css/Zonesoft.css"
-import * as DataService from "./DataService";
+import DataService from "../../data-services/DataServiceClass";
+import ApiClientConfigs from "../../configurations/ApiClientConfigsClass";
+import View from './View';
 
 function Policies(props) {
 	const ENTITY_NAME = "policy";
+	const view = new View();
 	const emptyPolicies = [];
 	const [policies, setPolicies] = useState(emptyPolicies);
 	const [selected, setSelected]= useState(null);
@@ -16,7 +19,8 @@ function Policies(props) {
 		}
 				
 		if(props.selectedAssetTypes){
-			DataService.fetchByIds(getAssociatedPolicyIdsFromAssetTypes(props.selectedAssetTypes)).then((data) => setPolicies(data));						
+			const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);
+			dataService.fetchByIds(getAssociatedPolicyIdsFromAssetTypes(props.selectedAssetTypes)).then((data) => setPolicies(data));						
 		}else{
 			console.warn("Policies:useEffect:props.selectedAssetTypes is not set");
 			setPolicies([]);
@@ -46,37 +50,7 @@ function Policies(props) {
 		return isSelected(selected, getTargetDataItem());
 	}	
 	
-	return (
-		<table className="zsft-table" style={{ width: "100%" }}>
-			<thead>
-				<tr>
-					<th></th>
-					<th>ID</th>
-					<th>Policy</th>
-					<th>Description</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				{policies.map(p =>
-					<tr key={p.id}>
-						<td>
-							<input type="checkbox" name={ENTITY_NAME + "-selector-" + p.id} id={ENTITY_NAME + "-selector-" + p.id}  value={p.id} onChange={onSelectionChange} checked={isChecked(p.id)} />
-						</td>					
-						<td>{p.id}</td>
-						<td>{p.name}</td>
-						<td>{p.description}</td>
-						<td className="ellipses">...</td>
-					</tr>										
-				)}
-				<tr>
-					<td colSpan={5}  style={{textAlign:"right"}}>
-						<button type="button" onClick={onAddNewClick}>Add New</button>
-					</td>
-				</tr>				
-			</tbody>
-		</table>
-	);
+	return view.getView(ENTITY_NAME,policies, onAddNewClick, onSelectionChange, isChecked );
 };
 
 	const isSelected = (selected, targetDataItem) =>{	

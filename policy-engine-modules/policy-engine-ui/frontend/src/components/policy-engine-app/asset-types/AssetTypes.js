@@ -1,14 +1,18 @@
-import React, { useState, useEffect, /*useRef*/ } from 'react';
+import { useState, useEffect } from 'react';
 import "../../../static/css/Zonesoft.css"
-import * as DataService from "./DataService";
+import DataService from "../../data-services/DataServiceClass";
+import ApiClientConfigs from "../../configurations/ApiClientConfigsClass";
+import View from './View';
 
 function AssetTypes(props) {
-	const ENTITY_NAME = "asset-type";
+	const ENTITY_NAME = "assetType";
+	const view = new View();
 	const [assetTypes, setAssetTypes] = useState([]);	
 	const [listOfSelected, setListOfSelected]= useState([]);	
 	
 	useEffect(() => {
-		DataService.fetchAll().then((data) => setAssetTypes(data));
+		const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);
+		dataService.fetchAll().then((data) => setAssetTypes(data));
 	}, [setAssetTypes]);
 	
 	useEffect(() => {
@@ -30,37 +34,7 @@ function AssetTypes(props) {
 		return isInListOfSelected(listOfSelected, getTargetDataItem());
 	}
 	
-	return (
-		<table className="zsft-table" style={{ width: "100%" }}>
-			<thead>
-				<tr>
-					<th></th>
-					<th>ID</th>
-					<th>Asset-Type</th>
-					<th>Description</th>
-					<th></th>					
-				</tr>
-			</thead>
-			<tbody>
-				{assetTypes.map(at =>
-					<tr key={at.id}>
-						<td>
-							<input type="checkbox" name={ENTITY_NAME + "-selector-" + at.id} id={ENTITY_NAME + "-selector-" + at.id}  value={at.id} onChange={onSelectionChange} checked={isChecked(at.id)} />
-						</td>
-						<td>{at.id}</td>
-						<td>{at.name}</td>
-						<td>{at.description}</td>
-						<td className="ellipses">...</td>
-					</tr>
-				)}
-				<tr>
-					<td colSpan={5}  style={{textAlign:"right"}}>
-						<button type="button" onClick={onAddNewClick}>Add New</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	);
+	return view.getView(ENTITY_NAME,assetTypes, onAddNewClick, onSelectionChange, isChecked );
 }
 
 	const isInListOfSelected = (listOfSelected, targetDataItem) =>{
