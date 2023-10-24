@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import "../static/css/Zonesoft.css"
-import AssetTypes from "../asset-types/AssetTypes";
-import Policies from "../policies/Policies";
-import Attributes from "../attributes/Attributes";
+import "../../static/css/Zonesoft.css"
+import AssetTypes from "./asset-types/AssetTypes";
+import Policies from "./policies/Policies";
+import Attributes from "./attributes/Attributes";
 
 
 function PolicyEngineApp() {

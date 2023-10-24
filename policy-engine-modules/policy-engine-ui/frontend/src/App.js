@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Routes, Route, Outlet } from 'react-router-dom';
-import PolicyEngineApp from "./policy-engine-app/PolicyEngineApp"
+import PolicyEngineApp from "./components/policy-engine-app/PolicyEngineApp"
 const App = () => {	return (
 		<>
 			<Routes>

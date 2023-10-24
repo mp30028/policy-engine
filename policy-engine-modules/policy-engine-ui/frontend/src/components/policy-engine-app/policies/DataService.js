@@ -29,11 +29,11 @@ export const fetchByIds = async (idList) => {
 			);
 			return await response.json();
 		}else{
-			console.warn("policies/DataService.fetchByIds: returned empty array");
+			console.log("policies/DataService.fetchByIds: returned empty array");
 			return emptyResult;
 		}			
 	}else{
-		console.warn("policies/DataService.fetchByIds: Expected idList to be an array but was not");
+		console.log("policies/DataService.fetchByIds: Expected idList to be an array but was not");
 		return emptyResult;
 	}
 }
