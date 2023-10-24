@@ -9,13 +9,19 @@ function Policies(props) {
 	const [selected, setSelected]= useState([]);
 	
 	useEffect(() => {		
-		if(props.selectedAssetTypes){
-			const selectedAssetTypeIds = props.selectedAssetTypes.map((at) => at.id);			
-			DataService.fetchByIds(selectedAssetTypeIds).then((data) => setPolicies(data));			
+		if(props.selectedAssetTypes){		
+			DataService.fetchByIds(getAssociatedPolicyIdsFromAssetTypes(props.selectedAssetTypes)).then((data) => setPolicies(data));
 		}else{
 			console.warn("Policies:useEffect:props.selectedAssetTypes is not set");
 		}
 	}, [props.selectedAssetTypes]);	
+	
+	const getAssociatedPolicyIdsFromAssetTypes = (assetTypes) =>{
+		const removeDuplicates = (inArray) => [...new Set(inArray)];		
+		const policyIds = assetTypes.flatMap(at => (at.associatedPolicies).map(p => p.id));
+		console.log("FROM getAssociatedPolicyIdsFromAssetTypes: policyIds = ", policyIds)
+		return removeDuplicates(policyIds);
+	}
 	
 	const onAddNewClick = () =>{
 		//to-do
