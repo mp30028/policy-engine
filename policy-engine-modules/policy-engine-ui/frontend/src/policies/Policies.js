@@ -12,7 +12,6 @@ function Policies(props) {
 		const getAssociatedPolicyIdsFromAssetTypes = (assetTypes) =>{
 			const deDupe = (inArray) => [...new Set(inArray)];		
 			const policyIds = assetTypes.flatMap(at => (at.associatedPolicies).map(p => p.id));
-			console.log("FROM getAssociatedPolicyIdsFromAssetTypes: policyIds = ", policyIds)
 			return deDupe(policyIds);
 		}
 				
