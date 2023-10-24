@@ -1,14 +1,16 @@
 import React, { useState, useEffect, /*useRef*/ } from 'react';
 import "../../../static/css/Zonesoft.css"
-import * as DataService from "./DataService";
+import DataService from "../../data-services/DataServiceClass";
+import ApiClientConfigs from "../../configurations/ApiClientConfigsClass";
 
 function AssetTypes(props) {
-	const ENTITY_NAME = "asset-type";
+	const ENTITY_NAME = "assetType";
 	const [assetTypes, setAssetTypes] = useState([]);	
 	const [listOfSelected, setListOfSelected]= useState([]);	
 	
 	useEffect(() => {
-		DataService.fetchAll().then((data) => setAssetTypes(data));
+		const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);
+		dataService.fetchAll().then((data) => setAssetTypes(data));
 	}, [setAssetTypes]);
 	
 	useEffect(() => {

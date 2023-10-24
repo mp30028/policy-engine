@@ -1,8 +1,10 @@
 import React, { useState, useEffect, /*useRef*/ } from 'react';
 import "../../../static/css/Zonesoft.css"
-import * as DataService from "./DataService";
+import DataService from "../../data-services/DataServiceClass";
+import ApiClientConfigs from "../../configurations/ApiClientConfigsClass";
 
 function Attributes(props) {
+	const ENTITY_NAME = "attribute";
 	const [attributes, setAttributes] = useState([]);
 
 	useEffect(() => {
@@ -18,8 +20,9 @@ function Attributes(props) {
 			}			
 		}
 				
-		if(props.selectedPolicy){		
-			DataService.fetchByIds(getAssociatedAttributeIdsFromPolicies(props.selectedPolicy)).then((data) => setAttributes(data));
+		if(props.selectedPolicy){
+			const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);
+			dataService.fetchByIds(getAssociatedAttributeIdsFromPolicies(props.selectedPolicy)).then((data) => setAttributes(data));
 		}else{
 			//console.warn("Policies:useEffect:props.selectedAssetTypes is not set");
 			setAttributes([]);

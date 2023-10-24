@@ -1,6 +1,7 @@
 import React, { useState, useEffect, /*useRef*/ } from 'react';
 import "../../../static/css/Zonesoft.css"
-import * as DataService from "./DataService";
+import DataService from "../../data-services/DataServiceClass";
+import ApiClientConfigs from "../../configurations/ApiClientConfigsClass";
 
 function Policies(props) {
 	const ENTITY_NAME = "policy";
@@ -16,7 +17,8 @@ function Policies(props) {
 		}
 				
 		if(props.selectedAssetTypes){
-			DataService.fetchByIds(getAssociatedPolicyIdsFromAssetTypes(props.selectedAssetTypes)).then((data) => setPolicies(data));						
+			const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);
+			dataService.fetchByIds(getAssociatedPolicyIdsFromAssetTypes(props.selectedAssetTypes)).then((data) => setPolicies(data));						
 		}else{
 			console.warn("Policies:useEffect:props.selectedAssetTypes is not set");
 			setPolicies([]);
