@@ -12,6 +12,8 @@
 	<logger name="com.zonesoft" level="DEBUG">
 	</logger>
 	
+	<logger name="com.zonesoft.policyengine.api.entities.wrappers" level="INFO"/>
+	
     <root level="INFO">
         <appender-ref ref="STDOUT" />
     </root>

@@ -1,22 +1,31 @@
 package com.zonesoft.policyengine.api.entities;
 
-import static com.zonesoft.policyengine.api.utilities.ToStringBuilder.lastLine;
-import static com.zonesoft.policyengine.api.utilities.ToStringBuilder.line;
+import java.util.List;
 
-import com.zonesoft.policyengine.api.utilities.ToStringBuilder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.zonesoft.policyengine.api.entities.wrappers.IdentifierWrapper;
+import com.zonesoft.policyengine.api.entities.wrappers.Identifier;
+import com.zonesoft.policyengine.api.utilities.ToStringHelper;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "t_attribute")
-public class Attribute {
+public class Attribute implements Identifier{
 	private Long id;
-	private String attribute;
+	private String name;
 	private String description;
+	private List<Policy> policies;
 	
 	@Id
+	@Override
 	public Long getId() {
 		return id;
 	}
@@ -25,12 +34,14 @@ public class Attribute {
 		this.id = id;
 	}
 	
-	public String getAttribute() {
-		return attribute;
+	@Column(name="attribute")
+	@Override
+	public String getName() {
+		return name;
 	}
 	
-	public void setAttribute(String attribute) {
-		this.attribute = attribute;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public String getDescription() {
@@ -41,15 +52,30 @@ public class Attribute {
 		this.description = description;
 	}
 	
-	@Override
-	public String toString(){
-		ToStringBuilder b = new ToStringBuilder();
-		return b.build(
-				line("id", id),
-				line("attribute", attribute),
-				lastLine("description", description)
-				
-		);
+	@JsonIgnore
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "attributes", cascade = CascadeType.ALL)//This is property in Policy
+	public List<Policy> getPolicies() {
+		return policies;
+	}
+
+	public void setPolicies(List<Policy> policies) {
+		this.policies = policies;
+	}
+	
+	@Transient
+	public List<Identifier> getAssociatedPolicies() {
+		return IdentifierWrapper.wrap(policies);
 	}	
 	
+	@Override
+	public String toString(){
+		ToStringHelper h= new ToStringHelper();
+		return h.blockStart()
+			.wrLn("id", id)
+			.wrLn("name", name)
+			.wrLn("description", description)
+			.<Policy>wr("used-by", policies, p -> p.getName())			
+		.blockEnd();		
+	}
+
 }

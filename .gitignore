@@ -127,6 +127,7 @@ nb-configuration.xml
 ##############################
 ## ReactJs
 ##############################
+.DS_STORE
 node_modules
 scripts/flow/*/.flowconfig
 .flowconfig
@@ -151,7 +152,7 @@ chrome-user-data
 .vscode
 *.swp
 *.swo
-*.project
+
 packages/react-devtools-core/dist
 packages/react-devtools-extensions/chrome/build
 packages/react-devtools-extensions/chrome/*.crx
@@ -164,5 +165,3 @@ packages/react-devtools-extensions/.tempUserDataDir
 packages/react-devtools-inline/dist
 packages/react-devtools-shell/dist
 packages/react-devtools-timeline/dist
-yarn.lock
-package-lock.json

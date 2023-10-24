@@ -3,6 +3,7 @@ package com.zonesoft.policyengine.api.repositories;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
@@ -14,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-//@SpringBootTest
 @TestMethodOrder(OrderAnnotation.class)
 abstract class AbstractRepositoryTest<R extends JpaRepository<E,Long>, E> extends AbstractMySqlContainer{
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRepositoryTest.class);
@@ -36,15 +36,18 @@ abstract class AbstractRepositoryTest<R extends JpaRepository<E,Long>, E> extend
 	@DisplayName("Check test-container has been instantiated")	
 	void testContainerIsCreated() {
 		assertNotNull(MYSQL_CONTAINER);
-		LOGGER.debug("FROM AssetTypeRepositoryTest.testContainerIsCreated: Test-Container was started on host={} and listening on port={}", MYSQL_CONTAINER.getHost(), MYSQL_CONTAINER.getFirstMappedPort());
+		LOGGER.debug("FROM AbstractRepositoryTest.testContainerIsCreated: Test-Container was started on host={} and listening on port={}", MYSQL_CONTAINER.getHost(), MYSQL_CONTAINER.getFirstMappedPort());
 	}
+	
 	
 	@Test
 	@Order(2)
 	@DisplayName("Check repository gets autowired")
 	void testRepoistoryIsWiredUp() {
+		LOGGER.debug("FROM AbstractRepositoryTest.testRepoistoryIsWiredUp: repository-is-null = {}", Objects.isNull(repository));
 		assertNotNull(repository);
 	}
+	
 	
 	@Test
 	@Order(3)
@@ -52,9 +55,9 @@ abstract class AbstractRepositoryTest<R extends JpaRepository<E,Long>, E> extend
 	void testFindAll() {		
 		List<E> findAllResults = repository.findAll();
 		assertEquals(expectedNoOfFindAllRecords, findAllResults.size());
-		LOGGER.debug("FROM AssetTypeRepositoryTest.testFindAll: repository.findAll returned {} records", findAllResults.size());
+		LOGGER.debug("FROM AbstractRepositoryTest.testFindAll: repository.findAll returned {} records", findAllResults.size());
 		for (E result: findAllResults) {
-			LOGGER.debug("FROM AssetTypeRepositoryTest.testFindAll: {} =  {}",result.getClass().getName(), result);
+			LOGGER.debug("FROM AbstractRepositoryTest.testFindAll: {} =  {}",result.getClass().getName(), result);
 		}
 	}
 	
