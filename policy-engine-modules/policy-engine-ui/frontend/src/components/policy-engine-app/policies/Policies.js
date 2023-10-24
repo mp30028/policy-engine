@@ -6,7 +6,7 @@ function Policies(props) {
 	const ENTITY_NAME = "policy";
 	const emptyPolicies = [];
 	const [policies, setPolicies] = useState(emptyPolicies);
-	const [selected, setSelected]= useState([]);
+	const [selected, setSelected]= useState(null);
 	
 	useEffect(() => {
 		const getAssociatedPolicyIdsFromAssetTypes = (assetTypes) =>{
@@ -15,12 +15,17 @@ function Policies(props) {
 			return deDupe(policyIds);
 		}
 				
-		if(props.selectedAssetTypes){		
-			DataService.fetchByIds(getAssociatedPolicyIdsFromAssetTypes(props.selectedAssetTypes)).then((data) => setPolicies(data));
+		if(props.selectedAssetTypes){
+			DataService.fetchByIds(getAssociatedPolicyIdsFromAssetTypes(props.selectedAssetTypes)).then((data) => setPolicies(data));						
 		}else{
 			console.warn("Policies:useEffect:props.selectedAssetTypes is not set");
+			setPolicies([]);
 		}
 	}, [props.selectedAssetTypes]);	
+
+	useEffect(() => {		
+		setSelected((selected)? policies.find(p => p.id === selected.id) : null);
+	}, [policies,selected]);
 	
 	useEffect(() => {
 		props.selectedPolicySetter(selected);
@@ -31,7 +36,7 @@ function Policies(props) {
 	}
 	
 	const onSelectionChange = (event) =>{
-		selectHandler(event, policies, setSelected);				
+		selectHandler(event, policies, selected, setSelected);				
 	}
 		
 	const isChecked = (id) =>{		
@@ -74,11 +79,15 @@ function Policies(props) {
 	);
 };
 
-	const isSelected = (selected, targetDataItem) =>{		
-		return (selected.id === targetDataItem.id);
+	const isSelected = (selected, targetDataItem) =>{	
+		if (selected){
+			return (selected.id === targetDataItem.id);
+		}else{
+			return false;
+		} 
 	};
 
-	const selectHandler = (event, data, setSelected) =>{
+	const selectHandler = (event, data,selected, setSelected) =>{
 		const getTargetDataItem = () => {
 			return data.find(x => x.id === parseInt(event.target.value));	
 		};
@@ -86,9 +95,13 @@ function Policies(props) {
 		const targetDataItem = getTargetDataItem();
 		
 		if (targetDataItem){
-			setSelected(targetDataItem);
+			if (isSelected(selected, targetDataItem)){
+				setSelected(null);	
+			}else{
+				setSelected(targetDataItem);
+			}			
 		}else{
-			targetDataItem(null);
+			setSelected(null);
 		}	
 	};
 

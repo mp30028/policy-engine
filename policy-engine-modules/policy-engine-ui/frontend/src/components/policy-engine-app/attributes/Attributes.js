@@ -21,7 +21,8 @@ function Attributes(props) {
 		if(props.selectedPolicy){		
 			DataService.fetchByIds(getAssociatedAttributeIdsFromPolicies(props.selectedPolicy)).then((data) => setAttributes(data));
 		}else{
-			console.warn("Policies:useEffect:props.selectedAssetTypes is not set");
+			//console.warn("Policies:useEffect:props.selectedAssetTypes is not set");
+			setAttributes([]);
 		}
 	}, [props.selectedPolicy]);		
 	
