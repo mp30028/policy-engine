@@ -1,14 +1,20 @@
 import React, { useState, useEffect, /*useRef*/ } from 'react';
-import "../css/Zonesoft.css"
+import "../static/css/Zonesoft.css"
 import * as DataService from "./DataService";
 
-function Attributes() {
+function Attributes(props) {
 
 	const [attributes, setAttributes] = useState([]);
+	const [selectedPolicy, setSelectedPolicy] = useState([]);
 
 	useEffect(() => {
+		console.log("FROM Attributes-useEffect[selectedPolicy]: selectedPolicy =", selectedPolicy)
 		DataService.fetchAll().then((data) => setAttributes(data));
-	}, [setAttributes]);
+	}, [selectedPolicy]);
+	
+	useEffect(() => {
+		setSelectedPolicy(props.selectedPolicy);
+	}, [props.selectedPolicy]);	
 	
 	return (
 		<table className="zsft-table" style={{ width: "100%" }}>

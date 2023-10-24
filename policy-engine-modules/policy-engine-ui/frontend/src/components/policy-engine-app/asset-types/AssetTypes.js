@@ -1,5 +1,5 @@
 import React, { useState, useEffect, /*useRef*/ } from 'react';
-import "../css/Zonesoft.css"
+import "../static/css/Zonesoft.css"
 import * as DataService from "./DataService";
 
 function AssetTypes(props) {
