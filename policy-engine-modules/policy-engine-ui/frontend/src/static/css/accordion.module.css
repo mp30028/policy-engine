@@ -26,12 +26,14 @@ body {
   cursor: pointer;
   display: flex;
   align-items: center;
-  width: 100%;
+/*  width: 100%;*/
+  width: 1000px;
   margin: 0;
 /*  padding: 1rem;*/
-  font-size: 1rem;
+  font-size: 1.2rem;
   text-align: left;
 /*  color: #007bff;*/
+  color: darkblue;
   background-color: transparent;
   border: none;
 /*  border: 1px;*/
@@ -69,17 +71,25 @@ body {
 }
 
 .title {
-  color: black;
-  font-size: 1.2rem;
+  color: darkblue;
+  font-size: 1.8rem;
   font-weight: bold;
   text-align: left;
-  width: 1000px;
+  width: 1000px;  
 }
 
 .description {
 /*  color: var(--ifm-color-gray-600);*/
   color: dimgrey;
-  margin: 0;
-  font-size: 1.0rem;
+  margin: 5pt;
+  font-size: 0.8rem;
   text-align: left;
+}
+
+.label {
+	background-color: white;
+	color: dimgrey;
+	font-size: 0.75rem;
+	font-weight: bold;
+	padding: 5pt;
 }
