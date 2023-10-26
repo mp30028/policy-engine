@@ -1,79 +1,33 @@
-import { useState, useEffect } from 'react';
-import "../../../static/css/Zonesoft.css"
-import DataService from "../../../data-services/DataServiceClass";
-import ApiClientConfigs from "../../../configurations/ApiClientConfigsClass";
-import View from './View';
+import React, {useEffect, useState } from 'react';
+import { Accordion} from '@szhsin/react-accordion';
+import ApiClientConfigs from "../../../classes/configurations/ApiClientConfigs.class";
+import DataService from "../../../classes/data-services/DataService.class";
+import AccordionItem from './AccordionItem';
+import styles from "./accordion.module.css";
+import Policies from "../policies/Policies";
 
-function AssetTypes(props) {
+function AssetTypes() {
 	const ENTITY_NAME = "assetType";
-	const view = new View();
-	const [assetTypes, setAssetTypes] = useState([]);	
-	const [listOfSelected, setListOfSelected]= useState([]);	
-	
+	const [assetTypes, setAssetTypes] = useState([]);
+			
 	useEffect(() => {
 		const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);
 		dataService.fetchAll().then((data) => setAssetTypes(data));
 	}, [setAssetTypes]);
-	
-	useEffect(() => {
-		props.selectedAssetTypesSetter(listOfSelected);
-	}, [props, listOfSelected]);
-	
-	const onAddNewClick = () =>{
-		//to-do
-	}
-	
-	const onSelectionChange = (event) =>{
-		multiSelectHandler(event, assetTypes, listOfSelected, setListOfSelected);		
-	}
-		
-	const isChecked = (id) =>{		
-		const getTargetDataItem = () => {
-			return assetTypes.find(x => x.id === id);	
-		};		
-		return isInListOfSelected(listOfSelected, getTargetDataItem());
-	}
-	
-	return view.getView(ENTITY_NAME,assetTypes, onAddNewClick, onSelectionChange, isChecked );
+			
+	return (
+		<div className={styles.accordion}>
+			<Accordion allowMultiple >
+				{assetTypes.map(at => 							
+					<AccordionItem header={at.name} label="Asset-Type" description={at.description} key={at.id}>						
+						<Policies assetType={at}/>
+						<hr style={{ width: "1000px", marginLeft: "0" }} />
+					</AccordionItem>
+					
+				)}
+			</Accordion>
+		</div>
+	);
 }
-
-	const isInListOfSelected = (listOfSelected, targetDataItem) =>{
-		const selector = ((item) => item.id === targetDataItem.id);
-		const foundItem = listOfSelected.find(selector);
-		return foundItem ? true : false;
-	};
-
-	const multiSelectHandler = (event, data, listOfSelected, setListOfSelected) =>{								
-		const getTargetDataItem = () => {
-			return data.find(x => x.id === parseInt(event.target.value));	
-		};
-								
-		const updateListOfSelected = () =>{
-			const addToListOfSelected = () =>{
-				const newListOfSelected =  [...listOfSelected, targetDataItem];
-				setListOfSelected(newListOfSelected);
-			};
-	
-			const removeFromListOfSelected = () =>{
-				const selector = ((item) => item.id !== targetDataItem.id);			
-				const newListOfSelected = listOfSelected.filter(selector);
-				setListOfSelected(newListOfSelected);			
-			};
-						
-			if (event.target.checked){
-				if (!isInListOfSelected(listOfSelected, targetDataItem)){
-					addToListOfSelected();
-				}//else do nothing as already in the list
-			}else{
-				if (isInListOfSelected(listOfSelected, targetDataItem)){
-					removeFromListOfSelected();
-				}//else do nothing as already not there
-			}
-		};		
-
-		const targetDataItem = getTargetDataItem();
-		updateListOfSelected();		
-	}
-		
 
 export default AssetTypes;

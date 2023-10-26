@@ -1,36 +1,42 @@
-import { useState, useEffect } from 'react';
-import "../../../static/css/Zonesoft.css"
-import DataService from "../../../data-services/DataServiceClass";
-import ApiClientConfigs from "../../../configurations/ApiClientConfigsClass";
-import View from './View';
+import React, {useEffect, useState } from 'react';
+import { Accordion} from '@szhsin/react-accordion';
+import ApiClientConfigs from "../../../classes/configurations/ApiClientConfigs.class";
+import DataService from "../../../classes/data-services/DataService.class";
+import AccordionItem from './AccordionItem';
+import styles from "./accordion.module.css";
+// import Policies from "../policies/Policies";
 
 function Attributes(props) {
 	const ENTITY_NAME = "attribute";
-	const view = new View();
-	 
 	const [attributes, setAttributes] = useState([]);
-
+	const [policy, setPolicy]= useState(null);
+				
 	useEffect(() => {
-		const getAssociatedAttributeIdsFromPolicies = (policy) =>{
-			if(policy){
-				if(policy.associatedAttributes){
-					return policy.associatedAttributes.map(a => a.id);	
-				}else{
-					return [];
-				}				
-			} else{
-				return [];
-			}			
-		}				
-		if(props.selectedPolicy){
+		if(props.policy){			
+			const getAttributeIdsFromPolicy = (policy) =>{		
+				return policy.associatedAttributes.map(a => a.id);
+			}
+			setPolicy(props.policy);
 			const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);
-			dataService.fetchByIds(getAssociatedAttributeIdsFromPolicies(props.selectedPolicy)).then((data) => setAttributes(data));
+			dataService.fetchByIds(getAttributeIdsFromPolicy(props.policy)).then((data) => setAttributes(data));						
 		}else{
+			setPolicy(null);
 			setAttributes([]);
 		}
-	}, [props.selectedPolicy]);		
+	}, [props.policy]);	
 	
-	return view.getView(attributes);
+			
+	return (
+		<div className = { styles.accordion } >
+			 {(policy) ? <span>Attributes for <b>{policy.name}</b> policy</span>  : <p>-- no policy assigned --</p>}
+			<Accordion>
+				{attributes.map(a =>
+					<AccordionItem header={a.name} label="Attribute" description={a.description} key={a.id}>
+					</AccordionItem>
+				)}
+			</Accordion>
+		</div>
+	);
 }
 
 export default Attributes;
