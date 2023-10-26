@@ -20,9 +20,10 @@ function AssetTypes() {
 			<Accordion allowMultiple >
 				{assetTypes.map(at => 							
 					<AccordionItem header={at.name} label="Asset-Type" description={at.description} key={at.id}>						
-						---- Policies for the Asset-Type above to go here -----
-						<Policies assetType={at}/>							
+						<Policies assetType={at}/>
+						<hr style={{ width: "1000px", marginLeft: "0" }} />
 					</AccordionItem>
+					
 				)}
 			</Accordion>
 		</div>

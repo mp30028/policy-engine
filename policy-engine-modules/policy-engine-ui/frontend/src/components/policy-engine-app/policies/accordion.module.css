@@ -1,21 +1,5 @@
-body {
-  font-family: sans-serif;
-}
-
-.list li {
-/*  margin: 0.75rem 0;*/
-}
-
-.info {
-/*  color: rgb(0, 49, 0);*/
-/*  background-color: rgb(230, 246, 230);*/
-/*  padding: 1rem;*/
-/*  border-radius: 4px;*/
-}
-
 .accordion {
-  border-top: 1px solid #ccc;
-  margin-top: 1rem;
+  border: none;
 }
 
 .item {
@@ -27,11 +11,12 @@ body {
   display: flex;
   align-items: center;
 /*  width: 100%;*/
-  width: 1000px;
+  width: 500px;
   margin: 0;
 /*  padding: 1rem;*/
-  font-size: 1.2rem;
+  font-size: 0.8rem;
   text-align: left;
+  font-weight: bold;
 /*  color: #007bff;*/
   color: darkblue;
   background-color: transparent;
@@ -45,19 +30,20 @@ body {
 }
 
 .itemBtnExpanded {
+	  width: 500px;
 /*  background-color: #e7e7e7;*/
 /*  border: 1px;*/
 }
 
-.itemContent {
-  transition: height 0.25s cubic-bezier(0, 0, 0, 1);
-  color: cadetblue
-}
+/*.itemContent {*/
+/*  transition: height 0.25s cubic-bezier(0, 0, 0, 1);*/
+/*  color: cadetblue*/
+/*}*/
 
-.itemPanel {
-  padding: 1rem;
+/*.itemPanel {*/
+/*  padding: 1rem;*/
 /*  border: 1px;*/
-}
+/*}*/
 
 .chevron {
   margin-left: auto;
@@ -75,7 +61,7 @@ body {
   font-size: 1.8rem;
   font-weight: bold;
   text-align: left;
-  width: 1000px;  
+  width: 100%;  
 }
 
 .description {

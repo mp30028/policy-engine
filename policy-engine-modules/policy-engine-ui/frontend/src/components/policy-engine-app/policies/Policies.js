@@ -27,7 +27,7 @@ export default function Policies(props) {
 	
 	return (
 		<div className = { styles.accordion } >
-			 {(assetType) ? <h3> Polices applied to {assetType.name} </h3> : <p>-- asset type not available --</p>}
+			 {(assetType) ? <span>Polices applied to <b>{assetType.name}</b></span>  : <p>-- asset type not available --</p>}
 			<Accordion>
 				{policies.map(p =>
 					<AccordionItem header={p.name} label="Policy" description={p.description} key={p.id}>
