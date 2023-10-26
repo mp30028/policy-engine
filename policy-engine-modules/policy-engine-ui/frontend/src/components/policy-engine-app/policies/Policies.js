@@ -4,7 +4,7 @@ import ApiClientConfigs from "../../../classes/configurations/ApiClientConfigs.c
 import DataService from "../../../classes/data-services/DataService.class";
 import AccordionItem from './AccordionItem';
 import styles from "./accordion.module.css";
-//import Attributes from "./attributes/Attributes";
+import Attributes from "../attributes/Attributes";
 
 export default function Policies(props) {
 	const ENTITY_NAME = "policy";
@@ -27,12 +27,13 @@ export default function Policies(props) {
 	
 	return (
 		<div className = { styles.accordion } >
-			 {(assetType) ? <span>Polices applied to <b>{assetType.name}</b></span>  : <p>-- asset type not available --</p>}
+			 {(assetType) ? <span className='indent'>Polices applied to <b>{assetType.name}</b></span>  : <p>-- asset type not available --</p>}
 			<Accordion>
 				{policies.map(p =>
 					<AccordionItem header={p.name} label="Policy" description={p.description} key={p.id}>
-						---- Attributes for the Policy above to go here -----
-						{/*<Attributes />*/}
+						<div className='indent'>
+							{<Attributes policy={p}/>}
+						</div>
 					</AccordionItem>
 				)}
 			</Accordion>
