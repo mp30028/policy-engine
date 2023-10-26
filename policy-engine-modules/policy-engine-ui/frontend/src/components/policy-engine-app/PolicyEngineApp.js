@@ -1,10 +1,10 @@
 import React, {useEffect, useState } from 'react';
 import { Accordion} from '@szhsin/react-accordion';
-import ApiClientConfigs from "../../configurations/ApiClientConfigsClass";
-import DataService from "../../data-services/DataServiceClass";
-import AccordionItem from './accordion/AccordionItem';
-import styles from "../../static/css/accordion.module.css";
-//import Policies from "./policies/Policies";
+import ApiClientConfigs from "../../classes/configurations/ApiClientConfigs.class";
+import DataService from "../../classes/data-services/DataService.class";
+import AccordionItem from './AccordionItem';
+import styles from "./accordion.module.css";
+import Policies from "./policies/Policies";
 
 function PolicyEngineApp() {
 	const ENTITY_NAME = "assetType";
@@ -21,7 +21,7 @@ function PolicyEngineApp() {
 				{assetTypes.map(at => 							
 					<AccordionItem header={at.name} label="Asset-Type" description={at.description} key={at.id}>						
 						---- Policies for the Asset-Type above to go here -----
-						{/*<Policies />*/}							
+						<Policies assetType={at}/>							
 					</AccordionItem>
 				)}
 			</Accordion>

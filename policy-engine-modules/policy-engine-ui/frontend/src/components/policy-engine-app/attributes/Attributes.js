@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import "../../../static/css/Zonesoft.css"
-import DataService from "../../../data-services/DataServiceClass";
-import ApiClientConfigs from "../../../configurations/ApiClientConfigsClass";
+import ApiClientConfigs from "../../../classes/configurations/ApiClientConfigs.class";
+import DataService from "../../../classes/data-services/DataService.class";
 import View from './View';
 
 function Attributes(props) {

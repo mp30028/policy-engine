@@ -1,7 +1,7 @@
 import React from 'react';
 import { AccordionItem as Item} from '@szhsin/react-accordion';
 import chevronDown from "../../../static/icons/chevron-down.svg";
-import styles from "../../../static/css/accordion.module.css";
+import styles from "./accordion.module.css";
 
 export default function AccordionItem({ header, label, description, ...rest }){
 	return (
@@ -22,8 +22,7 @@ export default function AccordionItem({ header, label, description, ...rest }){
 		    buttonProps={{className: ({ isEnter }) =>`${styles.itemBtn} ${isEnter && styles.itemBtnExpanded}`}}
 		    contentProps={{ className: styles.itemContent }}
 		    panelProps={{ className: styles.itemPanel }}
-		  />
-		  <hr style={{ width: "1000px", marginLeft: "0" }} />
+		  />		  
   		</>
   );
 }
