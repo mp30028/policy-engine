@@ -47,7 +47,10 @@ function AssetTypes() {
 		<div className={styles.accordion}>
 			<Accordion allowMultiple >
 				{assetTypes.map(at => 							
-					<AccordionItem assetType={at} onDataChange={onDataChangeHandler}   label="Asset-Type" key={at.id}>						
+/*					<AccordionItem assetType={at} onDataChange={onDataChangeHandler}   label="Asset-Type" key={at.id}> */
+/*					<AccordionItem assetTypeIn={at} label="Asset-Type" key={at.id}> */
+					<AccordionItem assetTypeIn={at} onDataChange={onDataChangeHandler}   label="Asset-Type" key={at.id}>
+
 						<Policies assetType={at} />
 						<hr style={{ width: "1000px", marginLeft: "0" }} />
 					</AccordionItem>					
