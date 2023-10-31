@@ -143,7 +143,7 @@ public class ToStringHelper {
 	}
 	
 	public<E> ToStringHelper wr(String key, List<E> value, Function<E, String> mapper) {
-		String valueAsString = this.<E>listToString(value, mapper);
+		String valueAsString = Objects.nonNull(value) ? this.<E>listToString(value, mapper) : "null";
 //		this.pad().key(key).value((Object)valueAsString).endLn();
 		this.key(key).value((Object)valueAsString);
 		return this;
