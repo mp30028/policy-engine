@@ -10,7 +10,7 @@ export default class DataService{
 			fetchUrl, 
 			{	method: 'GET',
 				headers: {
-					'Content-Type': 'application/json;charset=U-8',
+					'Content-Type': 'application/json;charset=UTF-8',
 					'Accept': 'application/json, text/plain'
 				}
 			}
@@ -34,5 +34,22 @@ export default class DataService{
 		}else{
 			return emptyResult;
 		}
+	}
+	
+	update = async (data) => {
+		const fetchUrl = this.configs.getUrl(this.pathName) + "/" + data.id;
+		console.log("FROM DataService.update: data=", JSON.stringify(data), "id=", data.id);
+		const response = await fetch(
+			fetchUrl,
+			{
+				method: 'PUT',
+				body: JSON.stringify(data),
+				headers: {
+					'Content-Type': 'application/json;charset=UTF-8',
+					'Accept': 'application/json, text/plain'
+				}
+			}
+		);
+		return await response.json();
 	}
 }
