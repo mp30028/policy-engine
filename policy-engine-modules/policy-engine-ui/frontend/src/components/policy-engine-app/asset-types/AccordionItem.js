@@ -5,44 +5,33 @@ import "../../../static/css/InlineEdit.css"
 import styles from "./accordion.module.css";
 import EasyEdit from "react-easy-edit";
 
-const AccordionItem = ({ assetTypeIn, onDataChange, label, ...rest }) => {
-//const AccordionItem = (props) => {	
-	console.log("FROM AccordionItem: assetTypeIn=", assetTypeIn);
-	
+const AccordionItem = ({ assetTypeIn, onDataChange, label, ...rest }) => {	
 	const [assetType, setAssetType] = useState(null);
 	
 	useEffect(() => {
 		setAssetType(assetTypeIn);
 	}, [assetTypeIn, setAssetType])	
 	
-//	useEffect(() => {
-//		setAssetType(props.assetType);
-//	}, [props.assetType, setAssetType])
-
 	useEffect(() => {
-		console.log("FROM AccordionItem:useEffect[assetType]: assetType=", (assetType)?assetType.toString():'null');
+		console.log("FROM AccordionItem:useEffect[assetType]: assetType=", (assetType)?assetType.toString():'null'); 
 	}, [assetType])
 
-	
 	const dataUpdateHandler = (newValue) => {
 		console.log("FROM AccordionItem.dataUpdateHandler", "key=", newValue.key, ", value=", newValue.value);
 		var updated = assetType;
 		updated[newValue.key]= newValue.value;
 		console.log("FROM AccordionItem.dataUpdateHandler", "updated=", updated);
 		setAssetType(updated);
-//		if (props.onDataChange)  props.onDataChange({type: 'UPDATE', data: updated});
 		if (onDataChange)  onDataChange({type: 'UPDATE', data: updated});
 	};
 	
 	return (
 		<>
 			<Item
-				{/*...props.rest*/
-				...rest}
+				{...rest}
 				header={
 					(assetType) ?
 						<>
-{/*							<span className={styles.label}>{props.label + '-' + assetType.id}: </span>*/}
 							<span className={styles.label}>{label + '-' + assetType.id}: </span>
 							<NameEdit assetType={assetType} onChange={dataUpdateHandler} />						
 							<DescriptionEdit assetType={assetType} onChange={dataUpdateHandler}/>						
@@ -60,10 +49,8 @@ const AccordionItem = ({ assetTypeIn, onDataChange, label, ...rest }) => {
 	);
 }
 
-
 const NameEdit = (props) => {	
 	const save = (newValue) => {
-//		console.log("FROM AccordionItem.save", "key=", newValue.key, "value", newValue.value);
 		props.onChange(newValue);
 	};
 		
@@ -86,10 +73,8 @@ const NameEdit = (props) => {
 	);
 }
 
-
 const DescriptionEdit = (props) => {
 	const save = (newValue) => {
-//		console.log("FROM AccordionItem.save", "key=", newValue.key, "value", newValue.value);
 		props.onChange(newValue);
 	}
 	
@@ -110,7 +95,5 @@ const DescriptionEdit = (props) => {
 		</span>
 	)		
 }
-
-
 	
 export default AccordionItem;
