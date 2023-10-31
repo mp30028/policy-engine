@@ -1,0 +1,17 @@
+button.easy-edit-button[name="save"]{
+	background-image: url(../icons/green-tick.svg);
+	background-size: cover;
+	background-color: white;
+	height: 22px;
+	width: 22px;
+	border: none;
+}
+
+button.easy-edit-button[name="cancel"]{
+	background-image: url(../icons/red-cross.svg);
+	background-size: cover;
+	background-color: white;
+	height: 22px;
+	width: 22px;
+	border: none;
+}
