@@ -5,6 +5,9 @@ import DataService from "../../../classes/data-services/DataService.class";
 import AccordionItem from './AccordionItem';
 import styles from "./accordion.module.css";
 import Attributes from "../attributes/Attributes";
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+
 
 export default function Policies(props) {
 	const ENTITY_NAME = "policy";
@@ -25,6 +28,11 @@ export default function Policies(props) {
 		}
 	}, [props.assetType]);	
 	
+	const onAssignPolicyHandler = (event) =>{
+		console.log("FROM Policies.onAssignPolicyHandler, event=", event);
+		alert("FROM Policies.onAssignPolicyHandler");
+	}
+	
 	return (
 		<div className = { styles.accordion } >
 			 {(assetType) ? <span className='indent'>Polices applied to <b>{assetType.name}</b></span>  : <p>-- asset type not available --</p>}
@@ -36,7 +44,25 @@ export default function Policies(props) {
 						</div>
 					</AccordionItem>
 				)}
+				<PoliciesPickList onAssign={onAssignPolicyHandler}/>
 			</Accordion>
 		</div>
 	)
+}
+
+const AssignPolicy = (props) => {		
+	return (
+			<AccordionItem header="" onClick={props.onClick} label={"-- click to assign another policy --"} description="" key={-1}></AccordionItem>
+	);
+}
+
+const PoliciesPickList = (props) => {
+	return (
+			<Popup 
+				trigger={open => <AssignPolicy onClick={open} />}
+				modal
+			>
+				<span> Popup content </span>
+			</Popup>
+	);	
 }
