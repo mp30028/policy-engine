@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import "./static/css/ZonesoftTabs.css"
-import AssetTypes from "./components/policy-engine-app/asset-types/AssetTypes"
+import AssetTypes from "./components/policy-engine-app/manage-asset-types/AssetTypes"
 
 function Home() {
 	return (

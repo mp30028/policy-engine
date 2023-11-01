@@ -61,6 +61,7 @@ const PoliciesPickList = (props) => {
 			<Popup 
 				trigger={open => <AssignPolicy onClick={open} />}
 				modal
+				nested
 			>
 				<span> Popup content </span>
 			</Popup>
