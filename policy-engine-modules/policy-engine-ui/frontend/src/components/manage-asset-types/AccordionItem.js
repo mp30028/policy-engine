@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AccordionItem as Item } from '@szhsin/react-accordion';
-import chevronDown from "../../../static/icons/chevron-down.svg";
-import "../../../static/css/InlineEdit.css"
+import chevronDown from "../../static/icons/chevron-down.svg";
+import "../../static/css/InlineEdit.css"
 import styles from "./accordion.module.css";
 import EasyEdit from "react-easy-edit";
 

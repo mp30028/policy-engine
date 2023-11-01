@@ -1,10 +1,10 @@
 import React, {useEffect, useState } from 'react';
 import { Accordion} from '@szhsin/react-accordion';
-import ApiClientConfigs from "../../../classes/configurations/ApiClientConfigs.class";
-import DataService from "../../../classes/data-services/DataService.class";
+import ApiClientConfigs from "../../classes/configurations/ApiClientConfigs.class";
+import DataService from "../../classes/data-services/DataService.class";
 import AccordionItem from './AccordionItem';
 import styles from "./accordion.module.css";
-import Policies from "../policies/Policies";
+import Policies from "./policies/Policies";
 
 function AssetTypes() {
 	const ENTITY_NAME = "assetType";

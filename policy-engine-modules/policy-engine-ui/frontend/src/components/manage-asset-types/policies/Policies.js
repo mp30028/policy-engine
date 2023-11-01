@@ -27,12 +27,7 @@ export default function Policies(props) {
 			setPolicies([]);
 		}
 	}, [props.assetType]);	
-	
-	const onAssignPolicyHandler = (event) =>{
-		console.log("FROM Policies.onAssignPolicyHandler, event=", event);
-		alert("FROM Policies.onAssignPolicyHandler");
-	}
-	
+		
 	return (
 		<div className = { styles.accordion } >
 			 {(assetType) ? <span className='indent'>Polices applied to <b>{assetType.name}</b></span>  : <p>-- asset type not available --</p>}
@@ -44,19 +39,21 @@ export default function Policies(props) {
 						</div>
 					</AccordionItem>
 				)}
-				<PoliciesPickList onAssign={onAssignPolicyHandler}/>
+				<PoliciesPickList />
 			</Accordion>
 		</div>
 	)
 }
 
-const AssignPolicy = (props) => {		
+const AssignPolicy = React.forwardRef((props, ref) => {		
 	return (
+		<>
 			<AccordionItem header="" onClick={props.onClick} label={"-- click to assign another policy --"} description="" key={-1}></AccordionItem>
+		</>
 	);
-}
+})
 
-const PoliciesPickList = (props) => {
+const PoliciesPickList = React.forwardRef( (props, ref) => {
 	return (
 			<Popup 
 				trigger={open => <AssignPolicy onClick={open} />}
@@ -66,4 +63,4 @@ const PoliciesPickList = (props) => {
 				<span> Popup content </span>
 			</Popup>
 	);	
-}
+})
