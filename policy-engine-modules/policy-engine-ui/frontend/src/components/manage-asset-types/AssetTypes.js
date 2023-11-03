@@ -1,10 +1,10 @@
 import React, {useEffect, useState } from 'react';
 import { Accordion} from '@szhsin/react-accordion';
-import ApiClientConfigs from "../../../classes/configurations/ApiClientConfigs.class";
-import DataService from "../../../classes/data-services/DataService.class";
+import ApiClientConfigs from "../../classes/configurations/ApiClientConfigs.class";
+import DataService from "../../classes/data-services/DataService.class";
 import AccordionItem from './AccordionItem';
 import styles from "./accordion.module.css";
-import Policies from "../policies/Policies";
+import Policies from "./policies/Policies";
 
 function AssetTypes() {
 	const ENTITY_NAME = "assetType";
@@ -79,7 +79,7 @@ function AssetTypes() {
 			<Accordion allowMultiple >
 				{assetTypes.map(at => 							
 					<AccordionItem assetTypeIn={at} onDataChange={onDataChangeHandler}   label="Asset-Type" key={at.id}>
-						<Policies assetType={at} />
+						<Policies assetType={at} onDataChange={onDataChangeHandler} />
 						<hr style={{ width: "1000px", marginLeft: "0" }} />
 					</AccordionItem>					
 				)}

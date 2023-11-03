@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.zonesoft.policyengine.api.entities.AssetType;
 import com.zonesoft.policyengine.api.entities.Policy;
 import com.zonesoft.policyengine.api.repositories.PolicyRepository;
 
@@ -42,6 +42,26 @@ public class PolicyService {
 			LOGGER.debug("FROM PolicyService.findByIds: ids=<empty>");
 			List<Policy> emptyList = new ArrayList<>();
 			return emptyList;
+		}
+	}
+
+	public void updateAssociatedPolicies(AssetType assetType) {
+		List<Policy> assignedPolicies = policyRepository.findAll()
+			.stream().filter(
+				p -> p
+						.getAssetTypes()
+						.stream()
+						.anyMatch(
+								at -> at.getId() == assetType.getId()
+						)
+				)
+				.toList();
+		for (Policy policy : assignedPolicies) {
+			policy.getAssetTypes().removeIf(at -> at.getId() == assetType.getId());
+		}				
+		for(Policy policy : assetType.getPolicies()) {
+			Policy currentPolicy = policyRepository.findById(policy.getId()).get();			
+			currentPolicy.getAssetTypes().add(assetType);
 		}
 	}
 

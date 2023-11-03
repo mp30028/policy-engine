@@ -83,3 +83,29 @@
 .indent{
 	left: 20px;
 }
+
+
+.addNew{
+	background-image: url(../../../static/icons/addnew_grey2.svg);
+	background-size: cover;
+	background-color: rgb(192, 192, 192);
+  	margin-left: auto;
+  	cursor: pointer;
+  	float: inline-start;	
+	height: 22pt;
+	width: 22pt;
+/*	padding-top: 20px;	*/
+	border: none;
+/*	border-style: solid;*/
+/*	border-color: grey;*/
+/*	border-width: 1pt;*/
+}
+
+.addNew:hover{
+	background-image: url(../../../static/icons/addnew_colour2.svg);
+	background-size: cover;
+	background-color: transparent;
+/*	height: 20px;*/
+/*	width: 20px;*/
+	border: none;
+}

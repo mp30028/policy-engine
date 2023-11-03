@@ -31,6 +31,10 @@ public class AssetTypeService {
 	}
 	
 	public AssetType update(AssetType assetType) {
+		//Because AssetType is not the owning side updates using AssetType.setPolicies(policies) will
+		// not persist. Policy is the owning side. So need to update from that side as done via the next statement    				
+		//policyService.updateAssociatedPolicies(assetType);
+		policyService.updateAssociatedPolicies(assetType);
 		return assetTypeRepository.save(assetType);
 	}
 	
@@ -47,15 +51,16 @@ public class AssetTypeService {
     		LOGGER.debug("FROM AssetTypeService.update: description={}", description);
     		if (description.isPresent()) assetType.setDescription(description.get());
     		
-    		Optional<List<Policy>> policies = getFromMap(map,"policies");
-    		if (policies.isPresent()) {
-    			LOGGER.debug("FROM AssetTypeService.update: policies={}", policies);
-    			assetType.setPolicies(policies.get());
+    		Optional<List<Policy>> policiesOptional = getFromMap(map,"policies");
+    		if (policiesOptional.isPresent()) {
+    			LOGGER.debug("FROM AssetTypeService.update: policiesOptional={}", policiesOptional);
+    			assetType.setPolicies(policiesOptional.get());
     		}else{
-    			Optional<List<Map<String, Object>>> associatedPolicies = getFromMap(map,"associatedPolicies");    			
-    			if(associatedPolicies.isPresent()) {
-    				LOGGER.debug("FROM AssetTypeService.update: associatedPolicies={}", associatedPolicies);
-    				assetType.setPolicies(this.getPolicesFromAssociatedPolicies( associatedPolicies.get()));
+    			Optional<List<Map<String, Object>>> associatedPoliciesOptional = getFromMap(map,"associatedPolicies");    			
+    			if(associatedPoliciesOptional.isPresent()) {
+    				LOGGER.debug("FROM AssetTypeService.update: associatedPoliciesOptional={}", associatedPoliciesOptional);
+    				List<Policy>  associatedPolicies = getPolicesFromAssociatedPolicies(associatedPoliciesOptional.get());
+    				assetType.setPolicies(associatedPolicies);
     			}
     		}
     		return this.update(assetType);

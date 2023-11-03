@@ -10,8 +10,8 @@ export default function AccordionItem({ header, label, description, ...rest }){
 		    {...rest}
 		    header={
 		      <>
-		      	<span className={styles.label}>{label}: </span>
-		        {header}, 
+		      	<span className={styles.label}>{label} </span>
+		        {header} 
 				<p className={styles.description}>
 					{description}
 				</p>
