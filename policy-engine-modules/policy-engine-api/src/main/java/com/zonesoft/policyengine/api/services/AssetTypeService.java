@@ -47,15 +47,19 @@ public class AssetTypeService {
     		LOGGER.debug("FROM AssetTypeService.update: description={}", description);
     		if (description.isPresent()) assetType.setDescription(description.get());
     		
-    		Optional<List<Policy>> policies = getFromMap(map,"policies");
-    		if (policies.isPresent()) {
-    			LOGGER.debug("FROM AssetTypeService.update: policies={}", policies);
-    			assetType.setPolicies(policies.get());
+    		Optional<List<Policy>> policiesOptional = getFromMap(map,"policies");
+    		if (policiesOptional.isPresent()) {
+    			LOGGER.debug("FROM AssetTypeService.update: policiesOptional={}", policiesOptional);
+    			assetType.setPolicies(policiesOptional.get());
     		}else{
-    			Optional<List<Map<String, Object>>> associatedPolicies = getFromMap(map,"associatedPolicies");    			
-    			if(associatedPolicies.isPresent()) {
-    				LOGGER.debug("FROM AssetTypeService.update: associatedPolicies={}", associatedPolicies);
-    				assetType.setPolicies(this.getPolicesFromAssociatedPolicies( associatedPolicies.get()));
+    			Optional<List<Map<String, Object>>> associatedPoliciesOptional = getFromMap(map,"associatedPolicies");    			
+    			if(associatedPoliciesOptional.isPresent()) {
+    				LOGGER.debug("FROM AssetTypeService.update: associatedPoliciesOptional={}", associatedPoliciesOptional);
+    				List<Policy>  associatedPolicies = getPolicesFromAssociatedPolicies(associatedPoliciesOptional.get());
+    				//assetType.setPolicies(associatedPolicies);
+    				//The above commented out line wont work because AssetType is not the owning side. Policy is the owning side.
+    				//So need to update from that side as done via the next statement    				
+    				policyService.updateAssociatedPolicies(assetType, associatedPolicies);
     			}
     		}
     		return this.update(assetType);

@@ -79,7 +79,7 @@ function AssetTypes() {
 			<Accordion allowMultiple >
 				{assetTypes.map(at => 							
 					<AccordionItem assetTypeIn={at} onDataChange={onDataChangeHandler}   label="Asset-Type" key={at.id}>
-						<Policies assetType={at} />
+						<Policies assetType={at} onDataChange={onDataChangeHandler} />
 						<hr style={{ width: "1000px", marginLeft: "0" }} />
 					</AccordionItem>					
 				)}

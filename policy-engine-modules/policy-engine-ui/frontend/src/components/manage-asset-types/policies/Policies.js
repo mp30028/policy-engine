@@ -8,29 +8,32 @@ import Attributes from "../attributes/Attributes";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 
-
 export default function Policies(props) {
 	const ENTITY_NAME = "policy";
 	const [policies, setPolicies] = useState([]);
-	const [assetType, setAssetType]= useState(null);
 	
 	useEffect(() => {
 		if(props.assetType){			
 			const getPolicyIdsFromAssetType = (assetType) =>{		
 				return assetType.associatedPolicies.map(p => p.id);
 			}
-			setAssetType(props.assetType);
 			const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);
 			dataService.fetchByIds(getPolicyIdsFromAssetType(props.assetType)).then((data) => setPolicies(data));						
 		}else{
-			setAssetType(null);
 			setPolicies([]);
 		}
-	}, [props.assetType]);	
+	}, [props.assetType]);
+	
+	const handlePoliciesChange = (updatedPolicies) =>{
+		setPolicies(updatedPolicies);
+		const updatedAssetType = props.assetType;
+		updatedAssetType.associatedPolicies = updatedPolicies.map(p => ({id: p.id, name: p.name}));
+		props.onDataChange({type: "UPDATE", data: updatedAssetType});
+	}
 		
 	return (
 		<div className = { styles.accordion } >
-			 {(assetType) ? <span className='indent'>Polices applied to <b>{assetType.name}</b></span>  : <p>-- asset type not available --</p>}
+			 {(props.assetType) ? <span className='indent'>Polices applied to <b>{props.assetType.name}</b></span>  : <p>-- asset type not available --</p>}
 			<Accordion>
 				{policies.map(p =>
 					<AccordionItem header={p.name} label="Policy" description={p.description} key={p.id}>
@@ -39,7 +42,13 @@ export default function Policies(props) {
 						</div>
 					</AccordionItem>
 				)}
-				<PoliciesPickList parentId={(assetType) ? assetType.id : 0} currentlySelectedPolices={policies} ENTITY_NAME={ENTITY_NAME} />
+				
+				<PoliciesPickList 
+					parentId={props.assetType.id} 
+					currentlySelectedPolices={policies} 
+					ENTITY_NAME={ENTITY_NAME} 
+					onSelectedChange={handlePoliciesChange} 
+				/>
 				<br/>
 			</Accordion>
 		</div>
@@ -54,22 +63,40 @@ const PoliciesPickList = React.forwardRef( (props, ref) => {
 	useEffect(() => {
 		const dataService = new DataService(new ApiClientConfigs(),props.ENTITY_NAME);
 		dataService.fetchAll().then((data) => setAllPolicies(data));		
-	}, [setAllPolicies, props.ENTITY_NAME]);	
+	}, [props.ENTITY_NAME]);	
 	
 	useEffect(() =>{
 		const updateSelectedPolicies = (all, currentlySelected) =>{
-			const updatedSelected = (all.filter(p => props.currentlySelectedPolices.find((q) => q.id === p.id)));
+			const updatedSelected = (all.filter(p => currentlySelected.find((q) => q.id === p.id)));
 			setSelectedPolicies(updatedSelected);
-		};		
+		};
+		
 		updateSelectedPolicies(allPolicies, props.currentlySelectedPolices);
 	},[props, allPolicies])
 	
 	const isSelected = (id) => {
-		console.log("FROM isSelected id=", id);
+		console.log("FROM Policies.PoliciesPickList.isSelected id=", id);
 		const findResult = selectedPolices.find((p) => (p.id === id));
 		var returnValue = ((findResult) ? true : false);
 		console.log("FROM isSelected returnValue=", returnValue);
 		return returnValue;
+	}
+
+	const onSelectionChange = (event) =>{
+		const updateSelectedPolicies = (id, isChecked) => {
+			if (isChecked){
+				const updated = [...selectedPolices, allPolicies.find(p => p.id === id)]
+				props.onSelectedChange(updated);
+			}else{				
+				const updated = selectedPolices.filter(p => (p.id !== id));
+				props.onSelectedChange(updated);
+			}
+		}
+			
+		const isChecked = event.target.checked;
+		const id = event.target.id ? parseInt(event.target.id) : 0;
+		console.log("FROM Policies.onSelectionChange: id=", id, "isChecked=", isChecked);
+		updateSelectedPolicies (id, isChecked);
 	}
 
 	const AssignPolicy = React.forwardRef((props, ref) => {		
@@ -82,7 +109,6 @@ const PoliciesPickList = React.forwardRef( (props, ref) => {
 			
 		);
 	})
-
 	
 	return (
 			<Popup 
@@ -92,9 +118,11 @@ const PoliciesPickList = React.forwardRef( (props, ref) => {
 			>
 				<span>
 					 {allPolicies.map(p =>
-					 	<span key={props.parenteId + '-' + p.id}> 
-					 		{p.name} - 	{(isSelected(p.id)).toString()} <br/>
-					 	</span>
+					 	<div key={props.parenteId + '-' + p.id}> 
+					 		{p.name} - 	{(isSelected(p.id)).toString()}
+					 		<input type='checkbox' id={p.id} name={'popup-item-' + p.id} checked={isSelected(p.id)} onChange={onSelectionChange} />
+					 		
+					 	</div>
 					 )}
 				</span>
 			</Popup>
