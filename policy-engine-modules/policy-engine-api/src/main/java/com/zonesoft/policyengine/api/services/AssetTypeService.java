@@ -31,6 +31,10 @@ public class AssetTypeService {
 	}
 	
 	public AssetType update(AssetType assetType) {
+		//Because AssetType is not the owning side updates using AssetType.setPolicies(policies) will
+		// not persist. Policy is the owning side. So need to update from that side as done via the next statement    				
+		//policyService.updateAssociatedPolicies(assetType);
+		policyService.updateAssociatedPolicies(assetType);
 		return assetTypeRepository.save(assetType);
 	}
 	
@@ -56,10 +60,7 @@ public class AssetTypeService {
     			if(associatedPoliciesOptional.isPresent()) {
     				LOGGER.debug("FROM AssetTypeService.update: associatedPoliciesOptional={}", associatedPoliciesOptional);
     				List<Policy>  associatedPolicies = getPolicesFromAssociatedPolicies(associatedPoliciesOptional.get());
-    				//assetType.setPolicies(associatedPolicies);
-    				//The above commented out line wont work because AssetType is not the owning side. Policy is the owning side.
-    				//So need to update from that side as done via the next statement    				
-    				policyService.updateAssociatedPolicies(assetType, associatedPolicies);
+    				assetType.setPolicies(associatedPolicies);
     			}
     		}
     		return this.update(assetType);

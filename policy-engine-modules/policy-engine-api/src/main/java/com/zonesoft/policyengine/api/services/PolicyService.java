@@ -45,10 +45,23 @@ public class PolicyService {
 		}
 	}
 
-	public void updateAssociatedPolicies(AssetType assetType, List<Policy> associatedPolicies) {
-		for(Policy policy : associatedPolicies) {
-			if(policy.getAssetTypes().contains(assetType)) policy.getAssetTypes().remove(assetType);
-			policy.getAssetTypes().add(assetType);
+	public void updateAssociatedPolicies(AssetType assetType) {
+		List<Policy> assignedPolicies = policyRepository.findAll()
+			.stream().filter(
+				p -> p
+						.getAssetTypes()
+						.stream()
+						.anyMatch(
+								at -> at.getId() == assetType.getId()
+						)
+				)
+				.toList();
+		for (Policy policy : assignedPolicies) {
+			policy.getAssetTypes().removeIf(at -> at.getId() == assetType.getId());
+		}				
+		for(Policy policy : assetType.getPolicies()) {
+			Policy currentPolicy = policyRepository.findById(policy.getId()).get();			
+			currentPolicy.getAssetTypes().add(assetType);
 		}
 	}
 
