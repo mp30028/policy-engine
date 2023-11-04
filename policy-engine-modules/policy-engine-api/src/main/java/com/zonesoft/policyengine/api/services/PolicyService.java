@@ -45,22 +45,31 @@ public class PolicyService {
 		}
 	}
 	
-	private List<Policy> getCurrentlyAssignedPolicies(AssetType assetType){
-		List<Long> assignedPoliciesIds = assetType.getPolicies().stream().map(p -> p.getId()).toList();
-		return this.findByIds(assignedPoliciesIds);
+	private List<Policy> getPoliciesAssignedToAssetType(AssetType assetType){
+		return policyRepository.findAll()
+		.stream().filter(
+			p -> p
+					.getAssetTypes()
+					.stream()
+					.anyMatch(
+							at -> at.getId() == assetType.getId()
+					)
+			)
+			.toList();				
 	}
 	
-	private void unassignAssetTypeFromPolicies(AssetType assetType) {		
-		List<Policy> assignedPolicies = getCurrentlyAssignedPolicies(assetType);
-		assignedPolicies.stream().map(p -> p.getAssetTypes().removeIf(at -> at.getId() == assetType.getId()));		
+	private void removeAssetTypeFromPolicies(AssetType assetType) {
+		List<Policy> policiesAssignedWithAssetType = getPoliciesAssignedToAssetType(assetType);
+		for (Policy policy : policiesAssignedWithAssetType) {			
+			policy.getAssetTypes().removeIf(at -> at.getId() == assetType.getId());
+		}		
 	}
-
-	public void updateAssignedPolicies(AssetType assetType) {
-		unassignAssetTypeFromPolicies(assetType);
+	
+	public void updateAssignedPolicies(AssetType assetType) {		
+		removeAssetTypeFromPolicies(assetType);						
 		for(Policy policy : assetType.getPolicies()) {
 			Policy currentPolicy = policyRepository.findById(policy.getId()).get();			
 			currentPolicy.getAssetTypes().add(assetType);
 		}
 	}	
-	
 }
