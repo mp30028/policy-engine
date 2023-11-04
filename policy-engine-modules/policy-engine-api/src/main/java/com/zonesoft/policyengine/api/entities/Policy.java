@@ -100,8 +100,7 @@ public class Policy implements Identifier{
 			.wrLn("id", id)
 			.wrLn("name", name)
 			.wrLn("description", description)
-			.<Attribute>wrLn("policy-attributes", attributes, a -> a.getName())
-			.<AssetType>wr("policy-applied-to", assetTypes, a -> a.getName())
+			.<Attribute>wr("policy-attributes", attributes, a -> a.getName())
 		.blockEnd();		
 	}
 
