@@ -44,25 +44,32 @@ public class PolicyService {
 			return emptyList;
 		}
 	}
-
-	public void updateAssociatedPolicies(AssetType assetType) {
-		List<Policy> assignedPolicies = policyRepository.findAll()
-			.stream().filter(
-				p -> p
-						.getAssetTypes()
-						.stream()
-						.anyMatch(
-								at -> at.getId() == assetType.getId()
-						)
-				)
-				.toList();
-		for (Policy policy : assignedPolicies) {
+	
+	private List<Policy> getPoliciesAssignedToAssetType(AssetType assetType){
+		return policyRepository.findAll()
+		.stream().filter(
+			p -> p
+					.getAssetTypes()
+					.stream()
+					.anyMatch(
+							at -> at.getId() == assetType.getId()
+					)
+			)
+			.toList();				
+	}
+	
+	private void removeAssetTypeFromPolicies(AssetType assetType) {
+		List<Policy> policiesAssignedWithAssetType = getPoliciesAssignedToAssetType(assetType);
+		for (Policy policy : policiesAssignedWithAssetType) {			
 			policy.getAssetTypes().removeIf(at -> at.getId() == assetType.getId());
-		}				
+		}		
+	}
+	
+	public void updateAssignedPolicies(AssetType assetType) {		
+		removeAssetTypeFromPolicies(assetType);						
 		for(Policy policy : assetType.getPolicies()) {
 			Policy currentPolicy = policyRepository.findById(policy.getId()).get();			
 			currentPolicy.getAssetTypes().add(assetType);
 		}
-	}
-
+	}	
 }

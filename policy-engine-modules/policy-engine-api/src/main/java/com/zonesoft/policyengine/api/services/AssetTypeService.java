@@ -34,7 +34,7 @@ public class AssetTypeService {
 		//Because AssetType is not the owning side updates using AssetType.setPolicies(policies) will
 		// not persist. Policy is the owning side. So need to update from that side as done via the next statement    				
 		//policyService.updateAssociatedPolicies(assetType);
-		policyService.updateAssociatedPolicies(assetType);
+		policyService.updateAssignedPolicies(assetType);
 		return assetTypeRepository.save(assetType);
 	}
 	
