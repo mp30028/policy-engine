@@ -5,8 +5,11 @@ import DataService from "../../classes/data-services/DataService.class";
 import AccordionItem from './AccordionItem';
 import styles from "./accordion.module.css";
 import Policies from "./policies/Policies";
+import Logger from '../../classes/logger/Logger.class';
 
-function AssetTypes() {
+function AssetTypes() {	
+	const LOGGER = new Logger().getLogger("AssetTypes");	
+		
 	const ENTITY_NAME = "assetType";
 	
 	const [assetTypes, setAssetTypes] = useState([]);
@@ -19,11 +22,12 @@ function AssetTypes() {
 	}, [setAssetTypes]);
 	
 	useEffect(() =>{
-		console.log("FROM AssetTypes#useEffect[pendingChanges]: pendingChanges=", pendingChanges);
-	},[pendingChanges])
+		LOGGER.debug("FROM AssetTypes#useEffect[pendingChanges]: pendingChanges=", pendingChanges);
+	},[pendingChanges,LOGGER])
 	
 	const onDataChangeHandler = (change) =>{
 		var updated = null;
+		LOGGER.debug("FROM AssetTypes.onDataChangeHandler, change=", change);
 		switch (change.type){
 			case 'UPDATE':				
 				updated = assetTypes.map((at) => (at.id === change.data.id) ? change.data : at);
@@ -36,7 +40,7 @@ function AssetTypes() {
 				updated = [...assetTypes, change.data];
 				break;
 			default:
-				console.log("FROM AssetTypes.onDataChangeHandler, Something very unexpected has  happened.");
+				LOGGER.debug("FROM AssetTypes.onDataChangeHandler, Something very unexpected has  happened.");
 		}
 		if (updated) setAssetTypes(updated);
 		setIsSavePending((updated)? true : false);
@@ -50,24 +54,24 @@ function AssetTypes() {
 	
 	const onSaveAllHandler = () => {
 		const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);		
-		//for(var change in pendingChanges){
+		LOGGER.debug("FROM AssetTypes.pendingChanges, pendingChanges=", pendingChanges);
 		pendingChanges.forEach((change) => {
 			switch (change.type){
 				case 'UPDATE':
-					console.log("FROM AssetTypes.onSaveAllHandler, case 'UPDATE'");										
+					LOGGER.debug("FROM AssetTypes.onSaveAllHandler, case 'UPDATE'");										
 					dataService.update(change.data);
 					break;
 				case 'DELETE':
 					change.data.status = 'DELETED';
-					console.log("FROM AssetTypes.onSaveAllHandler, case 'DELETE'");
+					LOGGER.debug("FROM AssetTypes.onSaveAllHandler, case 'DELETE'");
 					//dataService.delete(change.data);				
 					break;
 				case 'ADD-NEW':
-					console.log("FROM AssetTypes.onSaveAllHandler, case 'ADD-NEW'");
+					LOGGER.debug("FROM AssetTypes.onSaveAllHandler, case 'ADD-NEW'");
 					//dataService.addNew(change.data);
 					break;
 				default:
-					console.log("FROM AssetTypes.onSaveAllHandler, Something very unexpected has  happened.");
+					LOGGER.debug("FROM AssetTypes.onSaveAllHandler, Something very unexpected has  happened.");
 			}		
 		});				
 		setPendingChanges([]);
@@ -90,9 +94,9 @@ function AssetTypes() {
 }
 
 const SaveAllButton = (props) =>{
-	
+	const LOGGER = new Logger().getLogger("AT_SaveAllButton");		
 	const saveAllOnClick = (event) =>{
-		console.log("FROM AssetTypes.saveAllOnClick, event=", event);
+		LOGGER.debug("FROM AssetTypes.saveAllOnClick, event=", event);
 		props.onSave();
 	}
 		

@@ -4,8 +4,10 @@ import chevronDown from "../../static/icons/chevron-down.svg";
 import "../../static/css/InlineEdit.css"
 import styles from "./accordion.module.css";
 import EasyEdit from "react-easy-edit";
+import Logger from '../../classes/logger/Logger.class';
 
-const AccordionItem = ({ assetTypeIn, onDataChange, label, ...rest }) => {	
+const AccordionItem = ({ assetTypeIn, onDataChange, label, ...rest }) => {
+	const LOGGER = new Logger().getLogger("AT_AccordionItem");	
 	const [assetType, setAssetType] = useState(null);
 	
 	useEffect(() => {
@@ -13,14 +15,14 @@ const AccordionItem = ({ assetTypeIn, onDataChange, label, ...rest }) => {
 	}, [assetTypeIn, setAssetType])	
 	
 	useEffect(() => {
-		console.log("FROM AccordionItem:useEffect[assetType]: assetType=", (assetType)?assetType.toString():'null'); 
-	}, [assetType])
+		LOGGER.debug("FROM AccordionItem:useEffect[assetType]: assetType=", (assetType)?assetType.toString():'null'); 
+	}, [assetType, LOGGER])
 
 	const dataUpdateHandler = (newValue) => {
-		console.log("FROM AccordionItem.dataUpdateHandler", "key=", newValue.key, ", value=", newValue.value);
+		LOGGER.debug("FROM AccordionItem.dataUpdateHandler", "key=", newValue.key, ", value=", newValue.value);
 		var updated = assetType;
 		updated[newValue.key]= newValue.value;
-		console.log("FROM AccordionItem.dataUpdateHandler", "updated=", updated);
+		LOGGER.debug("FROM AccordionItem.dataUpdateHandler", "updated=", updated);
 		setAssetType(updated);
 		if (onDataChange)  onDataChange({type: 'UPDATE', data: updated});
 	};
@@ -49,13 +51,14 @@ const AccordionItem = ({ assetTypeIn, onDataChange, label, ...rest }) => {
 	);
 }
 
-const NameEdit = (props) => {	
+const NameEdit = (props) => {
+	const LOGGER = new Logger().getLogger("AT_AI_NameEdit");
 	const save = (newValue) => {
 		props.onChange(newValue);
 	};
 		
 	const cancel = () => {
-		console.log("FROM AccordionItem.cancel");
+		LOGGER.debug("FROM AccordionItem.NameEdit.cancel");
 	};		
 		
 	return (
@@ -74,12 +77,13 @@ const NameEdit = (props) => {
 }
 
 const DescriptionEdit = (props) => {
+	const LOGGER = new Logger().getLogger("AT_AI_DescriptionEdit");		
 	const save = (newValue) => {
 		props.onChange(newValue);
 	}
 	
 	const cancel = () => {
-		console.log("FROM AccordionItem.cancel");
+		LOGGER.debug("FROM AccordionItem.DescriptionEdit.cancel");
 	}		
 	return (
 		<span className={styles.description}>

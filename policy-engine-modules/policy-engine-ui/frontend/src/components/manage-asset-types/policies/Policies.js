@@ -7,8 +7,10 @@ import styles from "./accordion.module.css";
 import Attributes from "../attributes/Attributes";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import Logger from '../../../classes/logger/Logger.class';
 
 export default function Policies(props) {
+//	const LOGGER = new Logger().getLogger("AT_Policies");	
 	const ENTITY_NAME = "policy";
 	const [policies, setPolicies] = useState([]);
 	
@@ -43,7 +45,7 @@ export default function Policies(props) {
 					</AccordionItem>
 				)}
 				
-				<PoliciesPickList 
+				<PickList 
 					parentId={props.assetType.id} 
 					currentlySelectedPolices={policies} 
 					ENTITY_NAME={ENTITY_NAME} 
@@ -55,8 +57,8 @@ export default function Policies(props) {
 	)
 }
 
-const PoliciesPickList = React.forwardRef( (props, ref) => {
-	
+const PickList = React.forwardRef( (props, ref) => {
+	const LOGGER = new Logger().getLogger("AT_Policies_PickList");
 	const [allPolicies, setAllPolicies] = useState([]);
 	const [selectedPolices, setSelectedPolicies] = useState([]);
 	
@@ -75,10 +77,10 @@ const PoliciesPickList = React.forwardRef( (props, ref) => {
 	},[props, allPolicies])
 	
 	const isSelected = (id) => {
-		console.log("FROM Policies.PoliciesPickList.isSelected id=", id);
+		LOGGER.debug("FROM Policies.PoliciesPickList.isSelected id=", id);
 		const findResult = selectedPolices.find((p) => (p.id === id));
 		var returnValue = ((findResult) ? true : false);
-		console.log("FROM isSelected returnValue=", returnValue);
+		LOGGER.debug("FROM isSelected returnValue=", returnValue);
 		return returnValue;
 	}
 
@@ -95,7 +97,7 @@ const PoliciesPickList = React.forwardRef( (props, ref) => {
 			
 		const isChecked = event.target.checked;
 		const id = event.target.id ? parseInt(event.target.id) : 0;
-		console.log("FROM Policies.onSelectionChange: id=", id, "isChecked=", isChecked);
+		LOGGER.debug("FROM Policies.onSelectionChange: id=", id, "isChecked=", isChecked);
 		updateSelectedPolicies (id, isChecked);
 	}
 
