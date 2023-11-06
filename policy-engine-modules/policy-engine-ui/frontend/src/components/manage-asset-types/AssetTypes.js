@@ -47,8 +47,15 @@ function AssetTypes() {
 		updatePendingChanges(change);
 	}
 	
-	const updatePendingChanges = (change) =>{
-		const updatedPendingChanges = [...pendingChanges, change];
+	const updatePendingChanges = (change) =>{		
+		function addOrReplace(pendingChanges, change){
+			const itemsToKeep = pendingChanges.filter((item) => item.data.id !== change.data.id); 
+ 			const updatedWithChange =  [...itemsToKeep, change];
+ 			return updatedWithChange;
+		}
+		LOGGER.debug("FROM AssetTypes.updatePendingChanges: pendingChanges=", pendingChanges);
+		const updatedPendingChanges = addOrReplace(pendingChanges, change);
+		LOGGER.debug("FROM AssetTypes.updatePendingChanges: updatedPendingChanges=", updatedPendingChanges);
 		setPendingChanges(updatedPendingChanges);
 	};
 	
@@ -59,7 +66,7 @@ function AssetTypes() {
 			switch (change.type){
 				case 'UPDATE':
 					LOGGER.debug("FROM AssetTypes.onSaveAllHandler, case 'UPDATE'");										
-					dataService.update(change.data);
+					dataService.update(change.data).then( (data) => LOGGER.debug("FROM AssetTypes.onSaveAllHandler, updated-data=", data));
 					break;
 				case 'DELETE':
 					change.data.status = 'DELETED';
