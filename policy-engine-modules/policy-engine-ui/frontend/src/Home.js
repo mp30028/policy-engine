@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import "./static/css/ZonesoftTabs.css"
-import AssetTypes from "./components/manage-asset-types/AssetTypes"
+import ManageAssetTypes from "./components/manage-asset-types/ManageAssetTypes"
 
 function Home() {
 	return (
@@ -13,7 +13,7 @@ function Home() {
 			</TabList>
 
 			<TabPanel>
-				<AssetTypes />
+				<ManageAssetTypes />
 			</TabPanel>
 			
 			<TabPanel>

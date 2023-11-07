@@ -2,12 +2,13 @@ import React, {useEffect, useState } from 'react';
 import { Accordion} from '@szhsin/react-accordion';
 import ApiClientConfigs from "../../classes/configurations/ApiClientConfigs.class";
 import DataService from "../../classes/data-services/DataService.class";
-import AccordionItem from './AccordionItem';
-import styles from "./accordion.module.css";
+import AccordionItem from './accordion-item/AccordionItem';
+import styles from "./accordion-item/accordion.module.css";
 import Policies from "./policies/Policies";
 import Logger from '../../classes/logger/Logger.class';
+import CommitChangesButton from './commit-changes-button/CommitChangesButton';
 
-function AssetTypes() {	
+function ManageAssetTypes() {	
 	const LOGGER = new Logger().getLogger("AssetTypes");	
 		
 	const ENTITY_NAME = "assetType";
@@ -95,21 +96,9 @@ function AssetTypes() {
 					</AccordionItem>					
 				)}
 			</Accordion>
-			{isSavePending && <SaveAllButton onSave={onSaveAllHandler} data={assetTypes} />}
+			{isSavePending && <CommitChangesButton onSave={onSaveAllHandler} />}
 		</div>
 	);
 }
 
-const SaveAllButton = (props) =>{
-	const LOGGER = new Logger().getLogger("AT_SaveAllButton");		
-	const saveAllOnClick = (event) =>{
-		LOGGER.debug("FROM AssetTypes.saveAllOnClick, event=", event);
-		props.onSave();
-	}
-		
-	return (
-		<input type='button' name='saveAll' id='saveAll' onClick={saveAllOnClick} value='Commit Changes'/>
-	); 	
-}
-
-export default AssetTypes;
+export default ManageAssetTypes;
