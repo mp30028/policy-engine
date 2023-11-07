@@ -1,6 +1,6 @@
 import React from 'react';
 import { AccordionItem as Item} from '@szhsin/react-accordion';
-import chevronDown from "../../../static/icons/chevron-down.svg";
+import chevronDown from "../../../../static/icons/chevron-down.svg";
 import styles from "./accordion.module.css";
 
 export default function AccordionItem({ header, label, description, ...rest }){

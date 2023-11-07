@@ -3,7 +3,7 @@ import ApiClientConfigs from "../../../classes/configurations/ApiClientConfigs.c
 import DataService from "../../../classes/data-services/DataService.class";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
-import styles from "./accordion.module.css";
+import styles from "./accordion-item/accordion.module.css";
 import Logger from '../../../classes/logger/Logger.class';
 
 const PickList = React.forwardRef( (props, ref) => {

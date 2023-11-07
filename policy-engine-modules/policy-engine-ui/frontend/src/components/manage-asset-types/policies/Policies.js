@@ -2,8 +2,8 @@ import React, {useEffect, useState } from 'react';
 import { Accordion} from '@szhsin/react-accordion';
 import ApiClientConfigs from "../../../classes/configurations/ApiClientConfigs.class";
 import DataService from "../../../classes/data-services/DataService.class";
-import AccordionItem from './AccordionItem';
-import styles from "./accordion.module.css";
+import AccordionItem from './accordion-item/AccordionItem';
+import styles from "./accordion-item/accordion.module.css";
 import Attributes from "./attributes/Attributes";
 import PickList from './PickList';
 

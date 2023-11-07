@@ -86,7 +86,7 @@
 
 
 .addNew{
-	background-image: url(../../../static/icons/addnew_grey2.svg);
+	background-image: url(../../../../static/icons/addnew_grey2.svg);
 	background-size: cover;
 	background-color: rgb(192, 192, 192);
   	margin-left: auto;
@@ -102,7 +102,7 @@
 }
 
 .addNew:hover{
-	background-image: url(../../../static/icons/addnew_colour2.svg);
+	background-image: url(../../../../static/icons/addnew_colour2.svg);
 	background-size: cover;
 	background-color: transparent;
 /*	height: 20px;*/
