@@ -1,6 +1,7 @@
 import React from 'react';
 import Logger from '../../classes/logger/Logger.class';
 import EasyEdit from "react-easy-edit";
+import "../../static/css/InlineEdit.css"
 
 const NameEdit = (props) => {
 	const LOGGER = new Logger().getLogger("AT_AI_NameEdit");
