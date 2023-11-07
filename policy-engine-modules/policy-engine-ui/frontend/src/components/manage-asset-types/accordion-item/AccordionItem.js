@@ -3,8 +3,8 @@ import { AccordionItem as Item } from '@szhsin/react-accordion';
 import chevronDown from "../../../static/icons/chevron-down.svg";
 import styles from "./accordion.module.css";
 import Logger from '../../../classes/logger/Logger.class';
-import NameEdit from '../NameEdit';
-import DescriptionEdit from '../DescriptionEdit';
+import NameEdit from '../name-edit/NameEdit';
+import DescriptionEdit from '../description-edit/DescriptionEdit';
 
 const AccordionItem = ({ assetTypeIn, onDataChange, label, ...rest }) => {
 	const LOGGER = new Logger().getLogger("AT_AccordionItem");	
