@@ -6,7 +6,7 @@ import AccordionItem from './AccordionItem';
 import styles from "./accordion.module.css";
 import Policies from "./policies/Policies";
 import Logger from '../../classes/logger/Logger.class';
-import SaveAllButton from './SaveAllButton';
+import CommitChangesButton from './CommitChangesButton';
 
 function ManageAssetTypes() {	
 	const LOGGER = new Logger().getLogger("AssetTypes");	
@@ -96,7 +96,7 @@ function ManageAssetTypes() {
 					</AccordionItem>					
 				)}
 			</Accordion>
-			{isSavePending && <SaveAllButton onSave={onSaveAllHandler} data={assetTypes} />}
+			{isSavePending && <CommitChangesButton onSave={onSaveAllHandler} />}
 		</div>
 	);
 }
