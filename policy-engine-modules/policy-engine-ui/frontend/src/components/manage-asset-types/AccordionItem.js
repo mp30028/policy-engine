@@ -5,6 +5,7 @@ import "../../static/css/InlineEdit.css"
 import styles from "./accordion.module.css";
 import EasyEdit from "react-easy-edit";
 import Logger from '../../classes/logger/Logger.class';
+import NameEdit from './NameEdit';
 
 const AccordionItem = ({ assetTypeIn, onDataChange, label, ...rest }) => {
 	const LOGGER = new Logger().getLogger("AT_AccordionItem");	
@@ -48,31 +49,6 @@ const AccordionItem = ({ assetTypeIn, onDataChange, label, ...rest }) => {
 				panelProps={{ className: styles.itemPanel }}
 			/>
 		</>
-	);
-}
-
-const NameEdit = (props) => {
-	const LOGGER = new Logger().getLogger("AT_AI_NameEdit");
-	const save = (newValue) => {
-		props.onChange(newValue);
-	};
-		
-	const cancel = () => {
-		LOGGER.debug("FROM AccordionItem.NameEdit.cancel");
-	};		
-		
-	return (
-		<span>
-			<EasyEdit
-				type="text"
-				value={props.assetType.name}
-				onSave={(newValue) => save({ key: 'name', value: newValue })}
-				onCancel={cancel}
-					saveButtonLabel=""
-					cancelButtonLabel=""			
-				attributes={{ name: "name-edit", id: props.assetType.id }}
-			/>
-		</span>
 	);
 }
 
