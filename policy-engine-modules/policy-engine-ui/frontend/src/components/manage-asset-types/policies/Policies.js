@@ -4,7 +4,7 @@ import ApiClientConfigs from "../../../classes/configurations/ApiClientConfigs.c
 import DataService from "../../../classes/data-services/DataService.class";
 import AccordionItem from './AccordionItem';
 import styles from "./accordion.module.css";
-import Attributes from "../attributes/Attributes";
+import Attributes from "./attributes/Attributes";
 import PickList from './PickList';
 
 export default function Policies(props) {	
