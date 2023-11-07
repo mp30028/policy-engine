@@ -50,6 +50,8 @@ export default class DataService{
 				}
 			}
 		);
-		return await response.json();
+		const responseJson = await response.json();
+		console.log("FROM DataService.update: responseJson=", responseJson);
+		return responseJson;
 	}
 }
