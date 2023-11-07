@@ -1,5 +1,5 @@
 import React from 'react';
-import Logger from '../../classes/logger/Logger.class';
+import Logger from '../../../classes/logger/Logger.class';
 
 const CommitChangesButton = (props) =>{
 	const LOGGER = new Logger().getLogger("AT_CommitChangesButton");

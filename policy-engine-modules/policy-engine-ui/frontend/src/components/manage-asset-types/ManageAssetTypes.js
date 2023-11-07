@@ -6,7 +6,7 @@ import AccordionItem from './accordion-item/AccordionItem';
 import styles from "./accordion-item/accordion.module.css";
 import Policies from "./policies/Policies";
 import Logger from '../../classes/logger/Logger.class';
-import CommitChangesButton from './CommitChangesButton';
+import CommitChangesButton from './commit-changes-button/CommitChangesButton';
 
 function ManageAssetTypes() {	
 	const LOGGER = new Logger().getLogger("AssetTypes");	
