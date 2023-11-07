@@ -5,7 +5,7 @@ import DataService from "../../../classes/data-services/DataService.class";
 import AccordionItem from './accordion-item/AccordionItem';
 import styles from "./accordion-item/accordion.module.css";
 import Attributes from "./attributes/Attributes";
-import PickList from './PickList';
+import PickList from './picklist/PickList';
 
 export default function Policies(props) {	
 	const ENTITY_NAME = "policy";

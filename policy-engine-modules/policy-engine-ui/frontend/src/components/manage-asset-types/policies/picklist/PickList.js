@@ -1,10 +1,10 @@
 import React, {useEffect, useState } from 'react';
-import ApiClientConfigs from "../../../classes/configurations/ApiClientConfigs.class";
-import DataService from "../../../classes/data-services/DataService.class";
+import ApiClientConfigs from "../../../../classes/configurations/ApiClientConfigs.class";
+import DataService from "../../../../classes/data-services/DataService.class";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
-import styles from "./accordion-item/accordion.module.css";
-import Logger from '../../../classes/logger/Logger.class';
+import styles from "../accordion-item/accordion.module.css";
+import Logger from '../../../../classes/logger/Logger.class';
 
 const PickList = React.forwardRef( (props, ref) => {
 	const LOGGER = new Logger().getLogger("AT_Policies_PickList");
