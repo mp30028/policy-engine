@@ -6,6 +6,7 @@ import AccordionItem from './AccordionItem';
 import styles from "./accordion.module.css";
 import Policies from "./policies/Policies";
 import Logger from '../../classes/logger/Logger.class';
+import SaveAllButton from './SaveAllButton';
 
 function ManageAssetTypes() {	
 	const LOGGER = new Logger().getLogger("AssetTypes");	
@@ -100,16 +101,16 @@ function ManageAssetTypes() {
 	);
 }
 
-const SaveAllButton = (props) =>{
-	const LOGGER = new Logger().getLogger("AT_SaveAllButton");		
-	const saveAllOnClick = (event) =>{
-		LOGGER.debug("FROM AssetTypes.saveAllOnClick, event=", event);
-		props.onSave();
-	}
-		
-	return (
-		<input type='button' name='saveAll' id='saveAll' onClick={saveAllOnClick} value='Commit Changes'/>
-	); 	
-}
+//const SaveAllButton = (props) =>{
+//	const LOGGER = new Logger().getLogger("AT_SaveAllButton");		
+//	const saveAllOnClick = (event) =>{
+//		LOGGER.debug("FROM AssetTypes.saveAllOnClick, event=", event);
+//		props.onSave();
+//	}
+//		
+//	return (
+//		<input type='button' name='saveAll' id='saveAll' onClick={saveAllOnClick} value='Commit Changes'/>
+//	); 	
+//}
 
 export default ManageAssetTypes;
