@@ -1,7 +1,7 @@
 import React from 'react';
 import Logger from '../../classes/logger/Logger.class';
 import EasyEdit from "react-easy-edit";
-import styles from "./accordion.module.css";
+import styles from "./accordion-item/accordion.module.css";
 import "../../static/css/InlineEdit.css"
 
 const DescriptionEdit = (props) => {

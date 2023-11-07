@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { AccordionItem as Item } from '@szhsin/react-accordion';
-import chevronDown from "../../static/icons/chevron-down.svg";
+import chevronDown from "../../../static/icons/chevron-down.svg";
 import styles from "./accordion.module.css";
-import Logger from '../../classes/logger/Logger.class';
-import NameEdit from './NameEdit';
-import DescriptionEdit from './DescriptionEdit';
+import Logger from '../../../classes/logger/Logger.class';
+import NameEdit from '../NameEdit';
+import DescriptionEdit from '../DescriptionEdit';
 
 const AccordionItem = ({ assetTypeIn, onDataChange, label, ...rest }) => {
 	const LOGGER = new Logger().getLogger("AT_AccordionItem");	
