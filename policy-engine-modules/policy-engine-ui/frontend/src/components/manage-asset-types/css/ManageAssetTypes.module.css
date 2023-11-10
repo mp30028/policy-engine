@@ -1,0 +1,155 @@
+/*
+accordion
+	item
+		item-heading
+			item-button
+		item-content
+			item-panel
+*/
+
+
+.accordion {
+  margin-bottom: 2.0rem;
+  background-color: transparent;
+  border: none;
+  text-align: left;
+  width: 800px;  
+}
+
+.item {
+/*  border: 1px solid var(--ifm-color-emphasis-300);*/
+  border: 1px solid ;
+  border-top-width: 0;  
+}
+
+.item:first-of-type {
+  border-top-width: 1px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.item:last-of-type {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.item:first-of-type .button {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.item:last-of-type .button:not(.buttonExpanded) {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.button {
+  cursor: pointer;
+  display: flex;
+/*  align-items: center;*/
+  margin: 0;
+  padding: 1rem 1.25rem;
+  font-size: 0.8rem;
+  font-weight: 400;
+  text-align: left;
+  color: var(--ifm-font-color-base);
+  background-color: transparent;
+  border: none;
+  transition: background-color 0.25s ease-in-out;
+  width: 100%;
+}
+
+.buttonExpanded {
+  composes: button;
+  box-shadow: inset 0 -1px 0 0 var(--ifm-color-emphasis-300);
+  color: var(--ifm-color-primary);
+  background-color: var(--accordion-background);
+}
+
+.button:hover {
+  box-shadow: 0 0 0 1px var(--ifm-color-primary);
+}
+
+.button:disabled {
+  box-shadow: none;
+  cursor: auto;
+  color: #808080;
+}
+
+.button:focus {
+  position: relative;
+  outline: none;
+}
+
+.button:focus-visible {
+  box-shadow: 0 0 0 3px var(--ifm-color-primary);
+}
+
+@supports not selector(:focus-visible) {
+  .button:focus {
+    box-shadow: 0 0 0 3px var(--ifm-color-primary);
+  }
+}
+
+.chevron {
+  flex-shrink: 0;
+  transition: transform 0.25s cubic-bezier(0, 0, 0, 1);
+  
+}
+
+.buttonExpanded .chevron {
+  transform: rotate(180deg);
+}
+
+.content {
+  transition: height 0.25s cubic-bezier(0, 0, 0, 1);
+}
+
+.panel {
+  padding: 1rem 1.25rem;
+}
+
+.header{
+	background-color: transparent;	
+}
+
+
+.headerContainer{
+	display: inline-block;
+	width: 100%;		
+}
+
+.headerContainer .label{
+	background-color: white;
+	color: dimgrey;
+	font-size: 0.75rem;
+	font-weight: bold;
+	padding: 5pt;
+}
+
+.headerContainer .id{
+	background-color: white;
+	color: black;
+	font-size: 0.85rem;
+	font-weight: bold;
+}
+
+.headerContainer .content{
+	background-color: white;
+	color: rgb(0, 0, 128);
+	font-size: 1rem;
+	font-weight: bold;
+}
+
+.headerContainer .info{
+  color: dimgrey;
+  margin: 5pt;
+  font-size: 0.8rem;
+  text-align: left;
+  font-weight: normal;
+}
+
+.headerContainer .chevron{
+  float: inline-end;
+  margin-right: 5px;
+}

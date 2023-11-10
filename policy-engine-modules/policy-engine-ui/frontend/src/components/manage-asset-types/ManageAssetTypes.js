@@ -1,104 +1,68 @@
 import React, {useEffect, useState } from 'react';
-import { Accordion} from '@szhsin/react-accordion';
+import { Accordion, AccordionItem} from '@szhsin/react-accordion';
 import ApiClientConfigs from "../../classes/configurations/ApiClientConfigs.class";
 import DataService from "../../classes/data-services/DataService.class";
-import AccordionItem from './accordion-item/AccordionItem';
-import styles from "./accordion-item/accordion.module.css";
-import Policies from "./policies/Policies";
 import Logger from '../../classes/logger/Logger.class';
-import CommitChangesButton from './commit-changes-button/CommitChangesButton';
+import styles from "./css/ManageAssetTypes.module.css";
+import chevronDown from "../../static/icons/chevron-down.svg";
 
-function ManageAssetTypes() {	
-	const LOGGER = new Logger().getLogger("AssetTypes");	
-		
+function ManageAssetTypes() {
+	const MODULE = 	"ManageAssetTypes";
+	const LOGGER = new Logger().getLogger(MODULE);			
 	const ENTITY_NAME = "assetType";
-	
 	const [assetTypes, setAssetTypes] = useState([]);
-	const [isSavePending, setIsSavePending] = useState(false);
-	const [pendingChanges, setPendingChanges] = useState([]);
 			
 	useEffect(() => {
 		const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);
 		dataService.fetchAll().then((data) => setAssetTypes(data));
-	}, [setAssetTypes]);
-	
-	useEffect(() =>{
-		LOGGER.debug("FROM AssetTypes#useEffect[pendingChanges]: pendingChanges=", pendingChanges);
-	},[pendingChanges,LOGGER])
-	
-	const onDataChangeHandler = (change) =>{
-		var updated = null;
-		LOGGER.debug("FROM AssetTypes.onDataChangeHandler, change=", change);
-		switch (change.type){
-			case 'UPDATE':				
-				updated = assetTypes.map((at) => (at.id === change.data.id) ? change.data : at);
-				break;
-			case 'DELETE':
-				change.data.status = 'DELETED';
-				updated = assetTypes.map((at) => (at.id === change.data.id) ? null : at);				
-				break;
-			case 'ADD-NEW':
-				updated = [...assetTypes, change.data];
-				break;
-			default:
-				LOGGER.debug("FROM AssetTypes.onDataChangeHandler, Something very unexpected has  happened.");
-		}
-		if (updated) setAssetTypes(updated);
-		setIsSavePending((updated)? true : false);
-		updatePendingChanges(change);
-	}
-	
-	const updatePendingChanges = (change) =>{		
-		function addOrReplace(pendingChanges, change){
-			const itemsToKeep = pendingChanges.filter((item) => item.data.id !== change.data.id); 
- 			const updatedWithChange =  [...itemsToKeep, change];
- 			return updatedWithChange;
-		}
-		LOGGER.debug("FROM AssetTypes.updatePendingChanges: pendingChanges=", pendingChanges);
-		const updatedPendingChanges = addOrReplace(pendingChanges, change);
-		LOGGER.debug("FROM AssetTypes.updatePendingChanges: updatedPendingChanges=", updatedPendingChanges);
-		setPendingChanges(updatedPendingChanges);
-	};
-	
-	const onSaveAllHandler = () => {
-		const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);		
-		LOGGER.debug("FROM AssetTypes.pendingChanges, pendingChanges=", pendingChanges);
-		pendingChanges.forEach((change) => {
-			switch (change.type){
-				case 'UPDATE':
-					LOGGER.debug("FROM AssetTypes.onSaveAllHandler, case 'UPDATE'");										
-					dataService.update(change.data).then( (data) => LOGGER.debug("FROM AssetTypes.onSaveAllHandler, updated-data=", data));
-					break;
-				case 'DELETE':
-					change.data.status = 'DELETED';
-					LOGGER.debug("FROM AssetTypes.onSaveAllHandler, case 'DELETE'");
-					//dataService.delete(change.data);				
-					break;
-				case 'ADD-NEW':
-					LOGGER.debug("FROM AssetTypes.onSaveAllHandler, case 'ADD-NEW'");
-					//dataService.addNew(change.data);
-					break;
-				default:
-					LOGGER.debug("FROM AssetTypes.onSaveAllHandler, Something very unexpected has  happened.");
-			}		
-		});				
-		setPendingChanges([]);
-		setIsSavePending(false);
-	}
+		LOGGER.debug("Data fetched successfully")
+	}, [setAssetTypes, LOGGER]);
 			
 	return (
-		<div className={styles.accordion}>
-			<Accordion allowMultiple >
-				{assetTypes.map(at => 							
-					<AccordionItem assetTypeIn={at} onDataChange={onDataChangeHandler}   label="Asset-Type" key={at.id}>
-						<Policies assetType={at} onDataChange={onDataChangeHandler} />
-						<hr style={{ width: "1000px", marginLeft: "0" }} />
-					</AccordionItem>					
-				)}
+			<Accordion allowMultiple className={styles.accordion}>
+				{assetTypes.map(at =>
+					<AccordionItem
+						header={<AccordionItemHeader assetType={at}/>}				
+						headingProps={{ className: styles.header }}
+						buttonProps={{ className: ({ isEnter }) => `${styles.button} ${isEnter && styles.buttonExpanded}` }}
+						className={styles.item}
+						key={at.id}
+					>
+						<AccordionItemContent assetType={at} className={styles.content}/>
+					</AccordionItem>									
+				)}				
 			</Accordion>
-			{isSavePending && <CommitChangesButton onSave={onSaveAllHandler} />}
-		</div>
 	);
+}
+
+
+const AccordionItemHeader = (props) => {			
+	return (
+		<>
+			{(props.assetType) ?							
+				<span className={styles.headerContainer}>
+					<span className={styles.label}>Asset-Type- 
+						<span className={styles.id}>{props.assetType.id}</span>
+					</span>								 
+					<span className={styles.content}>{props.assetType.name}</span>
+					<span className={styles.info}>{props.assetType.description}</span>
+					<img src={chevronDown} alt="Chevron Down" className={styles.chevron}/>									
+				</span>								
+			:
+				<span>
+					{/* ELSE empty */}
+				</span>
+			}																										
+		</>
+	);
+}
+
+const AccordionItemContent = (props) =>{
+	return (
+		<>
+			<span>Policy details go here</span>
+		</>
+	);	
 }
 
 export default ManageAssetTypes;
