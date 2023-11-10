@@ -3,6 +3,7 @@ import { Accordion, AccordionItem} from '@szhsin/react-accordion';
 import ApiClientConfigs from "../../classes/configurations/ApiClientConfigs.class";
 import DataService from "../../classes/data-services/DataService.class";
 import Logger from '../../classes/logger/Logger.class';
+import Policies from './policies/Policies';
 import styles from "./css/ManageAssetTypes.module.css";
 import chevronDown from "../../static/icons/chevron-down.svg";
 
@@ -19,16 +20,18 @@ function ManageAssetTypes() {
 	}, [setAssetTypes, LOGGER]);
 			
 	return (
-			<Accordion allowMultiple className={styles.accordion}>
+			<Accordion allowMultiple className={styles.accordion} style={{width: '800px'}}>
 				{assetTypes.map(at =>
 					<AccordionItem
 						header={<AccordionItemHeader assetType={at}/>}				
 						headingProps={{ className: styles.header }}
+						panelProps={{className: styles.panel}}
 						buttonProps={{ className: ({ isEnter }) => `${styles.button} ${isEnter && styles.buttonExpanded}` }}
+						contentProps={{className: styles.content}}
 						className={styles.item}
 						key={at.id}
 					>
-						<AccordionItemContent assetType={at} className={styles.content}/>
+						<AccordionItemContent assetType={at} />
 					</AccordionItem>									
 				)}				
 			</Accordion>
@@ -60,7 +63,7 @@ const AccordionItemHeader = (props) => {
 const AccordionItemContent = (props) =>{
 	return (
 		<>
-			<span>Policy details go here</span>
+			<Policies assetType={props.assetType} />
 		</>
 	);	
 }

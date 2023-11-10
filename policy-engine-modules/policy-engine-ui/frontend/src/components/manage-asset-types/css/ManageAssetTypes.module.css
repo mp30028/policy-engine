@@ -1,23 +1,11 @@
-/*
-accordion
-	item
-		item-heading
-			item-button
-		item-content
-			item-panel
-*/
-
-
 .accordion {
   margin-bottom: 2.0rem;
   background-color: transparent;
   border: none;
   text-align: left;
-  width: 800px;  
 }
 
 .item {
-/*  border: 1px solid var(--ifm-color-emphasis-300);*/
   border: 1px solid ;
   border-top-width: 0;  
 }
@@ -46,9 +34,8 @@ accordion
 .button {
   cursor: pointer;
   display: flex;
-/*  align-items: center;*/
   margin: 0;
-  padding: 1rem 1.25rem;
+  padding: 0.5rem 1rem;
   font-size: 0.8rem;
   font-weight: 400;
   text-align: left;
@@ -106,7 +93,7 @@ accordion
 }
 
 .panel {
-  padding: 1rem 1.25rem;
+  padding: 0.5rem 0.5rem;
 }
 
 .header{
