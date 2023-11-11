@@ -62,23 +62,21 @@ const AccordionItemHeader = (props) => {
 	}
 	
 	return (
-		<div>
-			<div className={styles.headerContainer}>
-				<span className={styles.label}>Asset-Type- 
-					<span className={styles.id}>{assetType.id}</span>
-				</span>								 
-				<span className={styles.content}>						
-					<TextEdit assetTypeProperty="name" assetType={assetType} onChange={onChangeHandler} />
-				</span>
-				<span className={styles.info}>
-					<TextEdit assetTypeProperty="description" assetType={assetType} onChange={onChangeHandler} />
-				</span>
-				<img src={chevronDown} alt="Chevron Down" className={styles.chevron}/>									
-			</div>
-			<div  onClick={event => event.stopPropagation()}>
+		<span className={styles.headerContainer}>
+			<span className={styles.label}>Asset-Type- 
+				<span className={styles.id}>{assetType.id}</span>
+			</span>								 
+			<span className={styles.content}>						
+				<TextEdit assetTypeProperty="name" assetType={assetType} onChange={onChangeHandler} />
+			</span>
+			<span className={styles.info}>
+				<TextEdit assetTypeProperty="description" assetType={assetType} onChange={onChangeHandler} />
+			</span>			
+			<span className={styles.buttons}>
 				<SaveCancelButtons assetType={assetType} />
-			</div>
-		</div>
+				<img src={chevronDown} alt="Chevron Down" className={styles.chevron}/>
+			</span>															
+		</span>
 	);
 }
 
@@ -151,9 +149,9 @@ const SaveCancelButtons = (props) => {
 	},[props.assetType])
 
 	return (
-		<span >
-			<input type='button' id='saveButton' name= 'saveButton' value='Save' />
-			<input type='button' id='cancelButton' name= 'saveButton' value='Cancel' />
+		<span className={styles.saveCancelButtons}>
+			<input type='button' id='saveButton' name= 'saveButton'/>
+			<input type='button' id='cancelButton' name= 'cancelButton' />
 		</span>
 	);
 		

@@ -81,7 +81,8 @@
 .chevron {
   flex-shrink: 0;
   transition: transform 0.25s cubic-bezier(0, 0, 0, 1);
-  
+  float: inline-end;
+  margin-right: 5px;  
 }
 
 .buttonExpanded .chevron {
@@ -138,7 +139,34 @@
   font-weight: normal;
 }
 
-.headerContainer .chevron{
+.headerContainer .buttons{
   float: inline-end;
   margin-right: 5px;
+}
+
+.saveCancelButtons input[type="button"][name="saveButton"]{
+	background-image: url(../../../static/icons/green-tick.svg);
+	background-size: cover;
+	background-color: white;
+	height: 22px;
+	width: 22px;
+	margin-left: 1pt;
+	border: none;
+	cursor: pointer;
+}
+
+.saveCancelButtons input[type="button"][name="cancelButton"]{
+	background-image: url(../../../static/icons/red-cross.svg);
+	background-size: cover;
+	background-color: white;
+	height: 22px;
+	width: 22px;
+	margin-left: 1pt;
+	margin-right: 10pt;
+	border: none;
+	cursor: pointer;  	
+}
+
+.saveCancelButtons input[type="button"]:hover{
+	background-color: gold;	
 }
