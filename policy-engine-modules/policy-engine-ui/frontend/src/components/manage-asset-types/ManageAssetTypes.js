@@ -7,6 +7,7 @@ import Policies from './policies/Policies';
 import styles from "./css/ManageAssetTypes.module.css";
 import chevronDown from "../../static/icons/chevron-down.svg";
 import EasyEdit from "react-easy-edit";
+import {isEqual, cloneDeep} from "lodash";
 
 const ManageAssetTypes = () => {
 	const MODULE = 	"ManageAssetTypes";
@@ -52,13 +53,20 @@ const AccordionItemHeader = (props) => {
 
 	const emptyAssetType = {id:0, name: "", description:"", associatedPolicies:[]}	
 	const [assetType, setAssetType] = useState(emptyAssetType);
+	const [isDataChanged, setIsDataChanged] = useState(false);
+	const [updatedAssetType, setUpdatedAssetType] = useState(emptyAssetType);
 	
 	useEffect(()=>{
 		setAssetType(props.assetType);
 	},[props.assetType])
 		
-	const onChangeHandler = (updatedAssetType) =>{		
-		LOGGER.debug("FROM ", MODULE, ".onChangeHandler: updatedAssetType=", updatedAssetType);
+	const onChangeHandler = (updated) =>{				
+		let isChanged = (!isEqual(assetType, updated));
+		LOGGER.debug("FROM ", MODULE, ".onChangeHandler: assetType=", assetType, ". updatedAssetType=", updatedAssetType, ". isChanged=", isChanged );		
+		setIsDataChanged(isChanged);
+		if(isChanged){
+			setUpdatedAssetType(updatedAssetType);
+		}
 	}
 	
 	return (
@@ -73,7 +81,7 @@ const AccordionItemHeader = (props) => {
 				<TextEdit assetTypeProperty="description" assetType={assetType} onChange={onChangeHandler} />
 			</span>			
 			<span className={styles.buttons}>
-				<SaveCancelButtons assetType={assetType} />
+				<SaveCancelButtons assetType={assetType} isDataChanged={isDataChanged} />
 				<img src={chevronDown} alt="Chevron Down" className={styles.chevron}/>
 			</span>															
 		</span>
@@ -104,12 +112,12 @@ const TextEdit = (props) => {
 		setAssetType(props.assetType);
 	},[props.assetType])
 	
-	const save = (newValue) => {
+	const save = (newValue) => {		
 		LOGGER.debug("FROM ", MODULE, ".save: newValue=", newValue);
-		let updatedAssetType = assetType;
+		const updatedAssetType = cloneDeep(assetType);
 		updatedAssetType[props.assetTypeProperty] = newValue;
-		props.onChange(updatedAssetType);
 		setAssetType(updatedAssetType);
+		props.onChange(updatedAssetType);
 		LOGGER.debug("FROM ", MODULE, ".save: updatedAssetType=", updatedAssetType);
 	};
 
@@ -140,19 +148,27 @@ const TextEdit = (props) => {
 const SaveCancelButtons = (props) => {
 	const MODULE = 	"ManageAssetTypes.SaveCancelButtons";
 	const LOGGER = new Logger().getLogger(MODULE);			
+	const [isDataChanged, setIsDataChanged] = useState(false);
 
-	const emptyAssetType = {id:0, name: "", description:"", associatedPolicies:[]}	
-	const [assetType, setAssetType] = useState(emptyAssetType);
-	
 	useEffect(()=>{
-		setAssetType(props.assetType);
-	},[props.assetType])
+		setIsDataChanged(props.isDataChanged);
+		LOGGER.debug("FROM ", MODULE, "propsIsDataChangedHook: props.isDataChanged=", props.isDataChanged);
+	},[props.isDataChanged, LOGGER])
+
+	useEffect(()=>{
+		LOGGER.debug("FROM ", MODULE, "isDataChangedHook: isDataChanged=", isDataChanged);
+	},[isDataChanged, LOGGER])
+
 
 	return (
-		<span className={styles.saveCancelButtons}>
-			<input type='button' id='saveButton' name= 'saveButton'/>
-			<input type='button' id='cancelButton' name= 'cancelButton' />
-		</span>
+		<>
+			{isDataChanged &&
+				<span className={styles.saveCancelButtons}>				 
+					<input type='button' id='saveButton' name= 'saveButton'/>
+					<input type='button' id='cancelButton' name= 'cancelButton' />
+				</span>
+			}
+		</>
 	);
 		
 }

@@ -3,9 +3,11 @@ export default class LoggerConfigs{
 	static FALLBACK_LOG_LEVEL = "INFO";		
 
 	static LEVELS = {
-		ManageAssetTypes: { value: "DEBUG", 
-							TextEdit: {value: "DEBUG"}
-		}
+		ManageAssetTypes: { level: "INFO", 
+							TextEdit: {level: "DEBUG"},
+							AccordionItemHeader:{level:"DEBUG"},
+							SaveCancelButtons:{level:"DEBUG"}
+		}		
 	}
 	
 	getLogLevel = (loggerName) => {
@@ -21,7 +23,7 @@ export default class LoggerConfigs{
 				break;
 			}
 		}
-		return ((currentNode) ? currentNode.value : LoggerConfigs.FALLBACK_LOG_LEVEL);		
+		return ((currentNode) ? currentNode.level : LoggerConfigs.FALLBACK_LOG_LEVEL);		
 	}
 	
 }
