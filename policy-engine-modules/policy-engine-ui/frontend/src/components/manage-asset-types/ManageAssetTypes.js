@@ -60,13 +60,25 @@ const AccordionItemHeader = (props) => {
 		setAssetType(props.assetType);
 	},[props.assetType])
 		
-	const onChangeHandler = (updated) =>{				
-		let isChanged = (!isEqual(assetType, updated));
-		LOGGER.debug("FROM ", MODULE, ".onChangeHandler: assetType=", assetType, ". updatedAssetType=", updatedAssetType, ". isChanged=", isChanged );		
+	const onChangeHandler = (updated) =>{
+		let isChanged = (!isEqual(assetType, updated));			
 		setIsDataChanged(isChanged);
 		if(isChanged){
 			setUpdatedAssetType(updatedAssetType);
 		}
+		LOGGER.debug("FROM ", MODULE, ".onChangeHandler: assetType=", assetType, ". updatedAssetType=", updatedAssetType, ". isChanged=", isChanged );
+	}
+	
+	const onSaveHandler = () =>{
+		LOGGER.debug("FROM ", MODULE, ".onSaveHandler: assetType=", assetType, ". updatedAssetType=", updatedAssetType, ". isDataChanged=", isDataChanged );
+	}
+	
+	const onCancelHandler =() =>{
+		setUpdatedAssetType(emptyAssetType);
+		const clonedAssetType = cloneDeep(assetType);
+		setAssetType(clonedAssetType);
+		setIsDataChanged(false);
+		LOGGER.debug("FROM ", MODULE, ".onCancelHandler: assetType=", assetType, ". updatedAssetType=", updatedAssetType);
 	}
 	
 	return (
@@ -81,7 +93,7 @@ const AccordionItemHeader = (props) => {
 				<TextEdit assetTypeProperty="description" assetType={assetType} onChange={onChangeHandler} />
 			</span>			
 			<span className={styles.buttons}>
-				<SaveCancelButtons assetType={assetType} isDataChanged={isDataChanged} />
+				<SaveCancelButtons isDataChanged={isDataChanged} onSave={onSaveHandler} onCancel={onCancelHandler} />
 				<img src={chevronDown} alt="Chevron Down" className={styles.chevron}/>
 			</span>															
 		</span>
@@ -153,19 +165,31 @@ const SaveCancelButtons = (props) => {
 	useEffect(()=>{
 		setIsDataChanged(props.isDataChanged);
 		LOGGER.debug("FROM ", MODULE, "propsIsDataChangedHook: props.isDataChanged=", props.isDataChanged);
-	},[props.isDataChanged, LOGGER])
+	},[props.isDataChanged, LOGGER]);
 
 	useEffect(()=>{
 		LOGGER.debug("FROM ", MODULE, "isDataChangedHook: isDataChanged=", isDataChanged);
-	},[isDataChanged, LOGGER])
+	},[isDataChanged, LOGGER]);
+	
+	const onSaveHandler = (event) =>{		
+		LOGGER.debug("FROM ", MODULE, "onSaveHandler: isDataChanged=", isDataChanged);
+		props.onSave();
+		event.stopPropagation();
+	}
+	
+	const onCancelHandler = (event) =>{		
+		LOGGER.debug("FROM ", MODULE, "onCancelHandler: isDataChanged=", isDataChanged);
+		props.onCancel();
+		event.stopPropagation();
+	}
 
 
 	return (
 		<>
 			{isDataChanged &&
 				<span className={styles.saveCancelButtons}>				 
-					<input type='button' id='saveButton' name= 'saveButton'/>
-					<input type='button' id='cancelButton' name= 'cancelButton' />
+					<input type='button' id='saveButton' name= 'saveButton' onClick={onSaveHandler}/>
+					<input type='button' id='cancelButton' name= 'cancelButton' onClick={onCancelHandler} />
 				</span>
 			}
 		</>
