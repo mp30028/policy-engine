@@ -21,8 +21,23 @@ export default function Policies(props) {
 		}
 	}, [props.assetType]);
 	
-	return (			
+	return (
 		<Accordion allowMultiple className={styles.accordion} style={{paddingLeft:'25pt', width: '75%'}}>
+		
+				<AccordionItem
+					header={
+						<span style={{width:'100%'}}>							 
+							<span className={styles.triggerIcon} />
+						</span>
+					}									
+					headingProps={{className: styles.header }}
+					buttonProps={{ className: styles.button}}
+					className={styles.item}					
+					style={{borderColor: 'grey'}}
+					key={0}
+				>					
+				</AccordionItem>
+				
 			{policies.map(p =>
 				<AccordionItem
 					header={<AccordionItemHeader policy={p}/>}				
@@ -48,7 +63,9 @@ const AccordionItemHeader = (props) => {
 				<span className={styles.headerContainer} >
 					<span className={styles.label} >Policy-{props.policy.id}:  {props.policy.name}</span>
 					<span className={styles.info}>{props.policy.description}</span>
-					<img src={chevronDown} alt="Chevron Down" className={styles.chevron}/>									
+					<span className={styles.buttons}>						
+						<img src={chevronDown} alt="Chevron Down" className={styles.chevron}/>
+					</span>						
 				</span>								
 			:
 				<span>

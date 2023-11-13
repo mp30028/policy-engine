@@ -140,8 +140,8 @@
 }
 
 .headerContainer .buttons{
-  float: inline-end;
   margin-right: 5px;
+  float: inline-end;
 }
 
 .saveCancelButtons input[type="button"][name="saveButton"]{
@@ -169,4 +169,23 @@
 
 .saveCancelButtons input[type="button"]:hover{
 	background-color: gold;	
+}
+
+.triggerIcon{
+	background-image: url(../../../static/icons/trigger-grey.svg);
+	background-size: cover;
+	background-color: rgb(192, 192, 192);
+  	cursor: pointer;
+  	float: right;	
+	height: 18pt;
+	width: 18pt;
+	border: none;
+	float: inline-end;
+}
+
+.triggerIcon:hover{
+	background-image: url(../../../static/icons/trigger-colour.svg);
+	background-size: cover;
+	background-color: transparent;
+	border: none;
 }
