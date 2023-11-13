@@ -3,18 +3,20 @@ import ApiClientConfigs from "../../../../classes/configurations/ApiClientConfig
 import DataService from "../../../../classes/data-services/DataService.class";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
-import styles from "../accordion-item/accordion.module.css";
+import styles from "../../css/ManageAssetTypes.module.css";
 import Logger from '../../../../classes/logger/Logger.class';
 
 const PickList = React.forwardRef( (props, ref) => {
-	const LOGGER = new Logger().getLogger("AT_Policies_PickList");
+	const MODULE = 	"ManageAssetTypes.Policies.PickList";
+	const LOGGER = new Logger().getLogger(MODULE);
+	const ENTITY_NAME = "policy";	
 	const [allPolicies, setAllPolicies] = useState([]);
 	const [selectedPolices, setSelectedPolicies] = useState([]);
 	
 	useEffect(() => {
-		const dataService = new DataService(new ApiClientConfigs(),props.ENTITY_NAME);
+		const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);
 		dataService.fetchAll().then((data) => setAllPolicies(data));		
-	}, [props.ENTITY_NAME]);	
+	}, [ENTITY_NAME]);	
 	
 	useEffect(() =>{
 		const updateSelectedPolicies = (all, currentlySelected) =>{
@@ -23,7 +25,7 @@ const PickList = React.forwardRef( (props, ref) => {
 		};
 		
 		updateSelectedPolicies(allPolicies, props.currentlySelectedPolices);
-	},[props, allPolicies])
+	},[props.currentlySelectedPolices, allPolicies])
 	
 	const isSelected = (id) => {
 		LOGGER.debug("FROM Policies.PoliciesPickList.isSelected id=", id);
@@ -52,24 +54,24 @@ const PickList = React.forwardRef( (props, ref) => {
 
 	const AssignPolicy = React.forwardRef((props, ref) => {		
 		return (
-			<div >
-			      <span className={styles.addNew} onClick={props.onClick} />
-			      <span className={styles.label}>Manage Assigned Policies</span>
-			</div>	
-					
-			
-		);
-	})
+			<span  style={{width:'100%'}}>
+				<span onClick={props.onClick} 
+					className={styles.triggerIcon} 
+					title={'Manange the policies applicable to ' + props.assetType.name}
+				/>
+			</span>	
+		)
+	});
 	
 	return (
 			<Popup 
-				trigger={open => <AssignPolicy onClick={open} />}
+				trigger={open => <AssignPolicy assetType={props.assetType} onClick={open} />}
 				modal
 				nested
 			>
 				<span>
 					 {allPolicies.map(p =>
-					 	<div key={props.parenteId + '-' + p.id}> 
+					 	<div key={p.id}> 
 					 		{p.name} - 	{(isSelected(p.id)).toString()}
 					 		<input type='checkbox' id={p.id} name={'popup-item-' + p.id} checked={isSelected(p.id)} onChange={onSelectionChange} />
 					 		

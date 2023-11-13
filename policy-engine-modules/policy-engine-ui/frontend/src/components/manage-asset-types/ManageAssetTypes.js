@@ -30,6 +30,7 @@ const ManageAssetTypes = () => {
 		dataService.update(updatedAssetType).then( (data) => LOGGER.debug("FROM AssetTypes.onSaveAllHandler, updated-data=", data));		
 	};
 
+
 	return (
 			<Accordion allowMultiple className={styles.accordion} style={{width: '800px'}}>
 				{assetTypes.map(at =>
@@ -42,7 +43,7 @@ const ManageAssetTypes = () => {
 						className={styles.item}
 						key={at.id}
 					>
-						<AccordionItemContent assetType={at} />
+						<AccordionItemContent assetType={at} header={AccordionItem}/>
 					</AccordionItem>									
 				)}				
 			</Accordion>
@@ -113,9 +114,16 @@ const AccordionItemHeader = (props) => {
 
 /* --------------------------------------------------------------------------------------------------- */
 const AccordionItemContent = (props) =>{
+	const MODULE = 	"ManageAssetTypes.AccordionItemContent";
+	const LOGGER = new Logger().getLogger(MODULE);		
+
+	const onChangeHandler = (updated) =>{
+		LOGGER.debug("FROM ", MODULE, ".onChangeHandler: props.assetType=", props.assetType);
+	}
+		
 	return (
 		<>
-			<Policies assetType={props.assetType} />
+			<Policies assetType={props.assetType} onChange={onChangeHandler}/>
 		</>
 	);	
 }

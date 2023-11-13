@@ -4,13 +4,14 @@ import ApiClientConfigs from "../../../classes/configurations/ApiClientConfigs.c
 import DataService from "../../../classes/data-services/DataService.class";
 import styles from "../css/ManageAssetTypes.module.css";
 import chevronDown from "../../../static/icons/chevron-down.svg";
+import PickList from './picklist/PickList';
 
 export default function Policies(props) {	
 	const ENTITY_NAME = "policy";
 	const [policies, setPolicies] = useState([]);
 	
 	useEffect(() => {
-		if(props.assetType){			
+		if(props.assetType){
 			const getPolicyIdsFromAssetType = (assetType) =>{
 				return assetType.associatedPolicies.map(p => p.id);
 			}
@@ -21,14 +22,25 @@ export default function Policies(props) {
 		}
 	}, [props.assetType]);
 	
+	
+	const handlePoliciesChange = (updatedPolicies) =>{
+		setPolicies(updatedPolicies);
+		const updatedAssetType = props.assetType;
+		updatedAssetType.associatedPolicies = updatedPolicies.map(p => ({id: p.id, name: p.name}));
+		props.onChange(updatedAssetType);
+	}
+		
 	return (
 		<Accordion allowMultiple className={styles.accordion} style={{paddingLeft:'25pt', width: '75%'}}>
+
 		
 				<AccordionItem
 					header={
-						<span style={{width:'100%'}}>							 
-							<span className={styles.triggerIcon} />
-						</span>
+						<PickList  
+							currentlySelectedPolices={policies}
+							onSelectedChange={handlePoliciesChange}
+							assetType={props.assetType} 
+						/>												
 					}									
 					headingProps={{className: styles.header }}
 					buttonProps={{ className: styles.button}}
