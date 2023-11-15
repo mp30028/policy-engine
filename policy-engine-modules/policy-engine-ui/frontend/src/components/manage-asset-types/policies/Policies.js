@@ -5,27 +5,31 @@ import DataService from "../../../classes/data-services/DataService.class";
 import styles from "../css/ManageAssetTypes.module.css";
 import chevronDown from "../../../static/icons/chevron-down.svg";
 import PickList from './picklist/PickList';
+import {cloneDeep} from "lodash";
 
 export default function Policies(props) {	
 	const ENTITY_NAME = "policy";
 	const [policies, setPolicies] = useState([]);
+	const emptyAssetType = {id:0, name: "", description:"", associatedPolicies:[]}
+	const [assetType, setAssetType] = useState(emptyAssetType);
+	
+	useEffect(()=>{
+		const clonedAssetType = cloneDeep(props.assetType);
+		setAssetType(clonedAssetType);
+	},[props.assetType])
 	
 	useEffect(() => {
-		if(props.assetType){
-			const getPolicyIdsFromAssetType = (assetType) =>{
-				return assetType.associatedPolicies.map(p => p.id);
-			}
-			const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);
-			dataService.fetchByIds(getPolicyIdsFromAssetType(props.assetType)).then((data) => setPolicies(data));						
-		}else{
-			setPolicies([]);
+		const getPolicyIdsFromAssetType = (assetType) =>{
+			return assetType.associatedPolicies.map(p => p.id);
 		}
-	}, [props.assetType]);
+		const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);
+		dataService.fetchByIds(getPolicyIdsFromAssetType(assetType)).then((data) => setPolicies(data));
+	}, [assetType]);
 	
 	
 	const handlePoliciesChange = (updatedPolicies) =>{
 		setPolicies(updatedPolicies);
-		const updatedAssetType = props.assetType;
+		const updatedAssetType = props.updatedAssetType;
 		updatedAssetType.associatedPolicies = updatedPolicies.map(p => ({id: p.id, name: p.name}));
 		props.onChange(updatedAssetType);
 	}
@@ -39,7 +43,7 @@ export default function Policies(props) {
 						<PickList  
 							currentlySelectedPolices={policies}
 							onSelectedChange={handlePoliciesChange}
-							assetType={props.assetType} 
+							assetType={assetType}
 						/>												
 					}									
 					headingProps={{className: styles.header }}
@@ -61,7 +65,7 @@ export default function Policies(props) {
 					style={{borderColor: 'grey'}}
 					key={p.id}
 				>
-					<AccordionItemContent policy={p} className={styles.content} />
+					<AccordionItemContent policy={p} className={styles.content} key={p.id}/>
 				</AccordionItem>
 			)}				
 		</Accordion>

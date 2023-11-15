@@ -14,7 +14,8 @@ const ManageAssetTypes = () => {
 	const LOGGER = new Logger().getLogger(MODULE);			
 	const ENTITY_NAME = "assetType";
 	const [assetTypes, setAssetTypes] = useState([]);
-			
+
+				
 	useEffect(() => {
 		const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);
 		dataService.fetchAll().then((data) => setAssetTypes(data));		
@@ -29,22 +30,13 @@ const ManageAssetTypes = () => {
 		const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);		
 		dataService.update(updatedAssetType).then( (data) => LOGGER.debug("FROM AssetTypes.onSaveAllHandler, updated-data=", data));		
 	};
-
-
+	
 	return (
 			<Accordion allowMultiple className={styles.accordion} style={{width: '800px'}}>
 				{assetTypes.map(at =>
-					<AccordionItem
-						header={<AccordionItemHeader assetType={at} onDataUpdate={dataUpdateHandler}/>}				
-						headingProps={{ className: styles.header }}
-						panelProps={{className: styles.panel}}
-						buttonProps={{ className: ({ isEnter }) => `${styles.button} ${isEnter && styles.buttonExpanded}` }}
-						contentProps={{className: styles.content}}
-						className={styles.item}
-						key={at.id}
-					>
-						<AccordionItemContent assetType={at} header={AccordionItem}/>
-					</AccordionItem>									
+				<>
+						<AccordionItemSynchroniser assetType={at}  onDataUpdate={dataUpdateHandler} key={at.id}/>
+				</>
 				)}				
 			</Accordion>
 	);
@@ -54,8 +46,8 @@ export default ManageAssetTypes;
 
 
 /* --------------------------------------------------------------------------------------------------- */
-const AccordionItemHeader = (props) => {
-	const MODULE = 	"ManageAssetTypes.AccordionItemHeader";
+const AccordionItemSynchroniser = (props) => {
+	const MODULE = 	"ManageAssetTypes.AccordionItemDataSynchroniser";
 	const LOGGER = new Logger().getLogger(MODULE);			
 
 	const emptyAssetType = {id:0, name: "", description:"", associatedPolicies:[]}	
@@ -67,28 +59,86 @@ const AccordionItemHeader = (props) => {
 		const clonedAssetType = cloneDeep(props.assetType);
 		setAssetType(clonedAssetType);
 	},[props.assetType])
+	
 		
 	const onChangeHandler = (updated) =>{
 		let isChanged = (!isEqual(props.assetType, updated));			
 		setIsDataChanged(isChanged);		
 		setUpdatedAssetType(updated);
-		setAssetType(updated);
+		//setAssetType(updated);
 		LOGGER.debug("FROM ", MODULE, ".onChangeHandler: assetType=", assetType, ". updated=", updated, ". isChanged=", isChanged );
 	}
+		
+	return (
+			<AccordionItem
+				header={<AccordionItemHeader 
+					assetType={props.assetType} 
+					onDataUpdate={props.onDataUpdate}
+					isDataChanged={isDataChanged}
+					setIsDataChanged={setIsDataChanged}
+					updatedAssetType={updatedAssetType}
+					setUpdatedAssetType={setUpdatedAssetType}
+					onChange={onChangeHandler}
+				/>}				
+				headingProps={{ className: styles.header }}
+				panelProps={{className: styles.panel}}
+				buttonProps={{ className: ({ isEnter }) => `${styles.button} ${isEnter && styles.buttonExpanded}` }}
+				contentProps={{className: styles.content}}
+				className={styles.item}
+				key={props.assetType.id}
+			>
+				<AccordionItemContent 
+					assetType={props.assetType}
+					onDataUpdate={props.onDataUpdate}
+					isDataChanged={isDataChanged}
+					setIsDataChanged={setIsDataChanged}
+					updatedAssetType={updatedAssetType}
+					setUpdatedAssetType={setUpdatedAssetType}
+					onChange={onChangeHandler}					
+				 />
+			</AccordionItem>
+	);	
+}
+
+
+/* --------------------------------------------------------------------------------------------------- */
+const AccordionItemHeader = (props) => {
+	const MODULE = 	"ManageAssetTypes.AccordionItemHeader";
+	const LOGGER = new Logger().getLogger(MODULE);			
+
+	const emptyAssetType = {id:0, name: "", description:"", associatedPolicies:[]}	
+	const [assetType, setAssetType] = useState(emptyAssetType);
+//	const [isDataChanged, setIsDataChanged] = useState(false);
+//	const [updatedAssetType, setUpdatedAssetType] = useState(emptyAssetType);
+	
+	useEffect(()=>{
+		const clonedAssetType = cloneDeep(props.assetType);
+		setAssetType(clonedAssetType);
+	},[props.assetType])
+	
+		
+//	const onChangeHandler = (updated) =>{
+//		let isChanged = (!isEqual(props.assetType, updated));			
+//		setIsDataChanged(isChanged);		
+//		setUpdatedAssetType(updated);
+//		setAssetType(updated);
+//		LOGGER.debug("FROM ", MODULE, ".onChangeHandler: assetType=", assetType, ". updated=", updated, ". isChanged=", isChanged );
+//	}
+	
 	
 	const onSaveHandler = () =>{
-		LOGGER.debug("FROM ", MODULE, ".onSaveHandler: assetType=", assetType, ". updatedAssetType=", updatedAssetType);
-		props.onDataUpdate(updatedAssetType);
-		setUpdatedAssetType(emptyAssetType);
-		setIsDataChanged(false);
+		LOGGER.debug("FROM ", MODULE, ".onSaveHandler: assetType=", assetType, ". updatedAssetType=", props.updatedAssetType);
+		props.onDataUpdate(props.updatedAssetType);
+		props.setUpdatedAssetType(emptyAssetType);
+		props.setIsDataChanged(false);
 	}
 	
 	const onCancelHandler =() =>{
-		setUpdatedAssetType(emptyAssetType);
+		props.setUpdatedAssetType(emptyAssetType);
 		const clonedAssetType = cloneDeep(props.assetType);
 		setAssetType(clonedAssetType);
-		setIsDataChanged(false);
-		LOGGER.debug("FROM ", MODULE, ".onCancelHandler: assetType=", assetType, ". updatedAssetType=", updatedAssetType);
+		props.setIsDataChanged(false);
+		LOGGER.debug("FROM ", MODULE, ".onCancelHandler: assetType=", assetType, ". updatedAssetType=", props.updatedAssetType);
 	}
 	
 	return (
@@ -97,13 +147,13 @@ const AccordionItemHeader = (props) => {
 				<span className={styles.id}>{assetType.id}</span>
 			</span>								 
 			<span className={styles.content}>						
-				<TextEdit assetTypeProperty="name" assetType={assetType} onChange={onChangeHandler} />
+				<TextEdit assetTypeProperty="name" assetType={assetType} onChange={props.onChange} />
 			</span>
 			<span className={styles.info}>
-				<TextEdit assetTypeProperty="description" assetType={assetType} onChange={onChangeHandler} />
+				<TextEdit assetTypeProperty="description" assetType={assetType} onChange={props.onChange} />
 			</span>			
 			<span className={styles.buttons}>
-				<SaveCancelButtons isDataChanged={isDataChanged} onSave={onSaveHandler} onCancel={onCancelHandler} />
+				<SaveCancelButtons isDataChanged={props.isDataChanged} onSave={onSaveHandler} onCancel={onCancelHandler} />
 				<img src={chevronDown} alt="Chevron Down" className={styles.chevron}/>
 			</span>															
 		</span>
@@ -116,14 +166,15 @@ const AccordionItemHeader = (props) => {
 const AccordionItemContent = (props) =>{
 	const MODULE = 	"ManageAssetTypes.AccordionItemContent";
 	const LOGGER = new Logger().getLogger(MODULE);		
-
-	const onChangeHandler = (updated) =>{
-		LOGGER.debug("FROM ", MODULE, ".onChangeHandler: props.assetType=", props.assetType);
-	}
+	LOGGER.debug("FROM ", MODULE, "props.assetType=", props.assetType);
+//	const onChangeHandler = (updated) =>{
+//		LOGGER.debug("FROM ", MODULE, ".onChangeHandler: props.assetType=", props.assetType);
+////		props.assetTypeUpdater(updated);
+//	}
 		
 	return (
 		<>
-			<Policies assetType={props.assetType} onChange={onChangeHandler}/>
+			<Policies assetType={props.assetType} updatedAssetType={props.updatedAssetType} onChange={props.onChange}/>
 		</>
 	);	
 }
