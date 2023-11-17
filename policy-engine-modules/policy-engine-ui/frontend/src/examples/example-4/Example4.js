@@ -34,7 +34,7 @@ export default Example4;
 const ConsumerA = (props) =>{
 	const MODULE = "Example-4.ConsumerA";
 	
-	const [sharedValue1, setSharedValue1, sharedValue2, setSharedValue2]= props.dataManager();
+	const [sharedValue1, setSharedValue1, sharedValue2]= props.dataManager();
 	
 	const onClickHandler = () => {
 		setSharedValue1("I have been changed");		
@@ -53,7 +53,7 @@ const ConsumerA = (props) =>{
 const ConsumerB = (props) =>{
 	const MODULE = "Example-4.ConsumerB";
 	
-	const [sharedValue1, setSharedValue1, sharedValue2, setSharedValue2]= props.dataManager();
+	const [sharedValue1, setSharedValue1, sharedValue2]= props.dataManager();
 	
 	const onClickHandler = () => {
 		setSharedValue1("I have been changed");		
