@@ -5,10 +5,10 @@ export default class LoggerConfigs{
 	static LEVELS = {
 		ManageAssetTypes: { level: "INFO", 
 							AccordionItemHeader:{level:"DEBUG"},
-							SaveCancelButtons:{level:"INFO"},
+							SaveCancelButtons:{level:"DEBUG"},
 							AccordionItemContent:{level:"INFO"},
-							AccordionItemWrapper:{level:"DEBUG"},
-							TextEdit:{level:"DEBUG"}
+							AccordionItemWrapper:{level:"INFO"},
+							TextEdit:{level:"INFO"}
 		}		
 	}
 	

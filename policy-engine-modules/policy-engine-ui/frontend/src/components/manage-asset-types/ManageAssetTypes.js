@@ -55,19 +55,19 @@ export default ManageAssetTypes;
 		useEffect(()=>{
 			const isDifferent = (!isEqual(editedAssetType, currentAssetType));			
 			setIsDataChanged(isDifferent);
-			LOGGER.debug("FROM ", MODULE, ".isDataChanged (Hook): currentAssetType=", currentAssetType, "editedAssetType", editedAssetType, "isDifferent=" ,isDifferent);
+			LOGGER.debug("FROM ", MODULE, ".isDataChanged (Hook): currentAssetType=", currentAssetType, "editedAssetType", editedAssetType, "isDifferent=" ,isDifferent);						
 		},[currentAssetType, editedAssetType, LOGGER])
 		
-
 		const dataStates = [
 			currentAssetType, setCurrentAssetType, 
 			editedAssetType, setEditedAssetType, 
 			isDataChanged
 		];
 		
+		
 		return (
 				<AccordionItem
-					header={<AccordionItemHeader dataStates={dataStates} />}
+					header={<AccordionItemHeader dataStates={dataStates} onDataUpdate={props.onDataUpdate} />}
 					headingProps={{ className: styles.header }}
 					panelProps={{className: styles.panel}}
 					buttonProps={{ className: ({ isEnter }) => `${styles.button} ${isEnter && styles.buttonExpanded}` }}
@@ -95,6 +95,7 @@ export default ManageAssetTypes;
 		const onSaveHandler = () =>{
 			LOGGER.debug("FROM ", MODULE, ".onSaveHandler: currentAssetType=", currentAssetType, ". editedAssetType=", editedAssetType);
 			setCurrentAssetType(editedAssetType);
+			props.onDataUpdate(editedAssetType);
 		}
 		
 		const onCancelHandler =() =>{
