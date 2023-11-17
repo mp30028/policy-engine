@@ -5,7 +5,7 @@ import DataService from "../../../classes/data-services/DataService.class";
 import styles from "../css/ManageAssetTypes.module.css";
 import chevronDown from "../../../static/icons/chevron-down.svg";
 import PickList from './picklist/PickList';
-import {cloneDeep} from "lodash";
+import {cloneDeep, sortBy} from "lodash";
 
 export default function Policies(props) {	
 	const ENTITY_NAME = "policy";
@@ -24,7 +24,7 @@ export default function Policies(props) {
 	const handlePoliciesChange = (updatedPolicies) =>{
 		setPolicies(updatedPolicies);
 		const updatedAssetType = cloneDeep(assetType);
-		updatedAssetType.associatedPolicies = updatedPolicies.map(p => ({id: p.id, name: p.name}));
+		updatedAssetType.associatedPolicies = sortBy(updatedPolicies.map(p => ({id: p.id, name: p.name})),['id']);
 		setAssetType(updatedAssetType);
 	}
 		
