@@ -10,14 +10,8 @@ import {cloneDeep} from "lodash";
 export default function Policies(props) {	
 	const ENTITY_NAME = "policy";
 	const [policies, setPolicies] = useState([]);
-	const emptyAssetType = {id:0, name: "", description:"", associatedPolicies:[]}
-	const [assetType, setAssetType] = useState(emptyAssetType);
-	
-	useEffect(()=>{
-		const clonedAssetType = cloneDeep(props.assetType);
-		setAssetType(clonedAssetType);
-	},[props.assetType])
-	
+	const [assetType, setAssetType] = props.dataStates;
+
 	useEffect(() => {
 		const getPolicyIdsFromAssetType = (assetType) =>{
 			return assetType.associatedPolicies.map(p => p.id);
@@ -29,9 +23,9 @@ export default function Policies(props) {
 	
 	const handlePoliciesChange = (updatedPolicies) =>{
 		setPolicies(updatedPolicies);
-		const updatedAssetType = props.updatedAssetType;
+		const updatedAssetType = cloneDeep(assetType);
 		updatedAssetType.associatedPolicies = updatedPolicies.map(p => ({id: p.id, name: p.name}));
-		props.onChange(updatedAssetType);
+		setAssetType(updatedAssetType);
 	}
 		
 	return (
