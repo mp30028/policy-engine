@@ -1,104 +1,207 @@
 import React, {useEffect, useState } from 'react';
-import { Accordion} from '@szhsin/react-accordion';
+import { Accordion, AccordionItem} from '@szhsin/react-accordion';
 import ApiClientConfigs from "../../classes/configurations/ApiClientConfigs.class";
 import DataService from "../../classes/data-services/DataService.class";
-import AccordionItem from './accordion-item/AccordionItem';
-import styles from "./accordion-item/accordion.module.css";
-import Policies from "./policies/Policies";
 import Logger from '../../classes/logger/Logger.class';
-import CommitChangesButton from './commit-changes-button/CommitChangesButton';
+import Policies from './policies/Policies';
+import styles from "./css/ManageAssetTypes.module.css";
+import chevronDown from "../../static/icons/chevron-down.svg";
+import EasyEdit from "react-easy-edit";
+import {isEqual, cloneDeep} from "lodash";
 
-function ManageAssetTypes() {	
-	const LOGGER = new Logger().getLogger("AssetTypes");	
-		
+const ManageAssetTypes = () => {
+	const MODULE = 	"ManageAssetTypes";
+	const LOGGER = new Logger().getLogger(MODULE);			
 	const ENTITY_NAME = "assetType";
-	
 	const [assetTypes, setAssetTypes] = useState([]);
-	const [isSavePending, setIsSavePending] = useState(false);
-	const [pendingChanges, setPendingChanges] = useState([]);
 			
 	useEffect(() => {
 		const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);
-		dataService.fetchAll().then((data) => setAssetTypes(data));
+		dataService.fetchAll().then((data) => setAssetTypes(data));		
 	}, [setAssetTypes]);
-	
-	useEffect(() =>{
-		LOGGER.debug("FROM AssetTypes#useEffect[pendingChanges]: pendingChanges=", pendingChanges);
-	},[pendingChanges,LOGGER])
-	
-	const onDataChangeHandler = (change) =>{
-		var updated = null;
-		LOGGER.debug("FROM AssetTypes.onDataChangeHandler, change=", change);
-		switch (change.type){
-			case 'UPDATE':				
-				updated = assetTypes.map((at) => (at.id === change.data.id) ? change.data : at);
-				break;
-			case 'DELETE':
-				change.data.status = 'DELETED';
-				updated = assetTypes.map((at) => (at.id === change.data.id) ? null : at);				
-				break;
-			case 'ADD-NEW':
-				updated = [...assetTypes, change.data];
-				break;
-			default:
-				LOGGER.debug("FROM AssetTypes.onDataChangeHandler, Something very unexpected has  happened.");
-		}
-		if (updated) setAssetTypes(updated);
-		setIsSavePending((updated)? true : false);
-		updatePendingChanges(change);
-	}
-	
-	const updatePendingChanges = (change) =>{		
-		function addOrReplace(pendingChanges, change){
-			const itemsToKeep = pendingChanges.filter((item) => item.data.id !== change.data.id); 
- 			const updatedWithChange =  [...itemsToKeep, change];
- 			return updatedWithChange;
-		}
-		LOGGER.debug("FROM AssetTypes.updatePendingChanges: pendingChanges=", pendingChanges);
-		const updatedPendingChanges = addOrReplace(pendingChanges, change);
-		LOGGER.debug("FROM AssetTypes.updatePendingChanges: updatedPendingChanges=", updatedPendingChanges);
-		setPendingChanges(updatedPendingChanges);
+		
+	const dataUpdateHandler = (updatedAssetType) => {
+		LOGGER.debug("FROM ", MODULE, ".dataUpdateHandler", "updatedAssetType=", updatedAssetType);
+		const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);		
+		dataService.update(updatedAssetType).then( (data) => LOGGER.debug("FROM AssetTypes.onSaveAllHandler, updated-data=", data));		
 	};
 	
-	const onSaveAllHandler = () => {
-		const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);		
-		LOGGER.debug("FROM AssetTypes.pendingChanges, pendingChanges=", pendingChanges);
-		pendingChanges.forEach((change) => {
-			switch (change.type){
-				case 'UPDATE':
-					LOGGER.debug("FROM AssetTypes.onSaveAllHandler, case 'UPDATE'");										
-					dataService.update(change.data).then( (data) => LOGGER.debug("FROM AssetTypes.onSaveAllHandler, updated-data=", data));
-					break;
-				case 'DELETE':
-					change.data.status = 'DELETED';
-					LOGGER.debug("FROM AssetTypes.onSaveAllHandler, case 'DELETE'");
-					//dataService.delete(change.data);				
-					break;
-				case 'ADD-NEW':
-					LOGGER.debug("FROM AssetTypes.onSaveAllHandler, case 'ADD-NEW'");
-					//dataService.addNew(change.data);
-					break;
-				default:
-					LOGGER.debug("FROM AssetTypes.onSaveAllHandler, Something very unexpected has  happened.");
-			}		
-		});				
-		setPendingChanges([]);
-		setIsSavePending(false);
-	}
-			
 	return (
-		<div className={styles.accordion}>
-			<Accordion allowMultiple >
-				{assetTypes.map(at => 							
-					<AccordionItem assetTypeIn={at} onDataChange={onDataChangeHandler}   label="Asset-Type" key={at.id}>
-						<Policies assetType={at} onDataChange={onDataChangeHandler} />
-						<hr style={{ width: "1000px", marginLeft: "0" }} />
-					</AccordionItem>					
+			<Accordion allowMultiple className={styles.accordion} style={{width: '800px'}}>
+				{assetTypes.map(at =>
+					<AccordionItemWrapper assetType={at}  onDataUpdate={dataUpdateHandler} key={at.id}/>				
 				)}
 			</Accordion>
-			{isSavePending && <CommitChangesButton onSave={onSaveAllHandler} />}
-		</div>
 	);
-}
-
+};
 export default ManageAssetTypes;
+
+
+
+/* --------------------------------------------------------------------------------------------------- */
+	const AccordionItemWrapper = (props) => {
+		const MODULE = 	"ManageAssetTypes.AccordionItemWrapper";
+		const LOGGER = new Logger().getLogger(MODULE);
+		const emptyAssetType = {id:0, name: "", description:"", associatedPolicies:[]}
+		const [currentAssetType, setCurrentAssetType] = useState(emptyAssetType);
+		const [editedAssetType, setEditedAssetType] = useState(cloneDeep(props.assetType));
+		const [isDataChanged, setIsDataChanged] = useState(false);
+		
+		useEffect(()=>{
+			LOGGER.debug("FROM ", MODULE, "props.assetType (Hook): props.assetType=", props.assetType);
+			setCurrentAssetType(cloneDeep(props.assetType));
+		},[props.assetType, LOGGER])
+		
+		useEffect(()=>{
+			const isDifferent = (!isEqual(editedAssetType, currentAssetType));			
+			setIsDataChanged(isDifferent);
+			LOGGER.debug("FROM ", MODULE, ".isDataChanged (Hook): currentAssetType=", currentAssetType, "editedAssetType", editedAssetType, "isDifferent=" ,isDifferent);						
+		},[currentAssetType, editedAssetType, LOGGER])
+		
+		const dataStates = [
+			currentAssetType, setCurrentAssetType, 
+			editedAssetType, setEditedAssetType, 
+			isDataChanged
+		];
+		
+		
+		return (
+				<AccordionItem
+					header={<AccordionItemHeader dataStates={dataStates} onDataUpdate={props.onDataUpdate} />}
+					headingProps={{ className: styles.header }}
+					panelProps={{className: styles.panel}}
+					buttonProps={{ className: ({ isEnter }) => `${styles.button} ${isEnter && styles.buttonExpanded}` }}
+					contentProps={{className: styles.content}}
+					className={styles.item}
+					key={props.assetType.id}
+				>
+					<Policies dataStates={[editedAssetType, setEditedAssetType]}/>
+				</AccordionItem>
+		);	
+	}
+
+
+
+/* --------------------------------------------------------------------------------------------------- */
+	const AccordionItemHeader = (props) => {
+		const MODULE = 	"ManageAssetTypes.AccordionItem";
+		const LOGGER = new Logger().getLogger(MODULE);			
+		const [
+				currentAssetType, setCurrentAssetType, 
+				editedAssetType, setEditedAssetType, 
+				isDataChanged
+		] = props.dataStates;
+		
+		const onSaveHandler = () =>{
+			LOGGER.debug("FROM ", MODULE, ".onSaveHandler: currentAssetType=", currentAssetType, ". editedAssetType=", editedAssetType);
+			setCurrentAssetType(editedAssetType);
+			props.onDataUpdate(editedAssetType);
+		}
+		
+		const onCancelHandler =() =>{
+			LOGGER.debug("FROM ", MODULE, ".onCancelHandler: currentAssetType=", currentAssetType, ". editedAssetType=", editedAssetType);
+			setEditedAssetType(currentAssetType);
+		}
+		
+		return (
+			<span className={styles.headerContainer} key={currentAssetType.id}>
+
+				<span className={styles.label}>Asset-Type- 
+					<span className={styles.id}>{currentAssetType.id}</span>
+				</span>								 
+
+				<span className={styles.content}>				
+					<TextEdit assetTypeProperty="name" assetTypeState={[editedAssetType, setEditedAssetType]} />					
+				</span>
+
+				<span className={styles.info}>
+					<TextEdit assetTypeProperty="description" assetTypeState={[editedAssetType, setEditedAssetType]} />
+				</span>			
+				<span className={styles.buttons}>
+					<SaveCancelButtons isDataChanged={isDataChanged} onSave={onSaveHandler} onCancel={onCancelHandler} />
+					<img src={chevronDown} alt="Chevron Down" className={styles.chevron}/>
+				</span>
+
+			</span>
+		);
+		
+	}
+
+
+
+/* --------------------------------------------------------------------------------------------------- */
+	const TextEdit = (props) => {
+		const MODULE = 	"ManageAssetTypes.TextEdit";
+		const LOGGER = new Logger().getLogger(MODULE);
+		const [assetType, setAssetType] = props.assetTypeState;		
+		
+		LOGGER.debug("FROM ", MODULE, ": props.assetTypeProperty=", props.assetTypeProperty, "props.assetTypeState=", props.assetTypeState);
+				
+		const saveEdits = (newValue) => {		
+			LOGGER.debug("FROM ", MODULE, ".saveEdits: newValue=", newValue);
+			const updatedAssetType = cloneDeep(assetType); 
+			updatedAssetType[props.assetTypeProperty] = newValue;
+			setAssetType(updatedAssetType);
+		};
+	
+		const cancelEdits = () => {
+			LOGGER.debug("FROM ", MODULE, ".cancel");		
+		};		
+			
+		return (
+			<span onClick={event => event.stopPropagation()}>
+				<EasyEdit
+					type="text"
+					value={assetType[props.assetTypeProperty]}
+					onSave={(newValue) => saveEdits(newValue)}
+					onCancel={cancelEdits}
+					saveOnBlur={true}
+					hideSaveButton={true}
+					hideCancelButton={true}
+					saveButtonLabel=""
+					cancelButtonLabel=""					
+				/>
+			</span>
+		);
+	}
+
+
+/* --------------------------------------------------------------------------------------------------- */
+	const SaveCancelButtons = (props) => {
+		const MODULE = 	"ManageAssetTypes.SaveCancelButtons";
+		const LOGGER = new Logger().getLogger(MODULE);			
+		const [isDataChanged, setIsDataChanged] = useState(false);
+	
+		useEffect(()=>{
+			setIsDataChanged(props.isDataChanged);
+			LOGGER.debug("FROM ", MODULE, "propsIsDataChangedHook: props.isDataChanged=", props.isDataChanged);
+		},[props.isDataChanged, LOGGER]);
+	
+		useEffect(()=>{
+			LOGGER.debug("FROM ", MODULE, "isDataChangedHook: isDataChanged=", isDataChanged);
+		},[isDataChanged, LOGGER]);
+		
+		const onSaveHandler = (event) =>{		
+			LOGGER.debug("FROM ", MODULE, "onSaveHandler: isDataChanged=", isDataChanged);
+			props.onSave();
+			event.stopPropagation();
+		}
+		
+		const onCancelHandler = (event) =>{		
+			LOGGER.debug("FROM ", MODULE, "onCancelHandler: isDataChanged=", isDataChanged);
+			props.onCancel();
+			event.stopPropagation();
+		}
+	
+	
+		return (
+			<>
+				{isDataChanged &&
+					<span className={styles.saveCancelButtons}>				 
+						<input type='button' id='saveButton' name= 'saveButton' onClick={onSaveHandler}/>
+						<input type='button' id='cancelButton' name= 'cancelButton' onClick={onCancelHandler} />
+					</span>
+				}
+			</>
+		);			
+	}

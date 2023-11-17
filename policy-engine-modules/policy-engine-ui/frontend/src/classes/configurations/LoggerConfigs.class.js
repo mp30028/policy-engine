@@ -3,18 +3,29 @@ export default class LoggerConfigs{
 	static FALLBACK_LOG_LEVEL = "INFO";		
 
 	static LEVELS = {
-		AssetTypes: "DEBUG",
-//		AT_AccordionItem: "INFO",
-		AT_CommitChangesButton: "DEBUG",
-		AT_AI_DescriptionEdit : "DEBUG",		
-		AT_AI_NameEdit : "DEBUG",
-//		AT_Policies: "INFO",
-		AT_Policies_PickList: "INFO"
+		ManageAssetTypes: { level: "INFO", 
+							AccordionItemHeader:{level:"DEBUG"},
+							SaveCancelButtons:{level:"DEBUG"},
+							AccordionItemContent:{level:"INFO"},
+							AccordionItemWrapper:{level:"INFO"},
+							TextEdit:{level:"INFO"}
+		}		
 	}
 	
-	getLogLevel = (name) => {
-		let lookupValue = LoggerConfigs.LEVELS[name];
-		return (lookupValue) ? lookupValue : LoggerConfigs.FALLBACK_LOG_LEVEL;
+	getLogLevel = (loggerName) => {
+		const names = loggerName.split(".");
+		var currentNode = LoggerConfigs.LEVELS;
+		for (let n in names){
+			const name = names[n];			
+			const nextNode = currentNode[name];
+			if(nextNode){
+				currentNode = nextNode;				 
+			}else{
+				currentNode = null;
+				break;
+			}
+		}
+		return ((currentNode) ? currentNode.level : LoggerConfigs.FALLBACK_LOG_LEVEL);		
 	}
 	
 }
