@@ -1,20 +1,12 @@
+import LEVELS from "../../logging.configs";
+
 export default class LoggerConfigs{
 	
-	static FALLBACK_LOG_LEVEL = "INFO";		
-
-	static LEVELS = {
-		ManageAssetTypes: { level: "INFO", 
-							AccordionItemHeader:{level:"INFO"},
-							SaveCancelButtons:{level:"INFO"},
-							AccordionItemContent:{level:"INFO"},
-							AccordionItemWrapper:{level:"DEBUG"},
-							TextEdit:{level:"INFO"}
-		}		
-	}
+	static FALLBACK_LOG_LEVEL = "INFO";
 	
 	getLogLevel = (loggerName) => {
 		const names = loggerName.split(".");
-		var currentNode = LoggerConfigs.LEVELS;
+		var currentNode = LEVELS;
 		for (let n in names){
 			const name = names[n];			
 			const nextNode = currentNode[name];
