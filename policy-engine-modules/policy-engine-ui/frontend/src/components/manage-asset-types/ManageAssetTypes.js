@@ -21,21 +21,65 @@ const ManageAssetTypes = () => {
 	}, [setAssetTypes]);
 		
 	const dataUpdateHandler = (updatedAssetType) => {
-		LOGGER.debug("FROM ", MODULE, ".dataUpdateHandler", "updatedAssetType=", updatedAssetType);
-		const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);		
-		dataService.update(updatedAssetType).then( (data) => LOGGER.debug("FROM AssetTypes.onSaveAllHandler, updated-data=", data));		
+		if (updatedAssetType.isCancelled){
+			LOGGER.debug("FROM ", MODULE, ".dataUpdateHandler", "updatedAssetType=", updatedAssetType);
+			const updatedAssetTypes = assetTypes.filter(at => at.id !== updatedAssetType.id );
+			setAssetTypes(updatedAssetTypes);
+		}else{
+			LOGGER.debug("FROM ", MODULE, ".dataUpdateHandler", "updatedAssetType=", updatedAssetType);
+			const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);		
+			dataService.update(updatedAssetType).then( (data) => LOGGER.debug("FROM AssetTypes.onSaveAllHandler, updated-data=", data));
+		}		
 	};
 	
 	return (
-			<Accordion allowMultiple className={styles.accordion} style={{width: '800px'}}>
+
+			<Accordion allowMultiple className={styles.accordion} style={{width: '1000px'}}>
+				<AddNew assetTypesState={[assetTypes, setAssetTypes]} />
+
 				{assetTypes.map(at =>
 					<AccordionItemWrapper assetType={at}  onDataUpdate={dataUpdateHandler} key={at.id}/>				
 				)}
 			</Accordion>
+
 	);
 };
 export default ManageAssetTypes;
 
+
+
+/* --------------------------------------------------------------------------------------------------- */
+	const AddNew = (props) => {
+		const MODULE = 	"ManageAssetTypes.AddNew";
+		const LOGGER = new Logger().getLogger(MODULE);				
+		
+		const protoAssetType = {
+			id:-1, 
+			name: "click-here to update name", 
+			description:"click-here and provide a description of the asset-type", 
+			associatedPolicies:[]
+		}
+		const [assetTypes, setAssetTypes] = props.assetTypesState;					
+		
+		const onClickHandler = () => {			
+			const id = ((new Date()).getTime() * -1);
+			const newAssetType = cloneDeep(protoAssetType);
+			newAssetType.id = id;
+			LOGGER.debug("FROM ", MODULE, ".onClickHandler", "newAssetType=", newAssetType);
+			const updatedAssetTypes = [...assetTypes, newAssetType];
+			setAssetTypes(updatedAssetTypes);			
+		}
+	
+		return (
+			<span className={styles.buttonPanel}>
+				<span
+					onClick={onClickHandler}
+					className={styles.addNewIcon}
+					title={'Add and configure a new Asset-Type'}
+				/>
+			</span>
+		);
+	}
 
 
 /* --------------------------------------------------------------------------------------------------- */
@@ -53,9 +97,13 @@ export default ManageAssetTypes;
 		},[props.assetType, LOGGER])
 		
 		useEffect(()=>{
-			const isDifferent = (!isEqual(editedAssetType, currentAssetType));			
-			setIsDataChanged(isDifferent);
-			LOGGER.debug("FROM ", MODULE, ".isDataChanged (Hook): currentAssetType=", currentAssetType, "editedAssetType", editedAssetType, "isDifferent=" ,isDifferent);						
+			if(currentAssetType.id < 0){
+				setIsDataChanged(true);
+			}else{
+				const isDifferent = (!isEqual(editedAssetType, currentAssetType));			
+				setIsDataChanged(isDifferent);
+				LOGGER.debug("FROM ", MODULE, ".isDataChanged (Hook): currentAssetType=", currentAssetType, "editedAssetType", editedAssetType, "isDifferent=" ,isDifferent);
+			}						
 		},[currentAssetType, editedAssetType, LOGGER])
 		
 		const dataStates = [
@@ -100,14 +148,19 @@ export default ManageAssetTypes;
 		
 		const onCancelHandler =() =>{
 			LOGGER.debug("FROM ", MODULE, ".onCancelHandler: currentAssetType=", currentAssetType, ". editedAssetType=", editedAssetType);
-			setEditedAssetType(currentAssetType);
+			if (editedAssetType.id < 0){
+				editedAssetType.isCancelled=true;
+				props.onDataUpdate(editedAssetType);
+			}else{
+				setEditedAssetType(currentAssetType);
+			}
 		}
 		
-		return (
+		return (			
 			<span className={styles.headerContainer} key={currentAssetType.id}>
 
 				<span className={styles.label}>Asset-Type- 
-					<span className={styles.id}>{currentAssetType.id}</span>
+					<span className={styles.id}>{(currentAssetType.id >= 0) ? currentAssetType.id : '<new>'}</span>
 				</span>								 
 
 				<span className={styles.content}>				
