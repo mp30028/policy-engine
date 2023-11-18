@@ -1,11 +1,17 @@
-const LEVELS = {
-	ManageAssetTypes:{ level: "INFO",
-		AccordionItemHeader:{level: "INFO"},
-		SaveCancelButtons:{level: "INFO"},
-		AccordionItemContent:{level: "INFO"},
-		AccordionItemWrapper:{level: "INFO"},
-		TextEdit:{level: "INFO"}
-	}
-};
+class LogLevel {
+	static INFO = "INFO";
+	static DEBUG = "DEBUG";	 
+}
 
-export default LEVELS;
+export const LEVELS = {
+	ManageAssetTypes:{ level: LogLevel.INFO,
+		AccordionItemHeader:{level: LogLevel.INFO},
+		SaveCancelButtons:{level: LogLevel.INFO},
+		AccordionItemContent:{level: LogLevel.INFO},
+		AccordionItemWrapper:{level: LogLevel.INFO},
+		TextEdit:{level: LogLevel.INFO}
+	}	
+}
+
+export const FALLBACK_LOG_LEVEL = LogLevel.INFO;
+
