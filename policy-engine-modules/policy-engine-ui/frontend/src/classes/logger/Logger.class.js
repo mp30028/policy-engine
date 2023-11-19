@@ -1,13 +1,31 @@
 import {default as LOG} from 'loglevel';
-import LoggerConfigs from '../configurations/LoggerConfigs.class';
+import {LEVELS, FALLBACK_LOG_LEVEL} from "../../logging.configs";
+
+class LoggerConfigs{
+	
+	getLogLevel = (loggerName) => {
+		const names = loggerName.split(".");
+		var currentNode = LEVELS;
+		for (let n in names){
+			const name = names[n];			
+			const nextNode = currentNode[name];
+			if(nextNode){
+				currentNode = nextNode;				 
+			}else{
+				currentNode = null;
+				break;
+			}
+		}
+		return ((currentNode) ? currentNode.level : FALLBACK_LOG_LEVEL);		
+	}
+	
+}
+
 
 export default class Logger{
 		
 	constructor() {
 		this.configs = new LoggerConfigs();
-		this.FALLBACK_LOG_LEVEL = "INFO";
-//		this.FALLBACK_LOG_LEVEL = "UNKNOWN";
-		
 	}
 
 	getLogger = (name, defaultLevel) => {
@@ -19,7 +37,7 @@ export default class Logger{
 			if(configuredLogLevel){
 				logger.setLevel(configuredLogLevel);
 			}else{
-				logger.setLevel(this.FALLBACK_LOG_LEVEL);
+				logger.setLevel(FALLBACK_LOG_LEVEL);
 			}
 		}					
 		return logger;

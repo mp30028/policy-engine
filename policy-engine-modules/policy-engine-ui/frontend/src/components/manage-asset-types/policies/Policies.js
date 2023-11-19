@@ -6,12 +6,17 @@ import styles from "../css/ManageAssetTypes.module.css";
 import chevronDown from "../../../static/icons/chevron-down.svg";
 import PickList from './picklist/PickList';
 import {cloneDeep, sortBy} from "lodash";
+import Logger from '../../../classes/logger/Logger.class';
 
-export default function Policies(props) {	
+export default function Policies(props) {
+	const MODULE = 	"ManageAssetTypes.Policies";
+	const LOGGER = new Logger().getLogger(MODULE);
 	const ENTITY_NAME = "policy";
 	const [policies, setPolicies] = useState([]);
 	const [assetType, setAssetType] = props.dataStates;
-
+	
+	LOGGER.debug("FROM ", MODULE);
+	
 	useEffect(() => {
 		const getPolicyIdsFromAssetType = (assetType) =>{
 			return assetType.associatedPolicies.map(p => p.id);

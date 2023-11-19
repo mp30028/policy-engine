@@ -1,10 +1,13 @@
 package com.zonesoft.policyengine.api.controllers;
 
+//import java.net.URI;
+//import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+//import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -58,10 +61,27 @@ public class AssetTypeController {
     }    
     
     @PostMapping
-    public ResponseEntity<AssetType> addNew(@RequestBody AssetType newAssetType) {
+    public ResponseEntity<AssetType> addNew(@RequestBody String newAssetTypeJson) {
+    	LOGGER.debug("FROM AssetTypeController.addNew: newAssetTypeJson={}", newAssetTypeJson);
+    	AssetType result = service.addNew(newAssetTypeJson);
+    	return ResponseEntity.ok().body(result) ;
+//    	try{
+//    		result =service.addNew(newAssetTypeJson);    	
+//    		URI uri = null;
+//			try {
+//				uri = new URI("/policy-engine/api/asset-type/" + result.getId());
+//			} catch (URISyntaxException e) {
+//				e.printStackTrace();
+//				return ResponseEntity.internalServerError().build();
+//			}
+//    		return ResponseEntity.created(uri).body(result) ;
+//    	}catch (Exception e) {
+//    		return ResponseEntity.status(HttpStatus.CONFLICT).header(HttpHeaders.LOCATION, "/policy-engine/api/asset-type/" + result.getId()).build();    		
+//    	}
+    	
     	//201 (Created)
     	//404 (Not Found), 409 (Conflict) if resource already exists..
-    	return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();    	
+//    	return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();    	
     }
     
     @DeleteMapping("/{id}")

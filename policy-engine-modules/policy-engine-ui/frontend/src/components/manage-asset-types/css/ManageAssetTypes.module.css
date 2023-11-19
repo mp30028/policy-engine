@@ -190,3 +190,32 @@
 	background-color: transparent;
 	border: none;
 }
+
+.addNewIcon{
+	background-image: url(../../../static/icons/add-new-grey.svg);
+	background-size: cover;
+	background-color:transparent;
+  	cursor: pointer;
+  	float: right;	
+	height: 20pt;
+	width: 20pt;
+	margin: 5pt;
+	margin-right: 15pt;
+	padding: 2px;
+/*	float: inline-end;*/
+}
+
+.addNewIcon:hover{
+	background-image: url(../../../static/icons/add-new-colour.svg);
+	background-size: cover;
+	background-color: gold;
+	border-radius: 5px;
+	border: none;
+}
+
+.buttonPanel {
+	border: none;
+    border-bottom: 1px solid #dddddd;
+    width: 100%;
+    float: inline-start;
+}
