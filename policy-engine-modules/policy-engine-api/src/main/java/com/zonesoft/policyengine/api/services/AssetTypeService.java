@@ -38,19 +38,20 @@ public class AssetTypeService {
 	public AssetType update(Long id, String json) {
     	AssetType assetType = this.findById(id);
     	if (Objects.nonNull(assetType)) {
-    		Map<String, Object> map = DeserialiseJsonToMap.deserialise(json);
-    		
-    		updateAssignedPolicies(assetType, map);
-    		
-    		Optional<String> name = getFromMap(map,"name");
-    		LOGGER.debug("FROM AssetTypeService.update: name={}", name);
-    		if (name.isPresent()) assetType.setName(name.get());
-    		
-    		Optional<String> description = getFromMap(map,"description");
-    		LOGGER.debug("FROM AssetTypeService.update: description={}", description);
-    		if (description.isPresent()) assetType.setDescription(description.get());
-    		
-    		AssetType updatedAssetType = this.update(assetType);
+//    		Map<String, Object> map = DeserialiseJsonToMap.deserialise(json);
+//    		
+//    		updateAssignedPolicies(assetType, map);
+//    		
+//    		Optional<String> name = getFromMap(map,"name");
+//    		LOGGER.debug("FROM AssetTypeService.update: name={}", name);
+//    		if (name.isPresent()) assetType.setName(name.get());
+//    		
+//    		Optional<String> description = getFromMap(map,"description");
+//    		LOGGER.debug("FROM AssetTypeService.update: description={}", description);
+//    		if (description.isPresent()) assetType.setDescription(description.get());
+//    		
+//    		AssetType updatedAssetType = this.update(assetType);
+    		AssetType updatedAssetType = updateAssetTypeFromJson(assetType, json);
     		return updatedAssetType;
     	}else {
     		return null;
@@ -60,7 +61,33 @@ public class AssetTypeService {
 	public AssetType findById(Long id) {
 		Optional<AssetType> result = assetTypeRepository.findById(id);
 		return (result.isPresent() ? result.get() : null);		
-	}		
+	}
+	
+	public AssetType addNew(String json) {		
+		AssetType newAssetType = updateAssetTypeFromJson(new AssetType(), json);
+		return newAssetType;
+	}
+	
+	private AssetType updateAssetTypeFromJson(AssetType assetType, String json) {
+		Map<String, Object> map = DeserialiseJsonToMap.deserialise(json);
+				
+		Optional<String> name = getFromMap(map,"name");
+		LOGGER.debug("FROM AssetTypeService.updateAssetTypeFromJson: name={}", name);
+		if (name.isPresent()) assetType.setName(name.get());
+		if(Objects.isNull(assetType.getId())) {
+			assetType = this.assetTypeRepository.save(assetType);
+		}
+		
+		Optional<String> description = getFromMap(map,"description");
+		LOGGER.debug("FROM AssetTypeService.updateAssetTypeFromJson: description={}", description);
+		if (description.isPresent()) assetType.setDescription(description.get());
+		
+		updateAssignedPolicies(assetType, map);
+		
+		AssetType updatedAssetType = this.update(assetType);
+		return updatedAssetType;
+		
+	}
 
 	@SuppressWarnings("unchecked")
 	private <T> Optional<T> getFromMap(Map<String, Object> map, String key){

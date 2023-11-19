@@ -27,8 +27,13 @@ const ManageAssetTypes = () => {
 			setAssetTypes(updatedAssetTypes);
 		}else{
 			LOGGER.debug("FROM ", MODULE, ".dataUpdateHandler", "updatedAssetType=", updatedAssetType);
-			const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);		
-			dataService.update(updatedAssetType).then( (data) => LOGGER.debug("FROM AssetTypes.onSaveAllHandler, updated-data=", data));
+			const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);
+			if (updatedAssetType.id > 0){		
+				dataService.update(updatedAssetType).then( (data) => LOGGER.debug("FROM AssetTypes.onSaveAllHandler, updated-data=", data));
+			}else{
+				updatedAssetType.id = null;
+				dataService.addNew(updatedAssetType).then( (data) => LOGGER.debug("FROM AssetTypes.onSaveAllHandler, updated-data=", data));
+			}
 		}		
 	};
 	

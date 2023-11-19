@@ -54,4 +54,23 @@ export default class DataService{
 		console.log("FROM DataService.update: responseJson=", responseJson);
 		return responseJson;
 	}
+	
+	addNew = async (data) => {
+		const fetchUrl = this.configs.getUrl(this.pathName) ;
+		console.log("FROM DataService.addNew: data=", JSON.stringify(data));
+		const response = await fetch(
+			fetchUrl,
+			{
+				method: 'POST',
+				body: JSON.stringify(data),
+				headers: {
+					'Content-Type': 'application/json;charset=UTF-8',
+					'Accept': 'application/json, text/plain'
+				}
+			}
+		);
+		const responseJson = await response.json();
+		console.log("FROM DataService.update: responseJson=", responseJson);
+		return responseJson;
+	}
 }
