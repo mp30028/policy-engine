@@ -1,5 +1,6 @@
 package com.zonesoft.policyengine.api.services;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,21 +39,8 @@ public class AssetTypeService {
 	public AssetType update(Long id, String json) {
     	AssetType assetType = this.findById(id);
     	if (Objects.nonNull(assetType)) {
-//    		Map<String, Object> map = DeserialiseJsonToMap.deserialise(json);
-//    		
-//    		updateAssignedPolicies(assetType, map);
-//    		
-//    		Optional<String> name = getFromMap(map,"name");
-//    		LOGGER.debug("FROM AssetTypeService.update: name={}", name);
-//    		if (name.isPresent()) assetType.setName(name.get());
-//    		
-//    		Optional<String> description = getFromMap(map,"description");
-//    		LOGGER.debug("FROM AssetTypeService.update: description={}", description);
-//    		if (description.isPresent()) assetType.setDescription(description.get());
-//    		
-//    		AssetType updatedAssetType = this.update(assetType);
-    		AssetType updatedAssetType = updateAssetTypeFromJson(assetType, json);
-    		return updatedAssetType;
+    		updateAssetTypeFromJson(assetType, json);
+    		return assetType;
     	}else {
     		return null;
     	}		
@@ -64,29 +52,39 @@ public class AssetTypeService {
 	}
 	
 	public AssetType addNew(String json) {		
-		AssetType newAssetType = updateAssetTypeFromJson(new AssetType(), json);
+		String TEMP_NAME = "";
+		String TEMP_DESCRIPTION = "";
+		AssetType newAssetType = new AssetType();
+		newAssetType.setName(TEMP_NAME);
+		newAssetType.setDescription(TEMP_DESCRIPTION);
+		newAssetType.setPolicies(new ArrayList<Policy>());
+		newAssetType = assetTypeRepository.saveAndFlush(newAssetType);
+		updateAssetTypeFromJson(newAssetType, json);
 		return newAssetType;
 	}
 	
-	private AssetType updateAssetTypeFromJson(AssetType assetType, String json) {
+	public void deleteById(Long id) {
+		AssetType assetType = this.findById(id);
+		if (Objects.nonNull(assetType)) {
+			assetTypeRepository.deleteById(id);
+		}else {
+			throw new RuntimeException(MessageFormat.format( "Unable to delete Asset-Type with id={0} as there is no Asset-Type with this id", id));
+		}
+	}
+	
+	private void updateAssetTypeFromJson(AssetType assetType, String json) {
 		Map<String, Object> map = DeserialiseJsonToMap.deserialise(json);
 				
 		Optional<String> name = getFromMap(map,"name");
 		LOGGER.debug("FROM AssetTypeService.updateAssetTypeFromJson: name={}", name);
 		if (name.isPresent()) assetType.setName(name.get());
-		if(Objects.isNull(assetType.getId())) {
-			assetType = this.assetTypeRepository.save(assetType);
-		}
+
 		
 		Optional<String> description = getFromMap(map,"description");
 		LOGGER.debug("FROM AssetTypeService.updateAssetTypeFromJson: description={}", description);
 		if (description.isPresent()) assetType.setDescription(description.get());
 		
-		updateAssignedPolicies(assetType, map);
-		
-		AssetType updatedAssetType = this.update(assetType);
-		return updatedAssetType;
-		
+		updateAssignedPolicies(assetType, map);		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -119,7 +117,6 @@ public class AssetTypeService {
 			// policyService.updateAssociatedPolicies(assetType)
 			LOGGER.debug("FROM AssetTypeService.updateAssignedPolicies: policiesOptional={}", policiesOptional);
 			policyService.updateAssignedPolicies(assetType, policiesOptional.get());
-			assetType = this.findById(assetType.getId()); //refresh after the update
 		}else{
 			Optional<List<Map<String, Object>>> associatedPoliciesOptional = getFromMap(map,"associatedPolicies");    			
 			if(associatedPoliciesOptional.isPresent()) {
@@ -127,7 +124,6 @@ public class AssetTypeService {
 				List<Policy>  associatedPolicies = getPolicesFromAssociatedPolicies(associatedPoliciesOptional.get());
 				// See earlier comment about updating from the owning side
 				policyService.updateAssignedPolicies(assetType, associatedPolicies);
-				assetType = this.findById(assetType.getId()); //refresh after the update
 			}
 		}		
 	}

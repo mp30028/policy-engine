@@ -21,18 +21,40 @@ const ManageAssetTypes = () => {
 	}, [setAssetTypes]);
 		
 	const dataUpdateHandler = (updatedAssetType) => {
-		if (updatedAssetType.isCancelled){
-			LOGGER.debug("FROM ", MODULE, ".dataUpdateHandler", "updatedAssetType=", updatedAssetType);
-			const updatedAssetTypes = assetTypes.filter(at => at.id !== updatedAssetType.id );
+
+		const removeAssetType = (assetTypeToRemove) => {
+			const updatedAssetTypes = assetTypes.filter(at => at.id !== assetTypeToRemove.id );
+			setAssetTypes(updatedAssetTypes);			
+		}
+		
+		const replaceAssetType = (idOfAssetTypeToReplace, replacementAssetType) => {
+			const updatedAssetTypes = assetTypes.map(at => (at.id === idOfAssetTypeToReplace) ? replacementAssetType : at);
 			setAssetTypes(updatedAssetTypes);
-		}else{
-			LOGGER.debug("FROM ", MODULE, ".dataUpdateHandler", "updatedAssetType=", updatedAssetType);
+		}
+
+
+		
+		if (updatedAssetType.isCancelled){			
+			removeAssetType(updatedAssetType);
+		}else{			
 			const dataService = new DataService(new ApiClientConfigs(),ENTITY_NAME);
-			if (updatedAssetType.id > 0){		
-				dataService.update(updatedAssetType).then( (data) => LOGGER.debug("FROM AssetTypes.onSaveAllHandler, updated-data=", data));
+			if (updatedAssetType.isMarkedForDeletion){
+				dataService.deleteById(updatedAssetType.id).then( (data) => LOGGER.debug("FROM AssetTypes.dataUpdateHandler, updated-data=", data));
+				updatedAssetType.isMarkedForDeletion = null;
+				removeAssetType(updatedAssetType);
 			}else{
-				updatedAssetType.id = null;
-				dataService.addNew(updatedAssetType).then( (data) => LOGGER.debug("FROM AssetTypes.onSaveAllHandler, updated-data=", data));
+				if (updatedAssetType.id > 0){
+					dataService.update(updatedAssetType).then( (data) => LOGGER.debug("FROM AssetTypes.dataUpdateHandler, updated-data=", data));
+				}else{
+					const tempId = updatedAssetType.id; 
+					updatedAssetType.id = null;
+					dataService.addNew(updatedAssetType).then( (data) =>{					 						 	
+					 	LOGGER.debug("FROM AssetTypes.dataUpdateHandler, newly-added-data=", data, "tempId=", tempId);
+						replaceAssetType(tempId, data);					 	
+					});
+//					const updatedAssetTypes = [...assetTypes, updatedAssetType];
+//					setAssetTypes(updatedAssetTypes);													
+				}
 			}
 		}		
 	};
@@ -104,6 +126,9 @@ export default ManageAssetTypes;
 		useEffect(()=>{
 			if(currentAssetType.id < 0){
 				setIsDataChanged(true);
+			}else if(editedAssetType.isMarkedForDeletion){
+				setIsDataChanged(true);
+				LOGGER.debug("FROM ", MODULE, ".isDataChanged (Hook): currentAssetType=", currentAssetType, "editedAssetType", editedAssetType);
 			}else{
 				const isDifferent = (!isEqual(editedAssetType, currentAssetType));			
 				setIsDataChanged(isDifferent);
@@ -163,9 +188,16 @@ export default ManageAssetTypes;
 		
 		return (			
 			<span className={styles.headerContainer} key={currentAssetType.id}>
+				<Delete assetTypeState={[editedAssetType, setEditedAssetType]} />
 
 				<span className={styles.label}>Asset-Type- 
-					<span className={styles.id}>{(currentAssetType.id >= 0) ? currentAssetType.id : '<new>'}</span>
+					<span className={styles.id}>
+						{
+							(currentAssetType.id >= 0) ? 
+								currentAssetType.id : 
+								'<new>'
+						}
+					</span>
 				</span>								 
 
 				<span className={styles.content}>				
@@ -186,6 +218,34 @@ export default ManageAssetTypes;
 	}
 
 
+
+/* --------------------------------------------------------------------------------------------------- */
+	const Delete = (props) => {
+		const MODULE = 	"ManageAssetTypes.delete";
+		const LOGGER = new Logger().getLogger(MODULE);	
+		const [assetType, setAssetType] = props.assetTypeState;
+		
+		const onClickHandler = (event) => {
+			LOGGER.debug("FROM ", MODULE, ": ");
+			const updatedAssetType =  cloneDeep(assetType);
+			updatedAssetType.isMarkedForDeletion = true;
+			setAssetType(updatedAssetType);
+			event.stopPropagation();
+		}
+		
+		return(
+			<>
+				{(assetType.id > 0) ?
+					(assetType.isMarkedForDeletion) ?
+						<span className={styles.markedForDeletionIcon} title={"WARNING:" + assetType.name + ' has been marked for permanent deletion'} onClick={event => event.stopPropagation()} />
+					:
+						<span className={styles.deleteIcon} title={'Click to mark ' + assetType.name + ' for deletion'} onClick={onClickHandler} />
+				:
+					<span className={styles.newRecordIcon} onClick={event => event.stopPropagation()}/>
+				}
+			</>			
+		);
+	}
 
 /* --------------------------------------------------------------------------------------------------- */
 	const TextEdit = (props) => {
