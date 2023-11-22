@@ -64,6 +64,8 @@ public class AssetTypeController {
     public ResponseEntity<AssetType> addNew(@RequestBody String newAssetTypeJson) {
     	LOGGER.debug("FROM AssetTypeController.addNew: newAssetTypeJson={}", newAssetTypeJson);
     	AssetType result = service.addNew(newAssetTypeJson);
+//    	service.findById(result.getId());
+    	LOGGER.debug("FROM AssetTypeController.addNew: result={}", result);
     	return ResponseEntity.ok().body(result) ;
 //    	try{
 //    		result =service.addNew(newAssetTypeJson);    	

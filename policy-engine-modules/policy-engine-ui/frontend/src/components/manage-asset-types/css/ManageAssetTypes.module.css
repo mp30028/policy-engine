@@ -219,3 +219,51 @@
     width: 100%;
     float: inline-start;
 }
+
+.deleteIcon{
+	background-image: url(../../../static/icons/delete-grey.svg);
+	background-size: cover;
+	background-color:transparent;
+  	cursor: pointer;
+  	float: left;	
+	height: 10pt;
+	width: 20pt;
+	margin-top: 4pt;
+	margin-left: 1pt;
+	padding: 1px;
+}
+
+.deleteIcon:hover{
+	background-image: url(../../../static/icons/delete-colour.svg);
+	background-size: cover;
+/*	background-color: gold;*/
+/*	border-radius: 5px;*/
+/*	border: none;*/
+	height: 12pt;
+	width: 25pt;
+	
+}
+
+.newRecordIcon{
+	background-image: url(../../../static/icons/green-star.svg);
+	background-size: cover;
+	background-color:transparent;
+  	float: left;	
+	height: 14pt;
+	width: 14pt;
+	margin-top: 4pt;
+	margin-left: 1pt;
+	padding: 1px;
+}
+
+.markedForDeletionIcon{
+	background-image: url(../../../static/icons/eraser-red.svg);
+	background-size: cover;
+	background-color:transparent;
+  	float: left;	
+	height: 18pt;
+	width: 18pt;
+	margin-top: 4pt;
+	margin-left: 1pt;
+	padding: 1px;
+}

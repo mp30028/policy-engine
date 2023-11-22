@@ -73,4 +73,21 @@ export default class DataService{
 		console.log("FROM DataService.update: responseJson=", responseJson);
 		return responseJson;
 	}
+	
+	deleteById = async (id) => {
+		const fetchUrl = this.configs.getUrl(this.pathName) + "/" + id;
+		console.log("FROM DataService.deleteById: id=", id);
+		const response = await fetch(
+			fetchUrl,
+			{
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json;charset=UTF-8',
+					'Accept': 'application/json, text/plain'
+				}
+			}
+		);
+		console.log("FROM DataService.update: response.staus=", response.statusText);
+		return true;
+	}	
 }
