@@ -1,3 +1,4 @@
+SET FOREIGN_KEY_CHECKS=0;
 -- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
 --
 -- Host: localhost    Database: policy-engine-db
@@ -268,3 +269,4 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2023-11-21 17:48:49
+SET FOREIGN_KEY_CHECKS=1;

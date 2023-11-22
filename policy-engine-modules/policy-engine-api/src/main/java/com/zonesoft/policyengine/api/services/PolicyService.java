@@ -45,7 +45,7 @@ public class PolicyService {
 		}
 	}
 	
-	public void updateAssignedPolicies(AssetType assetType, List<Policy> policies) {
+	public void unassignAssetTypeFromAllPolicies(AssetType assetType) {
 		List<Policy> allPolicies = this.policyRepository.findAll();
 		for (Policy policy : allPolicies) {			
 			boolean isRemoved = policy.getAssetTypes().removeIf(at -> at.getId() == assetType.getId());		
@@ -53,12 +53,29 @@ public class PolicyService {
 				this.policyRepository.save(policy);
 			}
 			LOGGER.debug(
-					"FROM PolicyService.updateAssignedPolicies: asset-type named {} {} from policy named {}",
+					"FROM PolicyService.unassignAssetTypeFromAllPolicies: asset-type named {} {} from policy named {}",
 					assetType.getName(), 
 					isRemoved ? "successfully removed" : "NOT removed", 
 					policy.getName()
 			);
-		}
+		}		
+	}
+	
+	public void updateAssignedPolicies(AssetType assetType, List<Policy> policies) {
+//		List<Policy> allPolicies = this.policyRepository.findAll();
+//		for (Policy policy : allPolicies) {			
+//			boolean isRemoved = policy.getAssetTypes().removeIf(at -> at.getId() == assetType.getId());		
+//			if (isRemoved) {
+//				this.policyRepository.save(policy);
+//			}
+//			LOGGER.debug(
+//					"FROM PolicyService.updateAssignedPolicies: asset-type named {} {} from policy named {}",
+//					assetType.getName(), 
+//					isRemoved ? "successfully removed" : "NOT removed", 
+//					policy.getName()
+//			);
+//		}
+		unassignAssetTypeFromAllPolicies(assetType);
 		for(Policy policy : policies) {
 			policy.getAssetTypes().add(assetType);
 			Policy updatedPolicy = this.policyRepository.save(policy);

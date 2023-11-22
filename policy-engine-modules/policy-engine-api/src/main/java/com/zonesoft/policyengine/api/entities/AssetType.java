@@ -55,7 +55,8 @@ public class AssetType implements Identifier {
 	}
 	
 	@JsonIgnore
-	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "assetTypes", cascade = CascadeType.ALL) //This is property in Policy
+//	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "assetTypes", cascade = CascadeType.ALL) //This is property in Policy
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "assetTypes") //This is property in Policy	
 	public List<Policy> getPolicies() {
 		return policies;
 	}

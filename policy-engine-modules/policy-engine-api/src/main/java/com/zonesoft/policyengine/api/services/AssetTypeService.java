@@ -1,5 +1,6 @@
 package com.zonesoft.policyengine.api.services;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +66,18 @@ public class AssetTypeService {
 	
 	public AssetType addNew(String json) {		
 		AssetType newAssetType = updateAssetTypeFromJson(new AssetType(), json);
-		return newAssetType;
+		
+		return this.findById(newAssetType.getId());
+	}
+	
+	public void deleteById(Long id) {
+		AssetType assetType = this.findById(id);
+		if (Objects.nonNull(assetType)) {
+//			this.policyService.unassignAssetTypeFromAllPolicies(assetType);
+			assetTypeRepository.deleteById(id);
+		}else {
+			throw new RuntimeException(MessageFormat.format( "Unable to delete Asset-Type with id={0} as there is no Asset-Type with this id", id));
+		}
 	}
 	
 	private AssetType updateAssetTypeFromJson(AssetType assetType, String json) {

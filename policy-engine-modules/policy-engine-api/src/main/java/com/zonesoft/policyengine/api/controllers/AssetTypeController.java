@@ -85,10 +85,23 @@ public class AssetTypeController {
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@RequestBody AssetType assetType) {
+    public ResponseEntity<Void> delete(@PathVariable(value = "id") Long id) {
+    	LOGGER.debug("FROM AssetTypeController.delete: id={}", id);
+    	try {
+    		service.deleteById(id);
+    		LOGGER.debug("FROM AssetTypeController.delete: Asset-Type with id={} was successfully deleted", id);
+    		return ResponseEntity.noContent().build();
+    	}catch(Exception e) {
+    		LOGGER.error("FROM AssetTypeController.delete: Asset-Type with id={} could not be deleted. Attempt to delete threw the following Exception: {}", id, e.getMessage());
+    		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();  
+    	}
+    	
+    	
+    	
+    	
     	//204 (OK - No Content). 
     	// 404 (Not Found), if ID not found or invalid.
     	//return ResponseEntity.noContent().build();
-    	return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+    	//return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
     }
 }
