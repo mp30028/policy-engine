@@ -50,7 +50,8 @@ const ManageAssetTypes = () => {
 					updatedAssetType.id = null;
 					dataService.addNew(updatedAssetType).then( (data) =>{					 						 	
 					 	LOGGER.debug("FROM AssetTypes.dataUpdateHandler, newly-added-data=", data, "tempId=", tempId);
-						replaceAssetType(tempId, data);					 	
+					 	updatedAssetType.id = data.id;
+						replaceAssetType(tempId, updatedAssetType);
 					});
 //					const updatedAssetTypes = [...assetTypes, updatedAssetType];
 //					setAssetTypes(updatedAssetTypes);													
@@ -94,7 +95,7 @@ export default ManageAssetTypes;
 			newAssetType.id = id;
 			LOGGER.debug("FROM ", MODULE, ".onClickHandler", "newAssetType=", newAssetType);
 			const updatedAssetTypes = [...assetTypes, newAssetType];
-			setAssetTypes(updatedAssetTypes);			
+			setAssetTypes(updatedAssetTypes);
 		}
 	
 		return (
@@ -172,8 +173,8 @@ export default ManageAssetTypes;
 		
 		const onSaveHandler = () =>{
 			LOGGER.debug("FROM ", MODULE, ".onSaveHandler: currentAssetType=", currentAssetType, ". editedAssetType=", editedAssetType);
-			setCurrentAssetType(editedAssetType);
 			props.onDataUpdate(editedAssetType);
+			setCurrentAssetType(editedAssetType);			
 		}
 		
 		const onCancelHandler =() =>{
