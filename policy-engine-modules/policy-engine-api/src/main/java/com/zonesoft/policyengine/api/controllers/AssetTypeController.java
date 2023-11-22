@@ -1,7 +1,5 @@
 package com.zonesoft.policyengine.api.controllers;
 
-//import java.net.URI;
-//import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 
@@ -64,26 +62,8 @@ public class AssetTypeController {
     public ResponseEntity<AssetType> addNew(@RequestBody String newAssetTypeJson) {
     	LOGGER.debug("FROM AssetTypeController.addNew: newAssetTypeJson={}", newAssetTypeJson);
     	AssetType result = service.addNew(newAssetTypeJson);
-//    	service.findById(result.getId());
     	LOGGER.debug("FROM AssetTypeController.addNew: result={}", result);
-    	return ResponseEntity.ok().body(result) ;
-//    	try{
-//    		result =service.addNew(newAssetTypeJson);    	
-//    		URI uri = null;
-//			try {
-//				uri = new URI("/policy-engine/api/asset-type/" + result.getId());
-//			} catch (URISyntaxException e) {
-//				e.printStackTrace();
-//				return ResponseEntity.internalServerError().build();
-//			}
-//    		return ResponseEntity.created(uri).body(result) ;
-//    	}catch (Exception e) {
-//    		return ResponseEntity.status(HttpStatus.CONFLICT).header(HttpHeaders.LOCATION, "/policy-engine/api/asset-type/" + result.getId()).build();    		
-//    	}
-    	
-    	//201 (Created)
-    	//404 (Not Found), 409 (Conflict) if resource already exists..
-//    	return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();    	
+    	return ResponseEntity.ok().body(result) ;    	
     }
     
     @DeleteMapping("/{id}")

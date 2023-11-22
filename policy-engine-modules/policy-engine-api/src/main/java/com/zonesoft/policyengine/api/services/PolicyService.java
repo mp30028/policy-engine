@@ -69,7 +69,7 @@ public class PolicyService {
 				policy.setAssetTypes(new ArrayList<AssetType>());
 			}
 			policy.getAssetTypes().add(assetType);
-			Policy updatedPolicy = this.policyRepository.saveAndFlush(policy);
+			Policy updatedPolicy = this.policyRepository.save(policy);
 			assetType.getPolicies().add(updatedPolicy);
 			LOGGER.debug(
 					"FROM PolicyService.updateAssignedPolicies: asset-type named {} {} to policy named {}",
