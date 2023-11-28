@@ -1,5 +1,6 @@
 version: "3.8"
 services:
+
   policy-engine-db:
     container_name: policy-engine-db
     image: mysql:8.0.33
@@ -7,23 +8,33 @@ services:
     stdin_open: false
     tty: false
     environment:
-      MYSQL_ROOT_PASSWORD: ${POLICY_ENGINE_DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${POLICY_ENGINE_DB_SCHEMA}
-      MYSQL_USER: ${POLICY_ENGINE_DB_USER}
-      MYSQL_PASSWORD: ${POLICY_ENGINE_DB_PASSWORD}
-      MYSQL_TCP_PORT: ${POLICY_ENGINE_DB_TCP_PORT}                  
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-R007*Password}
+      MYSQL_DATABASE: ${DB_SCHEMA:-policy_engine_db}
+      MYSQL_USER: ${DB_USER:-policy_engine_db_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-U5erPa55word}
+      MYSQL_TCP_PORT: ${DB_PORT:-3311}
+      ENV_DB_HOST: ${DB_HOST:-policy-engine-db}
+      ENV_DB_PORT: ${DB_PORT:-3311}
+      ENV_DB_SCHEMA: ${DB_SCHEMA:-policy_engine_db}
+      ENV_DB_USER: ${DB_USER:-policy_engine_db_user}
+      ENV_DB_PASSWORD: ${DB_PASSWORD:-R007*Password}
     ports:
-       - ${POLICY_ENGINE_DB_TCP_PORT}:${POLICY_ENGINE_DB_TCP_PORT}
+       - ${DB_PORT:-3311}:${DB_PORT:-3311}
     volumes:
       - type: bind      
-        source: ${POLICY_ENGINE_DB_DATAFILES_DIR}
+        source: ${DB_DATAFILES_DIR:-../../../policy-engine-data-files}
         target: /var/lib/mysql
-        read_only: false      
+        read_only: false
       - type: bind
-        source: ${POLICY_ENGINE_DB_INIT}
+        source: ${DB_INIT_SCRIPT:-../../policy-engine-modules/policy-engine-api/src/test/resources/db/initialise-policy-engine-db.sql}
         target: /docker-entrypoint-initdb.d/initdb.sql
         read_only: true
     healthcheck:
         test: "mysql $${MYSQL_DATABASE} -u$${MYSQL_USER} -p$${MYSQL_PASSWORD} --port=$${MYSQL_TCP_PORT} -e 'SELECT 1;'"
         timeout: 20s
         retries: 10
+    networks:
+      - policyenginenet
+
+networks:
+  policyenginenet: 
