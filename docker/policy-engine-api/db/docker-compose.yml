@@ -22,11 +22,11 @@ services:
        - ${DB_PORT:-3311}:${DB_PORT:-3311}
     volumes:
       - type: bind      
-        source: ${DB_DATAFILES_DIR:-../../../policy-engine-data-files}
+        source: ${DB_DATAFILES_DIR:-../../../../policy-engine-data-files/api}
         target: /var/lib/mysql
         read_only: false
       - type: bind
-        source: ${DB_INIT_SCRIPT:-../../policy-engine-modules/policy-engine-api/src/test/resources/db/initialise-policy-engine-db.sql}
+        source: ${DB_INIT_SCRIPT:-../../../policy-engine-modules/policy-engine-api/src/test/resources/db/initialise-policy-engine-db.sql}
         target: /docker-entrypoint-initdb.d/initdb.sql
         read_only: true
     healthcheck:
