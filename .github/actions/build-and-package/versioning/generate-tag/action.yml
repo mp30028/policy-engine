@@ -1,0 +1,147 @@
+name: 'Increment All Version Data'
+description: 'Fetch the major, minor, patch and build numbers from repository variables and increment based on input flags'
+inputs:
+  module-id:
+    required: true
+    description: "The repository variables are stored using the format <module-id>_<'MAJOR'|'MINOR'|'PATCH'>'_NUMBER'"
+   
+  github-token:
+    required: true
+    description: "Authentication token with permissions to read and write repository variables"
+    
+  release-type:
+    required: true
+    description: "Has to be one of 'MAJOR'|'MINOR'|'PATCH'|'SNAPSHOT'"
+    default: "SNAPSHOT"
+        
+     
+#  increment-major-number:
+#    required: false
+#    description: "If set to 'true' will increment and save major version number to repository variables"
+#    default: "NO"
+#    
+#  increment-minor-number:
+#    required: false
+#    description: "If set to 'true' will increment and save minor version number to repository variables"
+#    default: "NO" 
+#    
+#  increment-patch-number:
+#    required: false
+#    description: "If set to 'true' will increment and save patch version number to repository variables"
+#    default: "NO"
+#    
+#  increment-build-number:
+#    required: false
+#    description: "If set to 'true' will increment and save build number to repository variables"
+#    default: "NO"
+     
+     
+outputs:
+  tag:
+    description: "Version tag in the format '<MAJOR_NO>'.'<MINOR_NO>'.'<PATCH_NO>{<EMPTY> | '-SNAPSHOT-'<BUILD_NO>}"
+    value: ${{ steps.new_version_numbers.outputs.tag }}
+
+#  major-number:
+#    description: "Updated major version number that was saved to repository variables"
+#    value: ${{ steps.incremented_data.outputs.major_number }}
+#    
+#  minor-number:
+#    description: "Updated minor version number that was saved to repository variables"
+#    value: ${{ steps.incremented_data.outputs.minor_number }}
+#    
+#  patch-number:
+#    description: "Updated patch version number that was saved to repository variables"
+#    value: ${{ steps.incremented_data.outputs.patch_number }}
+#    
+#  build-number:
+#    description: "Updated build version number that was saved to repository variables"
+#    value: ${{ steps.incremented_data.outputs.build_number }}
+
+runs: 
+  using: composite
+  steps:    
+    - name: "Fetch last version numbers"
+      id: last_version_numbers
+      uses: mp30028/policy-engine-temp/.github/actions/build-and-package/versioning/fetch@main      
+      with:
+        label-prefix: ${{ inputs.module-id }}
+        github-token: ${{inputs.github-token}}
+
+    - name: "Generate next version numbers and tag"
+      id: new_version_numbers
+      shell: bash
+      run: |
+          major_number=${{ steps.last_version_numbers.outputs.major-number }};
+          minor_number=${{ steps.last_version_numbers.outputs.minor-number }};
+          patch_number=${{ steps.last_version_numbers.outputs.patch-number }};
+          build_number=${{ steps.last_version_numbers.outputs.build-number }};
+          if [ "${{ inputs.release-type }}" ==  "SNAPSHOT" ]; then
+            build_number=$(date +'%Y%m%d.%H%M%S');
+            tag="${major_number}.${minor_number}.${patch_number}-SNAPSHOT-${build_number}";
+          else
+            if [[ "${{ inputs.release-type }}" ==  "PATCH" ]]; then
+              patch_number=$(($patch_number + 1));
+            fi
+            if [[ "${{ inputs.release-type }}" ==  "MINOR" ]]; then
+              patch_number=0;
+              minor_number=$(($minor_number + 1));
+            fi
+            if [[ "${{ inputs.release-type }}" ==  "MAJOR" ]]; then
+              patch_number=0;
+              minor_number=0;
+              major_number=$(($major_number + 1));
+            fi            
+              tag="${major_number}.${minor_number}.${patch_number}";
+          fi;
+          echo "major_number=$major_number" >> $GITHUB_OUTPUT;
+          echo "minor_number=$minor_number" >> $GITHUB_OUTPUT;
+          echo "patch_number=$patch_number" >> $GITHUB_OUTPUT;
+          echo "build_number=$build_number" >> $GITHUB_OUTPUT;
+          echo "tag=$tag" >> $GITHUB_OUTPUT;
+         
+    - name: "Update major number"
+      id: updated_major_number
+      uses: mp30028/policy-engine-temp/.github/actions/build-and-package/versioning/update@main      
+      with:
+        variable-name: ${{ inputs.module-id }}_MAJOR_NUMBER
+        variable-value: ${{ steps.new_version_numbers.outputs.major_number }}
+        github-token: ${{inputs.github-token}}
+        
+    - name: "Update minor number"
+      id: updated_minor_number
+      uses: mp30028/policy-engine-temp/.github/actions/build-and-package/versioning/update@main      
+      with:
+        variable-name: ${{ inputs.module-id }}_MINOR_NUMBER
+        variable-value: ${{ steps.new_version_numbers.outputs.minor_number }}
+        github-token: ${{inputs.github-token}}
+        
+    - name: "Update patch number"
+      id: updated_patch_number
+      uses: mp30028/policy-engine-temp/.github/actions/build-and-package/versioning/update@main      
+      with:
+        variable-name: ${{ inputs.module-id }}_PATCH_NUMBER
+        variable-value: ${{ steps.new_version_numbers.outputs.patch_number }}
+        github-token: ${{inputs.github-token}}        
+         
+    - name: "Update build number"
+      id: updated_build_number
+      uses: mp30028/policy-engine-temp/.github/actions/build-and-package/versioning/update@main      
+      with:
+        variable-name: ${{ inputs.module-id}}_BUILD_NUMBER
+        variable-value: ${{ steps.new_version_numbers.outputs.build_number }}
+        github-token: ${{inputs.github-token}}                   
+          
+    - name: "Print updated data"
+      id: printed_data
+      shell: bash
+      run: |
+          major_number=${{ steps.new_version_numbers.outputs.major_number }};
+          minor_number=${{ steps.new_version_numbers.outputs.minor_number }};
+          patch_number=${{ steps.new_version_numbers.outputs.patch_number }};
+          build_number=${{ steps.new_version_numbers.outputs.build_number }};
+          tag=${{ steps.new_version_numbers.outputs.tag }};          
+          echo "major_number = $major_number";
+          echo "minor_number = $minor_number";
+          echo "patch_number = $patch_number";
+          echo "build_number = $build_number";
+          echo "tag = $tag";

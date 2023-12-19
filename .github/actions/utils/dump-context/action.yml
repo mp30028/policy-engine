@@ -1,0 +1,13 @@
+name: 'Dump github context'
+description: 'Dumps the whole context object. Very useful. See documentation at https://docs.github.com/articles/contexts-and-expression-syntax-for-github-actions'
+
+runs: 
+  using: composite
+  steps:        
+
+    - name: Dump GitHub context
+      id: github_context
+      shell: bash
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"

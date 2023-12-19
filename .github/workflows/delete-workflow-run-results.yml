@@ -1,0 +1,33 @@
+name: Delete workflow run results
+
+on:
+# Trigger workflow manually
+ workflow_dispatch:
+    
+jobs:
+  step-1:
+    runs-on: ubuntu-latest
+    steps:
+    - name: "delete-disabled-workflow-runs"
+      id: disabled-workflow-runs
+      shell: bash
+      env:
+           GH_TOKEN:  ${{ github.token }}
+      run: |       
+        # Get workflow IDs with status "disabled_manually"
+        workflow_ids=($(gh api repos/${GITHUB_REPOSITORY}/actions/workflows --paginate | jq '.workflows[] | select(.["state"] | contains("disabled_manually")) | .id'))
+
+        for workflow_id in "${workflow_ids[@]}"
+        do
+          echo "Listing runs for the workflow ID $workflow_id"
+          run_ids=( $(gh api repos/${GITHUB_REPOSITORY}/actions/workflows/$workflow_id/runs --paginate | jq '.workflow_runs[].id') )
+          for run_id in "${run_ids[@]}"
+          do
+            echo "Deleting Run ID $run_id"
+            gh api repos/${GITHUB_REPOSITORY}/actions/runs/$run_id -X DELETE >/dev/null
+          done
+        done
+
+#user=GH_USERNAME repo=REPO_NAME; gh api repos/$user/$repo/actions/runs \
+#--paginate -q '.workflow_runs[] | select(.head_branch != "master") | "\(.id)"' | \
+#xargs -n1 -I % gh api repos/$user/$repo/actions/runs/% -X DELETE

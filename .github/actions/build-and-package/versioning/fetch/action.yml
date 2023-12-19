@@ -1,0 +1,51 @@
+name: 'Fetch Version Data'
+description: 'Fetch the major, minor, patch and build numbers from repository variables'
+inputs:
+    
+   label-prefix:
+     required: true
+     description: "The repository variables are stored using the format <label>_<'MAJOR'|'MINOR'|'PATCH'>'_NUMBER'"
+   
+   github-token:
+     required: true
+     description: "Authentication token with permissions to read and write repository variables"
+     
+outputs:
+  major-number:
+    description: "Currently saved major version number retrieved from repository variables"
+    value: ${{ steps.version-data.outputs.major-number }}
+    
+  minor-number:
+    description: "Currently saved minor version number retrieved from repository variables"
+    value: ${{ steps.version-data.outputs.minor-number }}
+    
+  patch-number:
+    description: "Currently saved patch version number retrieved from repository variables"
+    value: ${{ steps.version-data.outputs.patch-number }}
+    
+  build-number:
+    description:  "Currently saved build number retrieved from repository variables"
+    value: ${{ steps.version-data.outputs.build-number }}
+
+runs: 
+  using: composite
+  steps:    
+    - name: "Get all data"
+      id: version-data
+      shell: bash
+      env:
+           GH_TOKEN: ${{inputs.github-token}}
+      run: |
+          json_response=$(curl --request GET \
+          --url "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/variables" \
+          --header "Accept: application/vnd.github+json" \
+          --header "Authorization: Bearer $GH_TOKEN");
+          echo "${json_response}";
+          major_number=$(echo "${json_response}" | jq " .variables[] | select(.name == \"${{ inputs.label-prefix }}_MAJOR_NUMBER\") | .value | tonumber");
+          minor_number=$(echo "${json_response}" | jq " .variables[] | select(.name == \"${{ inputs.label-prefix }}_MINOR_NUMBER\") | .value | tonumber");
+          patch_number=$(echo "${json_response}" | jq " .variables[] | select(.name == \"${{ inputs.label-prefix }}_PATCH_NUMBER\") | .value | tonumber");
+          build_number=$(echo "${json_response}" | jq " .variables[] | select(.name == \"${{ inputs.label-prefix }}_BUILD_NUMBER\") | .value | tonumber");         
+          echo "major-number=${major_number}" >> $GITHUB_OUTPUT;
+          echo "minor-number=${minor_number}" >> $GITHUB_OUTPUT;
+          echo "patch-number=${patch_number}" >> $GITHUB_OUTPUT;
+          echo "build-number=${build_number}" >> $GITHUB_OUTPUT;

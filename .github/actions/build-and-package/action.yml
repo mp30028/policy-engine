@@ -1,0 +1,141 @@
+name: 'Build and Package'
+description: 'Create a build for a springboot application using maven then package and upload it to GitHub-Packages'
+inputs:
+    
+   java-distribution:
+     required: true
+     description: 'Name of the distribution to be used to do the build'
+     default: 'temurin'
+   
+   java-version:
+     required: true
+     description: 'Java version to used for doing the build'
+     default: '21'
+   
+   application-name:
+     required: true
+     description: 'Name of the application or module to be packaged'
+   
+   source-location:
+     required: true
+     description: 'Path to the source code, usually where the applications pom.xml is located'
+     
+   github-token:
+    required: true
+    description: "Authentication token with permissions to read and write repository variables"     
+     
+#   release-version-tag:
+#     required: true
+#     description: 'Typically a version number to use in naming the release for identification purposes'
+     
+#   module-id:
+#    required: true
+#    description: |
+#                 module_id identifies the json value in the release type directive to extract and return
+#                 This should match the label prefix which determines the repository variables to reference. 
+#                 Repository variables are stored using the format <module_id>_<'MAJOR'|'MINOR'|'PATCH'>'_NUMBER'" 
+
+runs: 
+  using: composite
+  steps:
+    - name: get-target-branch
+      id: target_branch
+      shell: bash
+      run: |
+        target_branch="${{ github.ref_name }}";
+        echo "value=$target_branch" >> $GITHUB_OUTPUT
+          
+    - name: get-module-id
+      id: module_id
+      shell: bash
+      run: |
+        application_name=${{ inputs.application-name }};
+        module_id="${application_name//-/_}";
+        module_id="${module_id^^}";
+        echo "value=$module_id" >> $GITHUB_OUTPUT
+          
+    - name: get-main-release-type
+      if: ${{ steps.target_branch.outputs.value == 'main' && github.event_name == 'push' }}
+      id: main_release_type
+      uses: mp30028/policy-engine-temp/.github/actions/build-and-package/versioning/get-release-type@main
+      with:
+        module_id: ${{ steps.module_id.outputs.value }}
+  
+    - name: get-release-type 
+      id: release_type
+      shell: bash
+      run: |
+        if [[ "${{ steps.target_branch.outputs.value }}" == "main" ]]; then
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            release_type=${{ steps.main_release_type.outputs.value }};
+          else
+            release_type="SNAPSHOT";
+          fi;
+        else
+          release_type="SNAPSHOT";
+        fi;
+        echo "value=$release_type" >> $GITHUB_OUTPUT;
+        
+    - name: Generate new version tag
+      id: new_version_numbers
+      uses: mp30028/policy-engine-temp/.github/actions/build-and-package/versioning/generate-tag@main      
+      with:
+        module-id: ${{ steps.module_id.outputs.value }}
+        github-token: ${{ inputs.github-token }}
+        release-type: ${{ steps.release_type.outputs.value }}
+    
+    - name: Generate package name
+      id: package_name
+      shell: bash      
+      run: | 
+        package_name="${{ inputs.application-name }}-${{ steps.new_version_numbers.outputs.tag }}";
+        echo "value=$package_name" >> $GITHUB_OUTPUT;
+        
+    - name: Checkout this repository
+      uses: actions/checkout@v3
+ 
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: ${{ inputs.java-version }}
+        distribution: ${{ inputs.java-distribution }}
+        
+    - name: Cache the Maven packages to speed up build
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2 
+    
+    - name: Test and build the source with maven
+      working-directory: ${{ inputs.source-location}}
+      shell: bash
+      run: mvn -B clean package --file pom.xml spring-boot:repackage
+
+    - name: Make staging directory
+      shell: bash
+      run: sudo mkdir -p /staging/${{ inputs.application-name }}
+      
+    - name: Copy the tested and built jar to staging      
+      shell: bash
+      run: |
+        package_name="${{ steps.package_name.outputs.value }}";
+        sudo cp ${{ inputs.source-location}}/target/*.jar /staging/${{ inputs.application-name }}/${package_name}.jar;      
+      
+    - name: Package and upload the jar to GitHub packages
+      uses: actions/upload-artifact@v3
+      with:
+        #name: ${{ inputs.application-name }}-${{ inputs.release-version-tag }}
+        #name: ${{ inputs.application-name }}-${{ steps.new_version_numbers.outputs.tag }}
+        name: ${{ steps.package_name.outputs.value }}
+        path: /staging/${{ inputs.application-name }}
+
+    - name: print details
+      id: printed_details
+      shell: bash    
+      run: |
+        echo "target_branch = ${{ steps.target_branch.outputs.value }}";
+        echo "main_release_type = ${{ steps.main_release_type.outputs.value }}";
+        echo "release_type = ${{ steps.release_type.outputs.value }}";  
+        echo "tag = ${{ steps.new_version_numbers.outputs.tag }}"; 
+        echo "package_name = ${{ steps.package_name.outputs.value }}"

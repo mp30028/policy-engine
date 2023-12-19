@@ -1,0 +1,37 @@
+name: 'Update Repository Variable'
+description: 'Update repository variable with new value'
+inputs:
+
+  variable-name:
+    required: true
+    description: "The name of the repository variable to be updated"
+
+  variable-value:
+    required: true
+    description: "The new value of the repository variable"
+
+  github-token:
+    required: true
+    description: "Authentication token with permissions to read and write repository variables"
+
+runs: 
+  using: composite
+  steps:    
+    - name: "Update repository data"
+      id: updated_data
+      shell: bash
+
+      run: |
+          update_json="{\"name\":\"${{ inputs.variable-name }}\",\"value\":\"${{ inputs.variable-value }}\"}";     
+          update_url=https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/variables/${{ inputs.variable-name }}
+          json_response=$(curl -L \
+          -X PATCH \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{inputs.github-token}}" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          $update_url \
+          -d $update_json);
+          
+          echo $update_json;
+          echo $update_url;
+          echo $json_response;

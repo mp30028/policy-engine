@@ -1,0 +1,35 @@
+name: 'SFTP to remote'
+description: 'Deploys files to an SFTP server using a SSH private key.'
+inputs:
+    remote_username:
+        description: 'username'
+        required: true
+    remote_host:
+        description: 'SFTP server hostname'
+        required: true
+    remote_port:
+        description: 'SFTP server port, defaults to 22'
+        required: true
+        default: '22'
+    remote_ssh_key:
+        description: 'SSH private key'
+        required: true
+    local_filepath:
+        description: 'Path of the files to be uploaded'
+        required: true
+        default: ./*
+    remote_filepath:
+        description: 'Path for the files to be uploaded to'
+        required: true
+        default: /
+
+runs:
+    using: 'docker'
+    image: 'Dockerfile'
+    args:
+        - ${{ inputs.remote_username }}
+        - ${{ inputs.remote_host }}
+        - ${{ inputs.remote_port }}
+        - ${{ inputs.remote_ssh_key }}
+        - ${{ inputs.local_filepath }}
+        - ${{ inputs.remote_filepath }}
