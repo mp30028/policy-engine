@@ -87,6 +87,7 @@ out/
 ##############################
 ## Eclipse
 ##############################
+.externalToolBuilders/
 .settings/
 bin/
 tmp/
