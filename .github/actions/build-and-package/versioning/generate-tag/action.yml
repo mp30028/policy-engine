@@ -62,7 +62,7 @@ runs:
   steps:    
     - name: "Fetch last version numbers"
       id: last_version_numbers
-      uses: mp30028/policy-engine-temp/.github/actions/build-and-package/versioning/fetch@main      
+      uses: mp30028/policy-engine/.github/actions/build-and-package/versioning/fetch@main      
       with:
         label-prefix: ${{ inputs.module-id }}
         github-token: ${{inputs.github-token}}
@@ -101,7 +101,7 @@ runs:
          
     - name: "Update major number"
       id: updated_major_number
-      uses: mp30028/policy-engine-temp/.github/actions/build-and-package/versioning/update@main      
+      uses: mp30028/policy-engine/.github/actions/build-and-package/versioning/update@main      
       with:
         variable-name: ${{ inputs.module-id }}_MAJOR_NUMBER
         variable-value: ${{ steps.new_version_numbers.outputs.major_number }}
@@ -109,7 +109,7 @@ runs:
         
     - name: "Update minor number"
       id: updated_minor_number
-      uses: mp30028/policy-engine-temp/.github/actions/build-and-package/versioning/update@main      
+      uses: mp30028/policy-engine/.github/actions/build-and-package/versioning/update@main      
       with:
         variable-name: ${{ inputs.module-id }}_MINOR_NUMBER
         variable-value: ${{ steps.new_version_numbers.outputs.minor_number }}
@@ -117,7 +117,7 @@ runs:
         
     - name: "Update patch number"
       id: updated_patch_number
-      uses: mp30028/policy-engine-temp/.github/actions/build-and-package/versioning/update@main      
+      uses: mp30028/policy-engine/.github/actions/build-and-package/versioning/update@main      
       with:
         variable-name: ${{ inputs.module-id }}_PATCH_NUMBER
         variable-value: ${{ steps.new_version_numbers.outputs.patch_number }}
@@ -125,7 +125,7 @@ runs:
          
     - name: "Update build number"
       id: updated_build_number
-      uses: mp30028/policy-engine-temp/.github/actions/build-and-package/versioning/update@main      
+      uses: mp30028/policy-engine/.github/actions/build-and-package/versioning/update@main      
       with:
         variable-name: ${{ inputs.module-id}}_BUILD_NUMBER
         variable-value: ${{ steps.new_version_numbers.outputs.build_number }}

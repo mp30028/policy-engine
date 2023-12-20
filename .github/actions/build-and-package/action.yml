@@ -57,7 +57,7 @@ runs:
     - name: get-main-release-type
       if: ${{ steps.target_branch.outputs.value == 'main' && github.event_name == 'push' }}
       id: main_release_type
-      uses: mp30028/policy-engine-temp/.github/actions/build-and-package/versioning/get-release-type@main
+      uses: mp30028/policy-engine/.github/actions/build-and-package/versioning/get-release-type@main
       with:
         module_id: ${{ steps.module_id.outputs.value }}
   
@@ -78,7 +78,7 @@ runs:
         
     - name: Generate new version tag
       id: new_version_numbers
-      uses: mp30028/policy-engine-temp/.github/actions/build-and-package/versioning/generate-tag@main      
+      uses: mp30028/policy-engine/.github/actions/build-and-package/versioning/generate-tag@main      
       with:
         module-id: ${{ steps.module_id.outputs.value }}
         github-token: ${{ inputs.github-token }}
