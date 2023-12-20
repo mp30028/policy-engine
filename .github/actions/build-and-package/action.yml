@@ -121,15 +121,20 @@ runs:
       shell: bash
       run: sudo mkdir -p /staging/${{ inputs.application-name }}
       
-    - name: Copy the tested and built jar to staging      
+    - name: Copy the tested and built jar to staging
+      id: staged_artifacts
       shell: bash
       run: |
         package_name="${{ steps.package_name.outputs.value }}";
+        staging_path="/staging/${{ inputs.application-name }}";
         echo "pwd = $(pwd)";
         echo "source-location = $(ls -l ${{ inputs.source-location}})";
         echo "target = $(ls -l ${{ inputs.source-location}}/target/*.jar)";
-        sudo cp ${{ inputs.source-location}}/target/*.jar /staging/${{ inputs.application-name }}/${package_name}.jar;
-        echo "staging = $(ls -l /staging/${{ inputs.application-name }}/${package_name}.jar)";
+        #sudo cp ${{ inputs.source-location}}/target/*.jar /staging/${{ inputs.application-name }}/${package_name}.jar;
+        sudo cp ${{ inputs.source-location}}/target/*.jar ${staging_path}/${package_name}.jar;
+        #echo "staging = $(ls -l /staging/${{ inputs.application-name }}/${package_name}.jar)";
+        echo "staging = $(ls -l ${staging_path}/${package_name}.jar)";
+        echo "path=$staging_path" >> $GITHUB_OUTPUT;
       
     - name: Package and upload the jar to GitHub packages
       uses: actions/upload-artifact@v3
@@ -137,7 +142,8 @@ runs:
         #name: ${{ inputs.application-name }}-${{ inputs.release-version-tag }}
         #name: ${{ inputs.application-name }}-${{ steps.new_version_numbers.outputs.tag }}
         name: ${{ steps.package_name.outputs.value }}
-        path: "/staging/${{ inputs.application-name }}"
+        #path: "/staging/${{ inputs.application-name }}"
+        path: ${{ steps.staged_artifacts.outputs.path }}
 
     - name: print details
       id: printed_details
