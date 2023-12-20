@@ -115,7 +115,7 @@ runs:
       shell: bash
       run: |
         cd ${{ inputs.source-location}}
-        mvn -B clean package --file pom.xml spring-boot:repackage
+        mvn -B clean package -DskipTests --file pom.xml spring-boot:repackage
 
     - name: Make staging directory
       shell: bash
