@@ -2,7 +2,7 @@ name: Build and Deploy Policy-Engine-API Package
 
 env:
   APPLICATION_NAME: policy-engine-api
-  BASE_SOURCE_PATH: "policy-engine-modules/${APPLICATION_NAME}"
+  BASE_SOURCE_PATH: "policy-engine-modules/policy-engine-api"
   
 on:
  workflow_dispatch:
