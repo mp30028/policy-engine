@@ -35,7 +35,7 @@ jobs:
           #application-name: 'policy-engine-api'
           application-name: "${APPLICATION_NAME}"
           #source-location: 'policy-engine-modules/policy-engine-api'
-          source-location: \'${BASE_SOURCE_PATH}\'
+          #source-location: \'${BASE_SOURCE_PATH}\'
           github-token: ${{ secrets.POLICY_ENGINE_WORKFLOWS_TOKEN }}
 
 #  sftp-orchestration-artifacts-to-remote:
