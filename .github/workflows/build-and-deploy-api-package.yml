@@ -12,13 +12,13 @@ on:
   branches:
     - "main"
   paths:
-    - "${BASE_SOURCE_PATH}/**"
+    - ${BASE_SOURCE_PATH}/**
     #- policy-engine-modules/policy-engine-api/** 
  push:
   branches:
     - "main"
   paths:
-    - "${BASE_SOURCE_PATH}/**"
+    - ${BASE_SOURCE_PATH}/**
     #- policy-engine-modules/policy-engine-api/**
 
    
