@@ -125,10 +125,11 @@ runs:
       shell: bash
       run: |
         package_name="${{ steps.package_name.outputs.value }}";
-        pwd;
-        ls -l ${{ inputs.source-location}};
-        ls -l ${{ inputs.source-location}}/target/*.jar;
-        sudo cp ${{ inputs.source-location}}/target/*.jar /staging/${{ inputs.application-name }}/${package_name}.jar;      
+        echo "pwd = $(pwd)";
+        echo "source-location = $(ls -l ${{ inputs.source-location}})";
+        echo "target = $(ls -l ${{ inputs.source-location}}/target/*.jar)";
+        sudo cp ${{ inputs.source-location}}/target/*.jar /staging/${{ inputs.application-name }}/${package_name}.jar;
+        echo "staging = $(ls -l /staging/${{ inputs.application-name }}/${package_name}.jar)";
       
     - name: Package and upload the jar to GitHub packages
       uses: actions/upload-artifact@v3
@@ -136,7 +137,7 @@ runs:
         #name: ${{ inputs.application-name }}-${{ inputs.release-version-tag }}
         #name: ${{ inputs.application-name }}-${{ steps.new_version_numbers.outputs.tag }}
         name: ${{ steps.package_name.outputs.value }}
-        path: /staging/${{ inputs.application-name }}
+        path: "/staging/${{ inputs.application-name }}"
 
     - name: print details
       id: printed_details
