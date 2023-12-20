@@ -23,17 +23,6 @@ inputs:
    github-token:
     required: true
     description: "Authentication token with permissions to read and write repository variables"     
-     
-#   release-version-tag:
-#     required: true
-#     description: 'Typically a version number to use in naming the release for identification purposes'
-     
-#   module-id:
-#    required: true
-#    description: |
-#                 module_id identifies the json value in the release type directive to extract and return
-#                 This should match the label prefix which determines the repository variables to reference. 
-#                 Repository variables are stored using the format <module_id>_<'MAJOR'|'MINOR'|'PATCH'>'_NUMBER'" 
 
 runs: 
   using: composite
@@ -90,9 +79,6 @@ runs:
       run: | 
         package_name="${{ inputs.application-name }}-${{ steps.new_version_numbers.outputs.tag }}";
         echo "value=$package_name" >> $GITHUB_OUTPUT;
-        
-#    - name: Checkout this repository
-#      uses: actions/checkout@v3
  
     - name: Set up JDK
       uses: actions/setup-java@v3
@@ -106,12 +92,8 @@ runs:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
-         
-#    - name: Checkout this repository
-#      uses: actions/checkout@v3
-#          
+                
     - name: Test and build the source with maven
-      #working-directory: ${{ inputs.source-location}}
       shell: bash
       run: |
         cd ${{ inputs.source-location}}
@@ -139,10 +121,7 @@ runs:
     - name: Package and upload the jar to GitHub packages
       uses: actions/upload-artifact@v3
       with:
-        #name: ${{ inputs.application-name }}-${{ inputs.release-version-tag }}
-        #name: ${{ inputs.application-name }}-${{ steps.new_version_numbers.outputs.tag }}
         name: ${{ steps.package_name.outputs.value }}
-        #path: "/staging/${{ inputs.application-name }}"
         path: ${{ steps.staged_artifacts.outputs.path }}
 
     - name: print details
