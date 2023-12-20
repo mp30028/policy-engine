@@ -108,7 +108,7 @@ runs:
         restore-keys: ${{ runner.os }}-m2 
     
     - name: Test and build the source with maven
-      working-directory: '${{ inputs.source-location}}'
+      working-directory: "${{ inputs.source-location}}"
       shell: bash
       run: mvn -B clean package --file pom.xml spring-boot:repackage
 
