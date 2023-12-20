@@ -111,7 +111,7 @@ runs:
 #      uses: actions/checkout@v3
 #          
     - name: Test and build the source with maven
-      working-directory: ${{ inputs.source-location}}
+      #working-directory: ${{ inputs.source-location}}
       shell: bash
       run: |
         cd ${{ inputs.source-location}}
@@ -125,6 +125,9 @@ runs:
       shell: bash
       run: |
         package_name="${{ steps.package_name.outputs.value }}";
+        pwd;
+        ls -l ${{ inputs.source-location}};
+        ls -l ${{ inputs.source-location}}/target/*.jar;
         sudo cp ${{ inputs.source-location}}/target/*.jar /staging/${{ inputs.application-name }}/${package_name}.jar;      
       
     - name: Package and upload the jar to GitHub packages
