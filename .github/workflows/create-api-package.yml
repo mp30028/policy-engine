@@ -22,7 +22,7 @@ jobs:
     steps:
       - name: build-and-package
         id: build_package
-        uses: mp30028/policy-engine-temp/.github/actions/build-and-package/@main
+        uses: mp30028/policy-engine/.github/actions/build-and-package/@main
         with:
           java-distribution: 'temurin'
           java-version: '21'
