@@ -12,15 +12,14 @@ on:
   branches:
     - "main"
   paths:
-    - "$BASE_SOURCE_PATH/**"
+    - "${BASE_SOURCE_PATH}/**"
     #- policy-engine-modules/policy-engine-api/** 
  push:
   branches:
     - "main"
   paths:
-    - "$BASE_SOURCE_PATH/**"
+    - "${BASE_SOURCE_PATH}/**"
     #- policy-engine-modules/policy-engine-api/**
-
 
    
 jobs:
@@ -39,15 +38,15 @@ jobs:
           source-location: "${BASE_SOURCE_PATH}"
           github-token: ${{ secrets.POLICY_ENGINE_WORKFLOWS_TOKEN }}
 
-  sftp-orchestration-artifacts-to-remote:
-    needs: [create-versioned-package]
-    runs-on: ubuntu-latest
-    
-    steps:
-        # Checkout the repository this workflow belongs to using a ready made global action called checkout
-        # The repository name is in an env variable called $GITHUB_WORKSPACE which this action uses
-      - name: Checkout this repository
-        uses: actions/checkout@v3
-        
-      - name: Make staging directory
-        run: mkdir -p staging/$APPLICATION_NAME
+#  sftp-orchestration-artifacts-to-remote:
+#    needs: [create-versioned-package]
+#    runs-on: ubuntu-latest
+#    
+#    steps:
+#        # Checkout the repository this workflow belongs to using a ready made global action called checkout
+#        # The repository name is in an env variable called $GITHUB_WORKSPACE which this action uses
+#      - name: Checkout this repository
+#        uses: actions/checkout@v3
+#        
+#      - name: Make staging directory
+#        run: mkdir -p staging/$APPLICATION_NAME
