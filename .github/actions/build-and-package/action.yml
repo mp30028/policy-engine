@@ -107,9 +107,9 @@ runs:
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
          
-    - name: Checkout this repository
-      uses: actions/checkout@v3
-          
+#    - name: Checkout this repository
+#      uses: actions/checkout@v3
+#          
     - name: Test and build the source with maven
       working-directory: ${{ inputs.source-location}}
       shell: bash
