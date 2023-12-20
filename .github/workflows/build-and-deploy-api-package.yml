@@ -1,0 +1,53 @@
+name: Build and Deploy Policy-Engine-API Package
+
+env:
+  APPLICATION_NAME: policy-engine-api
+  BASE_SOURCE_PATH: policy-engine-modules/$APPLICATION_NAME
+  
+on:
+ workflow_dispatch:
+ 
+ pull_request:
+  types: [opened, reopened, synchronize]
+  branches:
+    - "main"
+  paths:
+    - "$BASE_SOURCE_PATH/**"
+    #- policy-engine-modules/policy-engine-api/** 
+ push:
+  branches:
+    - "main"
+  paths:
+    - "$BASE_SOURCE_PATH/**"
+    #- policy-engine-modules/policy-engine-api/**
+
+
+   
+jobs:
+  create-versioned-package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: build-and-package
+        id: build_package
+        uses: mp30028/policy-engine/.github/actions/build-and-package/@main
+        with:
+          java-distribution: 'temurin'
+          java-version: '21'
+          #application-name: 'policy-engine-api'
+          application-name: $APPLICATION_NAME
+          #source-location: 'policy-engine-modules/policy-engine-api'
+          source-location: $BASE_SOURCE_PATH
+          github-token: ${{ secrets.POLICY_ENGINE_WORKFLOWS_TOKEN }}
+
+  sftp-orchestration-artifacts-to-remote:
+    needs: [create-versioned-package]
+    runs-on: ubuntu-latest
+    
+    steps:
+        # Checkout the repository this workflow belongs to using a ready made global action called checkout
+        # The repository name is in an env variable called $GITHUB_WORKSPACE which this action uses
+      - name: Checkout this repository
+        uses: actions/checkout@v3
+        
+      - name: Make staging directory
+        run: mkdir -p staging/$APPLICATION_NAME
