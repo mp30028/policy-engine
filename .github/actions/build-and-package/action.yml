@@ -91,8 +91,8 @@ runs:
         package_name="${{ inputs.application-name }}-${{ steps.new_version_numbers.outputs.tag }}";
         echo "value=$package_name" >> $GITHUB_OUTPUT;
         
-    - name: Checkout this repository
-      uses: actions/checkout@v3
+#    - name: Checkout this repository
+#      uses: actions/checkout@v3
  
     - name: Set up JDK
       uses: actions/setup-java@v3
@@ -111,7 +111,7 @@ runs:
 #      uses: actions/checkout@v3
 #          
     - name: Test and build the source with maven
-      #working-directory: ${{ inputs.source-location}}
+      working-directory: ${{ inputs.source-location}}
       shell: bash
       run: |
         cd ${{ inputs.source-location}}
