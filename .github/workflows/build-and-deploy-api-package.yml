@@ -26,6 +26,10 @@ jobs:
   create-versioned-package:
     runs-on: ubuntu-latest
     steps:
+    
+      - name: Checkout this repository
+        uses: actions/checkout@v3
+          
       - name: build-and-package
         id: build_package
         uses: mp30028/policy-engine/.github/actions/build-and-package/@main
