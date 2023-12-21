@@ -62,13 +62,12 @@ jobs:
       - name: Download the package to staging
         uses: actions/download-artifact@v4
         with:
-          name:  ${{needs.create-versioned-package.outputs.package-name}}
-          path: staging/${APPLICATION_NAME}
+          name: ${{ needs.create-versioned-package.outputs.package-name }}
+          path: staging/$APPLICATION_NAME
 
       - name: Copy docker setup to staging
         run: |
-          cp -r ${ORCHESTRATION_ARTIFACTS_PATH}/* staging/${APPLICATION_NAME}
-          #cp -r docker-setup/hello-app/* staging/hello-app
+          cp -r $ORCHESTRATION_ARTIFACTS_PATH/* staging/$APPLICATION_NAME
 
       - name: sftp staged artifacts to remote
         uses: mp30028/policy-engine/.github/actions/sftp-to-remote@main
@@ -77,5 +76,5 @@ jobs:
           remote_host: ${{ secrets.REMOTE_SWOT_SERVER  }}
           remote_port: ${{ secrets.REMOTE_SWOT_PORT  }}
           remote_ssh_key: ${{ secrets.REMOTE_SWOT_SSH_KEY  }}
-          local_filepath: staging/${APPLICATION_NAME}
+          local_filepath: staging/$APPLICATION_NAME
           remote_filepath: ${{ vars.REMOTE_SWOT_FILEPATH  }}
