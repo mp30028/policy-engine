@@ -22,7 +22,13 @@ inputs:
      
    github-token:
     required: true
-    description: "Authentication token with permissions to read and write repository variables"     
+    description: "Authentication token with permissions to read and write repository variables"  
+       
+outputs:
+  package-name:
+    description: "Name of the package created and uploaded"
+    value: ${{ steps.package_name.outputs.value }}
+
 
 runs: 
   using: composite
@@ -77,7 +83,7 @@ runs:
       id: package_name
       shell: bash      
       run: | 
-        package_name="${{ inputs.application-name }}-${{ steps.new_version_numbers.outputs.tag }}";
+        package_name="${{ inputs.application-name }}-${{ steps.new_version_numbers.outputs.tag }}.jar";
         echo "value=$package_name" >> $GITHUB_OUTPUT;
  
     - name: Set up JDK
@@ -112,10 +118,10 @@ runs:
         echo "pwd = $(pwd)";
         echo "source-location = $(ls -l ${{ inputs.source-location}})";
         echo "target = $(ls -l ${{ inputs.source-location}}/target/*.jar)";
-        #sudo cp ${{ inputs.source-location}}/target/*.jar /staging/${{ inputs.application-name }}/${package_name}.jar;
-        sudo cp ${{ inputs.source-location}}/target/*.jar ${staging_path}/${package_name}.jar;
-        #echo "staging = $(ls -l /staging/${{ inputs.application-name }}/${package_name}.jar)";
-        echo "staging = $(ls -l ${staging_path}/${package_name}.jar)";
+        #sudo cp ${{ inputs.source-location}}/target/*.jar /staging/${{ inputs.application-name }}/${package_name};
+        sudo cp ${{ inputs.source-location}}/target/*.jar ${staging_path}/${package_name};
+        #echo "staging = $(ls -l /staging/${{ inputs.application-name }}/${package_name})";
+        echo "staging = $(ls -l ${staging_path}/${package_name})";
         echo "path=$staging_path" >> $GITHUB_OUTPUT;
       
     - name: Package and upload the jar to GitHub packages
@@ -123,6 +129,7 @@ runs:
       with:
         name: ${{ steps.package_name.outputs.value }}
         path: ${{ steps.staged_artifacts.outputs.path }}
+        compression-level: 0 # no compression
 
     - name: print details
       id: printed_details
