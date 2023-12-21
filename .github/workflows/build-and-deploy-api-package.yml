@@ -81,3 +81,13 @@ jobs:
           remote_ssh_key: ${{ secrets.REMOTE_SWOT_SSH_KEY  }}
           local_filepath: staging/${{ env.APPLICATION_NAME }}
           remote_filepath: ${{ vars.REMOTE_SWOT_FILEPATH  }}
+          
+      - name: Create symlink for executable jar
+        uses: mp30028/policy-engine/.github/actions/execute-remote-command@main
+        with:
+          remote_username: ${{ secrets.REMOTE_SWOT_USERNAME  }}
+          remote_host: ${{ secrets.REMOTE_SWOT_SERVER  }}
+          remote_port: ${{ secrets.REMOTE_SWOT_PORT  }}
+          remote_ssh_key: ${{ secrets.REMOTE_SWOT_SSH_KEY  }}
+          remote_cmd: cd ${{ vars.REMOTE_SWOT_FILEPATH  }}; echo hello >> hello.txt;
+         
