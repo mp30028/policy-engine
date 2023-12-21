@@ -89,5 +89,7 @@ jobs:
           remote_host: ${{ secrets.REMOTE_SWOT_SERVER  }}
           remote_port: ${{ secrets.REMOTE_SWOT_PORT  }}
           remote_ssh_key: ${{ secrets.REMOTE_SWOT_SSH_KEY  }}
-          remote_cmd: cd ${{ vars.REMOTE_SWOT_FILEPATH  }}; echo hello >> hello.txt;
+          remote_cmd: |
+            cd ${{ vars.REMOTE_SWOT_FILEPATH  }}/${{ env.APPLICATION_NAME }}; 
+            echo hello >> hello.txt;
          
