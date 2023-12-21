@@ -48,8 +48,10 @@ jobs:
       - name: Print initialisation parameters
         run: |
           echo "package-name = ${{ needs.create-versioned-package.outputs.package-name }}";
-          echo "application-name = $APPLICATION_NAME";
-          echo "orchestration-artifacts-path = $ORCHESTRATION_ARTIFACTS_PATH"
+          #echo "application-name = $APPLICATION_NAME";
+          echo "application-name = ${{ env.APPLICATION_NAME }}";
+          #echo "orchestration-artifacts-path = $ORCHESTRATION_ARTIFACTS_PATH";
+          echo "orchestration-artifacts-path = ${{ env.ORCHESTRATION_ARTIFACTS_PATH }}";
         
         # Checkout the repository this workflow belongs to using a ready made global action called checkout
         # The repository name is in an env variable called $GITHUB_WORKSPACE which this action uses
@@ -57,17 +59,18 @@ jobs:
         uses: actions/checkout@v3
         
       - name: Make staging directory
-        run: mkdir -p staging/${APPLICATION_NAME}
+        run:  |
+          mkdir -p staging/${{ env.APPLICATION_NAME }}
         
       - name: Download the package to staging
         uses: actions/download-artifact@v4
         with:
           name: ${{ needs.create-versioned-package.outputs.package-name }}
-          path: staging/${APPLICATION_NAME}
+          path: staging/${{ env.APPLICATION_NAME }}
 
       - name: Copy docker setup to staging
         run: |
-          cp -r $ORCHESTRATION_ARTIFACTS_PATH/* staging/${APPLICATION_NAME}
+          cp -r ${{ env.ORCHESTRATION_ARTIFACTS_PATH}}/* staging/${{ env.APPLICATION_NAME }}
 
       - name: sftp staged artifacts to remote
         uses: mp30028/policy-engine/.github/actions/sftp-to-remote@main
@@ -76,5 +79,5 @@ jobs:
           remote_host: ${{ secrets.REMOTE_SWOT_SERVER  }}
           remote_port: ${{ secrets.REMOTE_SWOT_PORT  }}
           remote_ssh_key: ${{ secrets.REMOTE_SWOT_SSH_KEY  }}
-          local_filepath: staging/${APPLICATION_NAME}
+          local_filepath: staging/${{ env.APPLICATION_NAME }}
           remote_filepath: ${{ vars.REMOTE_SWOT_FILEPATH  }}
