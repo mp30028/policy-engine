@@ -125,7 +125,7 @@ runs:
         echo "path=$staging_path" >> $GITHUB_OUTPUT;
       
     - name: Package and upload the jar to GitHub packages
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.package_name.outputs.value }}
         path: ${{ steps.staged_artifacts.outputs.path }}

@@ -23,6 +23,9 @@ on:
 jobs:
   create-versioned-package:
     runs-on: ubuntu-latest
+    outputs:
+      package-name: ${{ steps.build_package.outputs.package-name }}   
+    
     steps:
     
       - name: Checkout this repository
