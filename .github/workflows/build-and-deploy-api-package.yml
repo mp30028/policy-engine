@@ -67,7 +67,7 @@ jobs:
 
       - name: Copy docker setup to staging
         run: |
-          cp -r ""${ORCHESTRATION_ARTIFACTS_PATH}"/*" "staging/"${APPLICATION_NAME}""
+          cp -r "${ORCHESTRATION_ARTIFACTS_PATH}"/* staging/"${APPLICATION_NAME}"
           #cp -r docker-setup/hello-app/* staging/hello-app
 
       - name: sftp staged artifacts to remote
