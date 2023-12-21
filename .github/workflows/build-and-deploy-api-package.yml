@@ -91,6 +91,6 @@ jobs:
           remote_ssh_key: ${{ secrets.REMOTE_SWOT_SSH_KEY  }}
           remote_cmd: |
             cd ${{ vars.REMOTE_SWOT_FILEPATH  }}/${{ env.APPLICATION_NAME }}; 
-            rm ./${{ env.APPLICATION_NAME }}.jar
-            ln ./${{ needs.create-versioned-package.outputs.package-name }} ./${{ env.APPLICATION_NAME }}.jar 
+            rm ./${{ env.APPLICATION_NAME }}.jar;
+            ln ./${{ needs.create-versioned-package.outputs.package-name }} ./${{ env.APPLICATION_NAME }}.jar;
          
