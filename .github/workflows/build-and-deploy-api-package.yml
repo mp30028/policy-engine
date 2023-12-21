@@ -3,7 +3,7 @@ name: Build and Deploy Policy-Engine-API Package
 env:
   APPLICATION_NAME: policy-engine-api
   BASE_SOURCE_PATH: policy-engine-modules/policy-engine-api
-  
+  ORCHESTRATION_ARTIFACTS_PATH: docker/policy-engine/api
 on:
  workflow_dispatch:
  
@@ -38,11 +38,16 @@ jobs:
           source-location: "${BASE_SOURCE_PATH}"
           github-token: ${{ secrets.POLICY_ENGINE_WORKFLOWS_TOKEN }}
 
-#  sftp-orchestration-artifacts-to-remote:
-#    needs: [create-versioned-package]
-#    runs-on: ubuntu-latest
-#    
-#    steps:
+  sftp-orchestration-artifacts-to-remote:
+    needs: [create-versioned-package]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print initialisation parameters
+        run: |
+          echo "package-name = ${{ needs.create-versioned-package.outputs.package-name }}";
+          echo "application-name = $APPLICATION_NAME";
+          echo "orchestration-artifacts-path = $ORCHESTRATION_ARTIFACTS_PATH"
+        
 #        # Checkout the repository this workflow belongs to using a ready made global action called checkout
 #        # The repository name is in an env variable called $GITHUB_WORKSPACE which this action uses
 #      - name: Checkout this repository
@@ -50,3 +55,24 @@ jobs:
 #        
 #      - name: Make staging directory
 #        run: mkdir -p staging/$APPLICATION_NAME
+#        
+#      - name: Download the package to staging
+#        uses: actions/download-artifact@v3
+#        with:
+#          name:  ${{needs.create-versioned-package.outputs.package-name}}
+#          path: "staging/${APPLICATION_NAME}"
+#
+#      - name: Copy docker setup to staging
+#        run: |
+#          cp -r "${ORCHESTRATION_ARTIFACTS_PATH}/*" "staging/${APPLICATION_NAME}"
+#          #cp -r docker-setup/hello-app/* staging/hello-app
+#
+#      - name: sftp staged artifacts to remote
+#        uses: mp30028/policy-engine/.github/actions/sftp-to-remote@main
+#        with:
+#          remote_username: ${{ secrets.REMOTE_SWOT_USERNAME  }}
+#          remote_host: ${{ secrets.REMOTE_SWOT_SERVER  }}
+#          remote_port: ${{ secrets.REMOTE_SWOT_PORT  }}
+#          remote_ssh_key: ${{ secrets.REMOTE_SWOT_SSH_KEY  }}
+#          local_filepath: "staging/${APPLICATION_NAME}"
+#          remote_filepath: ${{ vars.REMOTE_SWOT_FILEPATH  }}
