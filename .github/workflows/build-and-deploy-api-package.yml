@@ -60,7 +60,7 @@ jobs:
         run: mkdir -p staging/$APPLICATION_NAME
         
       - name: Download the package to staging
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name:  ${{needs.create-versioned-package.outputs.package-name}}
           path: "staging/${APPLICATION_NAME}"
