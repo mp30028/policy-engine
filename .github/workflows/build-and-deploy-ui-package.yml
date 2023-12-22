@@ -1,0 +1,114 @@
+name: Build and Deploy Policy-Engine-API Package
+
+env:
+  APPLICATION_NAME: policy-engine-ui
+  BASE_SOURCE_PATH: policy-engine-modules/policy-engine-ui
+  ORCHESTRATION_ARTIFACTS_PATH: docker/policy-engine/ui
+on:
+ workflow_dispatch:
+ 
+ pull_request:
+  types: [opened, reopened, synchronize]
+  branches:
+    - "main"
+  paths:
+    - policy-engine-modules/policy-engine-ui/** 
+ push:
+  branches:
+    - "main"
+  paths:
+    - policy-engine-modules/policy-engine-ui/**
+
+   
+jobs:
+  create-versioned-package:
+    runs-on: ubuntu-latest
+    outputs:
+      package-name: ${{ steps.build_package.outputs.package-name }}   
+    
+    steps:
+    
+      - name: Checkout this repository
+        uses: actions/checkout@v3
+          
+      - name: build-and-package
+        id: build_package
+        uses: mp30028/policy-engine/.github/actions/build-and-package/@main
+        with:
+          java-distribution: 'temurin'
+          java-version: '21'
+          application-name: "${APPLICATION_NAME}"
+          source-location: "${BASE_SOURCE_PATH}"
+          github-token: ${{ secrets.POLICY_ENGINE_WORKFLOWS_TOKEN }}
+
+  sftp-orchestration-artifacts-to-remote:
+    if: ${{ github.ref_name == 'main' && github.event_name == 'push' }}
+    needs: [create-versioned-package]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print initialisation parameters
+        run: |
+          echo "package-name = ${{ needs.create-versioned-package.outputs.package-name }}";
+          #echo "application-name = $APPLICATION_NAME";
+          echo "application-name = ${{ env.APPLICATION_NAME }}";
+          #echo "orchestration-artifacts-path = $ORCHESTRATION_ARTIFACTS_PATH";
+          echo "orchestration-artifacts-path = ${{ env.ORCHESTRATION_ARTIFACTS_PATH }}";
+        
+        # Checkout the repository this workflow belongs to using a ready made global action called checkout
+        # The repository name is in an env variable called $GITHUB_WORKSPACE which this action uses
+      - name: Checkout this repository
+        uses: actions/checkout@v3
+        
+      - name: Make staging directory
+        run:  |
+          mkdir -p staging/${{ env.APPLICATION_NAME }}
+        
+      - name: Download the package to staging
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.create-versioned-package.outputs.package-name }}
+          path: staging/${{ env.APPLICATION_NAME }}
+
+      - name: Copy docker setup to staging
+        run: |
+          cp -r ${{ env.ORCHESTRATION_ARTIFACTS_PATH}}/* staging/${{ env.APPLICATION_NAME }}
+
+      - name: sftp staged artifacts to remote
+        uses: mp30028/policy-engine/.github/actions/sftp-to-remote@main
+        with:
+          remote_username: ${{ secrets.REMOTE_SWOT_USERNAME  }}
+          remote_host: ${{ secrets.REMOTE_SWOT_SERVER  }}
+          remote_port: ${{ secrets.REMOTE_SWOT_PORT  }}
+          remote_ssh_key: ${{ secrets.REMOTE_SWOT_SSH_KEY  }}
+          local_filepath: staging/${{ env.APPLICATION_NAME }}
+          remote_filepath: ${{ vars.REMOTE_SWOT_FILEPATH  }}
+          
+      - name: Create symlink for executable jar
+        uses: mp30028/policy-engine/.github/actions/execute-remote-command@main
+        with:
+          remote_username: ${{ secrets.REMOTE_SWOT_USERNAME  }}
+          remote_host: ${{ secrets.REMOTE_SWOT_SERVER  }}
+          remote_port: ${{ secrets.REMOTE_SWOT_PORT  }}
+          remote_ssh_key: ${{ secrets.REMOTE_SWOT_SSH_KEY  }}
+          remote_cmd: |
+            cd ${{ vars.REMOTE_SWOT_FILEPATH  }}/${{ env.APPLICATION_NAME }}; 
+            rm ./${{ env.APPLICATION_NAME }}.jar;
+            ln ./${{ needs.create-versioned-package.outputs.package-name }} ./${{ env.APPLICATION_NAME }}.jar;
+            
+  start-the-application-on-remote:
+    if: ${{ github.ref_name == 'main' && github.event_name == 'push' }}
+    needs: [sftp-orchestration-artifacts-to-remote]
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Start the application
+        uses: mp30028/policy-engine/.github/actions/execute-remote-command@main
+        with:
+          remote_username: ${{ secrets.REMOTE_SWOT_USERNAME  }}
+          remote_host: ${{ secrets.REMOTE_SWOT_SERVER  }}
+          remote_port: ${{ secrets.REMOTE_SWOT_PORT  }}
+          remote_ssh_key: ${{ secrets.REMOTE_SWOT_SSH_KEY  }}
+          remote_cmd: |
+            cd ${{ vars.REMOTE_SWOT_FILEPATH  }}/${{ env.APPLICATION_NAME }};
+            docker compose down; 
+            docker compose up -d;
