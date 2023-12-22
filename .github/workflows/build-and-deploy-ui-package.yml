@@ -1,4 +1,4 @@
-name: Build and Deploy Policy-Engine-API Package
+name: Build and Deploy Policy-Engine-UI Package
 
 env:
   APPLICATION_NAME: policy-engine-ui
