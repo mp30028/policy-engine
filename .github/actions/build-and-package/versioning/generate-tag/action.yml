@@ -13,49 +13,11 @@ inputs:
     required: true
     description: "Has to be one of 'MAJOR'|'MINOR'|'PATCH'|'SNAPSHOT'"
     default: "SNAPSHOT"
-        
-     
-#  increment-major-number:
-#    required: false
-#    description: "If set to 'true' will increment and save major version number to repository variables"
-#    default: "NO"
-#    
-#  increment-minor-number:
-#    required: false
-#    description: "If set to 'true' will increment and save minor version number to repository variables"
-#    default: "NO" 
-#    
-#  increment-patch-number:
-#    required: false
-#    description: "If set to 'true' will increment and save patch version number to repository variables"
-#    default: "NO"
-#    
-#  increment-build-number:
-#    required: false
-#    description: "If set to 'true' will increment and save build number to repository variables"
-#    default: "NO"
-     
-     
+    
 outputs:
   tag:
     description: "Version tag in the format '<MAJOR_NO>'.'<MINOR_NO>'.'<PATCH_NO>{<EMPTY> | '-SNAPSHOT-'<BUILD_NO>}"
     value: ${{ steps.new_version_numbers.outputs.tag }}
-
-#  major-number:
-#    description: "Updated major version number that was saved to repository variables"
-#    value: ${{ steps.incremented_data.outputs.major_number }}
-#    
-#  minor-number:
-#    description: "Updated minor version number that was saved to repository variables"
-#    value: ${{ steps.incremented_data.outputs.minor_number }}
-#    
-#  patch-number:
-#    description: "Updated patch version number that was saved to repository variables"
-#    value: ${{ steps.incremented_data.outputs.patch_number }}
-#    
-#  build-number:
-#    description: "Updated build version number that was saved to repository variables"
-#    value: ${{ steps.incremented_data.outputs.build_number }}
 
 runs: 
   using: composite
