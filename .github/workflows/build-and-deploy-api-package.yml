@@ -42,6 +42,7 @@ jobs:
           github-token: ${{ secrets.POLICY_ENGINE_WORKFLOWS_TOKEN }}
 
   sftp-orchestration-artifacts-to-remote:
+    if: ${{ github.ref_name == 'main' && github.event_name == 'push' }}
     needs: [create-versioned-package]
     runs-on: ubuntu-latest
     steps:
@@ -95,6 +96,7 @@ jobs:
             ln ./${{ needs.create-versioned-package.outputs.package-name }} ./${{ env.APPLICATION_NAME }}.jar;
             
   start-the-application-on-remote:
+    if: ${{ github.ref_name == 'main' && github.event_name == 'push' }}
     needs: [sftp-orchestration-artifacts-to-remote]
     runs-on: ubuntu-latest
     steps:
