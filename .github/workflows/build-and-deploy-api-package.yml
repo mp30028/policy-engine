@@ -93,4 +93,20 @@ jobs:
             cd ${{ vars.REMOTE_SWOT_FILEPATH  }}/${{ env.APPLICATION_NAME }}; 
             rm ./${{ env.APPLICATION_NAME }}.jar;
             ln ./${{ needs.create-versioned-package.outputs.package-name }} ./${{ env.APPLICATION_NAME }}.jar;
-         
+            
+  start-the-application-on-remote:
+    needs: [sftp-orchestration-artifacts-to-remote]
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Start the application
+        uses: mp30028/policy-engine/.github/actions/execute-remote-command@main
+        with:
+          remote_username: ${{ secrets.REMOTE_SWOT_USERNAME  }}
+          remote_host: ${{ secrets.REMOTE_SWOT_SERVER  }}
+          remote_port: ${{ secrets.REMOTE_SWOT_PORT  }}
+          remote_ssh_key: ${{ secrets.REMOTE_SWOT_SSH_KEY  }}
+          remote_cmd: |
+            cd ${{ vars.REMOTE_SWOT_FILEPATH  }}/${{ env.APPLICATION_NAME }};
+            docker compose down; 
+            docker compose up -d;
