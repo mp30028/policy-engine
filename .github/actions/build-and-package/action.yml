@@ -28,6 +28,15 @@ outputs:
   package-name:
     description: "Name of the package created and uploaded"
     value: ${{ steps.package_name.outputs.value }}
+ 
+  release-tag:
+    description: "the tag to be assigned to the github release if created"
+    value: ${{ steps.package_name.outputs.release_tag }}
+    
+  is-snapshot:
+    description: "flag to signal if this is a production build or not"
+    value: ${{ steps.release_type.outputs.is_snapshot }}
+    
 
 
 runs: 
@@ -63,13 +72,18 @@ runs:
         if [[ "${{ steps.target_branch.outputs.value }}" == "main" ]]; then
           if [[ "${{ github.event_name }}" == "push" ]]; then
             release_type=${{ steps.main_release_type.outputs.value }};
+            is_snapshot=false;
           else
             release_type="SNAPSHOT";
+            is_snapshot=true;
           fi;
         else
           release_type="SNAPSHOT";
+          is_snapshot=true;
         fi;
         echo "value=$release_type" >> $GITHUB_OUTPUT;
+        echo "is_snapshot=$is_snapshot" >> $GITHUB_OUTPUT;
+ 
         
     - name: Generate new version tag
       id: new_version_numbers
@@ -83,8 +97,11 @@ runs:
       id: package_name
       shell: bash      
       run: | 
-        package_name="${{ inputs.application-name }}-${{ steps.new_version_numbers.outputs.tag }}.jar";
+        #package_name="${{ inputs.application-name }}-${{ steps.new_version_numbers.outputs.tag }}.jar";
+        release_tag="${{ inputs.application-name }}-${{ steps.new_version_numbers.outputs.tag }}";
+        package_name="${release_tag}.jar";
         echo "value=$package_name" >> $GITHUB_OUTPUT;
+        echo "release_tag=$release_tag" >> $GITHUB_OUTPUT;
  
     - name: Set up JDK
       uses: actions/setup-java@v3
@@ -139,4 +156,6 @@ runs:
         echo "main_release_type = ${{ steps.main_release_type.outputs.value }}";
         echo "release_type = ${{ steps.release_type.outputs.value }}";  
         echo "tag = ${{ steps.new_version_numbers.outputs.tag }}"; 
-        echo "package_name = ${{ steps.package_name.outputs.value }}"
+        echo "package_name = ${{ steps.package_name.outputs.value }}";
+        echo "release_tag = ${{ steps.package_name.outputs.release_tag }}";
+        echo "is_snapshot = ${{ steps.release_type.outputs.is_snapshot }}";

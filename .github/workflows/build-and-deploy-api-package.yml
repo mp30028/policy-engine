@@ -24,7 +24,9 @@ jobs:
   create-versioned-package:
     runs-on: ubuntu-latest
     outputs:
-      package-name: ${{ steps.build_package.outputs.package-name }}   
+      package-name: ${{ steps.build_package.outputs.package-name }}
+      release-tag: ${{ steps.build_package.outputs.release-tag }} 
+      is-snapshot: ${{ steps.build_package.outputs.is-snapshot }} 
     
     steps:
     
@@ -40,6 +42,33 @@ jobs:
           application-name: "${APPLICATION_NAME}"
           source-location: "${BASE_SOURCE_PATH}"
           github-token: ${{ secrets.POLICY_ENGINE_WORKFLOWS_TOKEN }}
+          
+          
+  create-github-release:
+    needs: [create-versioned-package]
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.POLICY_ENGINE_WORKFLOWS_TOKEN }}
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v3
+        
+      - name: Make temp directory
+        run:  |
+          mkdir -p temp/${{ env.APPLICATION_NAME }}        
+        
+      - name: Download the package
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.create-versioned-package.outputs.package-name }}
+          path: temp/${{ env.APPLICATION_NAME }}
+              
+      - name: create-release
+        run: |
+          release_tag=${{ needs.create-versioned-package.outputs.release-tag }};
+          package_name=${{ needs.create-versioned-package.outputs.package-name }};
+          is_snapshot=${{ needs.create-versioned-package.outputs.is-snapshot }};
+          gh release create ${release_tag} --generate-notes --prerelease=${is_snapshot} temp/${{ env.APPLICATION_NAME }}/${package_name};
 
   sftp-orchestration-artifacts-to-remote:
     if: ${{ github.ref_name == 'main' && github.event_name == 'push' }}
