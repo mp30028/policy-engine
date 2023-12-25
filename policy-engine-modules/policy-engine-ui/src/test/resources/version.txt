@@ -2,10 +2,10 @@
 ---
 {"versioning": 
    [
-      {"module": "POLICY_ENGINE_API", "release": "MINOR"},
-      {"module": "POLICY_ENGINE_UI","release": "MINOR"}
+      {"module": "POLICY_ENGINE_API", "release": "MAJOR"},
+      {"module": "POLICY_ENGINE_UI","release": "MAJOR"}
     ]
 }
 ===
 
-updated version.txt to trigger workflows at 08:56 22/12/2023
+updated version.txt to trigger workflows at 09:26 25/12/2023
