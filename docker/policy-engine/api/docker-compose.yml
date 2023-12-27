@@ -14,6 +14,7 @@ services:
       ENV_DB_SCHEMA: ${DB_SCHEMA:-policy_engine_db}
       ENV_DB_USER: ${DB_USER:-policy_engine_db_user}
       ENV_DB_PASSWORD: ${DB_PASSWORD:-U5erPa55word}
+      ENV_ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:1111}
 #      ENV_KEY_STORE_TYPE: ${KEY_STORE_TYPE:-PKCS12}
 #      ENV_KEY_STORE_PASSWORD: ${KEY_STORE_PASSWORD:-alligator*001}
 # The following setting should never need to change
@@ -34,13 +35,16 @@ services:
     networks:
       - policyenginenet
       - db_policyenginenet
+
 #    depends_on:
 #      db_swot-db:
 #        condition: service_healthy
 #    restart: on-failure
 
 networks:
-  policyenginenet:    
+  policyenginenet:
       
   db_policyenginenet:
+    name: ${DB_DOCKER_NETWORK:-db_policyenginenet}
     external: true
+
