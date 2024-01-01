@@ -8,7 +8,7 @@ services:
     tty: false
     environment:
       ENV_HTTP_PORT: ${HTTP_PORT:-1111}
-#      ENV_HTTPS_PORT: ${HTTPS_PORT:-8447}
+      ENV_HTTPS_PORT: ${HTTPS_PORT:-9999}
       ENV_HTTP_HOST: ${HTTP_HOST:-localhost}
       ENV_HTTP_PROTOCOL: ${HTTP_PROTOCOL:-http}
       REACT_APP_ENV_API_PROTOCOL: ${API_PROTOCOL:-http}
@@ -22,23 +22,22 @@ services:
       ENV_KEYCLOAK_REALM: ${KEYCLOAK_REALM:-policy-engine-realm}
 #      ENV_API_USER: ${API_USER:-policy_engine_api_user}
 #      ENV_API_PASSWORD: ${API_PASSWORD:-ApiU5erPa55word}
-#      ENV_KEY_STORE_TYPE: ${KEY_STORE_TYPE:-PKCS12}
-#      ENV_KEY_STORE_PASSWORD: ${KEY_STORE_PASSWORD:-alligator*001}
-# The following setting should never need to change
-#      ENV_KEY_STORE_FILE: /policy-engine/certs.p12
+      ENV_SSL_KEY_STORE_TYPE: ${SSL_KEY_STORE_TYPE:-PKCS12}
+      ENV_SSL_KEY_STORE_PASSWORD: ${SSL_KEY_STORE_PASSWORD:-alligator*001}
+      ENV_SSL_KEY_STORE_FILE: /policy-engine/certs.p12
 
     ports:
       - ${HTTP_PORT:-1111}:${HTTP_PORT:-1111}
-#      - ${HTTPS_PORT:-8447}:${HTTPS_PORT:-8447}
+      - ${HTTPS_PORT:-9999}:${HTTPS_PORT:-9999}
     volumes:
       - type: bind
         source: ${APP_JAR_FILEPATH:-../../../policy-engine-modules/policy-engine-ui/target/policy-engine-ui-0.0.1-SNAPSHOT.jar}
         target: /policy-engine-ui/policy-engine-ui.jar
         read_only: true
- #     - type: bind
- #       source: ${KEY_STORE_FILEPATH:-../../../swot-modules/swot-app/src/main/resources/localhost-certs/localhost.p12}
- #       target: /swot-app/certs.p12
- #       read_only: true
+      - type: bind
+        source: ${SSL_KEY_STORE_FILEPATH:-./certs/localhost.p12}
+        target: /policy-engine/certs.p12
+        read_only: true
     networks:
       - policyenginenet
       - api_policyenginenet
