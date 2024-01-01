@@ -33,7 +33,8 @@ services:
 
   keycloak-app:
     container_name: keycloak-app
-    image: quay.io/keycloak/keycloak:21.1.0
+    #image: quay.io/keycloak/keycloak:21.1.0
+    image: quay.io/keycloak/keycloak:23.0.3
     stdin_open: false
     tty: false
     environment:
