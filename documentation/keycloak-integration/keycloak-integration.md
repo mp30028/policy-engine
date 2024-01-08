@@ -82,3 +82,12 @@ Test using the `SSLPoke` test utility.
  - This time the check should succeed
  
  ![Successful poke](./09-redo-check.png)
+ 
+
+## Setting up and starting Policy-Engine-API
+ 
+ 
+## Setting up and starting Policy-Engine-UI
+
+
+## Configuring the Application and Keycloak for Authentication
