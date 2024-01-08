@@ -8,8 +8,8 @@ Open a command prompt and `cd` to the folder containing the `SSLPoke.class` file
 Then type: `java SSLPoke <host> <port>`
 
 ## Error Messages
-- **javax.net.ssl.SSLHandshakeException** : sun.security.validator.ValidatorException: PKIX path building failed
-<dd>Java cannot authenticate the server's SSL certificate because its Certificate Authority (CA) is not present in its trusted CA store.</dd>
+- **javax.net.ssl.SSLHandshakeException** : sun.security.validator.ValidatorException: PKIX path building failed. <br/>
+Java cannot authenticate the server's SSL certificate because its Certificate Authority (CA) is not present in its trusted CA store.</dd>
 
 - **java.net.UnknownHostException** :
 <dd>The host name is invalid i.e. not resolvable by your DNS server</dd>
