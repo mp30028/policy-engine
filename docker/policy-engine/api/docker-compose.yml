@@ -7,31 +7,28 @@ services:
     stdin_open: false
     tty: false
     environment:
-      ENV_HTTP_PORT: ${HTTP_PORT:-8083}
-#      ENV_HTTPS_PORT: ${HTTPS_PORT:-8446}
+      ENV_HTTPS_PORT: ${HTTPS_PORT:-9998}
       ENV_DB_HOST: ${DB_HOST:-policy-engine-db}
       ENV_DB_PORT: ${DB_PORT:-3311}
       ENV_DB_SCHEMA: ${DB_SCHEMA:-policy_engine_db}
       ENV_DB_USER: ${DB_USER:-policy_engine_db_user}
       ENV_DB_PASSWORD: ${DB_PASSWORD:-U5erPa55word}
-      ENV_ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:1111,https://localhost:9999}
-#      ENV_KEY_STORE_TYPE: ${KEY_STORE_TYPE:-PKCS12}
-#      ENV_KEY_STORE_PASSWORD: ${KEY_STORE_PASSWORD:-alligator*001}
-# The following setting should never need to change
-#      ENV_KEY_STORE_FILE: /swot-app/certs.p12
+      ENV_ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-https://localhost:9999}
+      ENV_KEY_STORE_TYPE: ${KEY_STORE_TYPE:-PKCS12}
+      ENV_KEY_STORE_PASSWORD: ${KEY_STORE_PASSWORD:-alligator*001}
+      ENV_KEY_STORE: ${KEY_STORE:-/certs/localhost.p12}
 
     ports:
-      - ${HTTP_PORT:-8083}:${HTTP_PORT:-8083}
-#      - ${HTTPS_PORT:-8446}:${HTTPS_PORT:-8446}
+      - ${HTTPS_PORT:-9998}:${HTTPS_PORT:-9998}
     volumes:
       - type: bind
         source: ${APP_JAR_FILEPATH:-../../../policy-engine-modules/policy-engine-api/target/policy-engine-api-0.0.1-SNAPSHOT.jar}
         target: /policy-engine-api/policy-engine-api.jar
         read_only: true
- #     - type: bind
- #       source: ${KEY_STORE_FILEPATH:-../../../swot-modules/swot-app/src/main/resources/localhost-certs/localhost.p12}
- #       target: /swot-app/certs.p12
- #       read_only: true
+      - type: bind
+        source: ${KEY_STORE_HOST_FILEPATH:-./certs/localhost.p12}
+        target: ${KEY_STORE:-/certs/localhost.p12}
+        read_only: true
     networks:
       - policyenginenet
       - db_policyenginenet
