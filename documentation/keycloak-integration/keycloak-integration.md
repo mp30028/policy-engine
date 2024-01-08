@@ -27,6 +27,6 @@ These components are setup to run within docker containers. Docker compose scrip
 #### Step-1: Generate a self signed certificate	using openssl
 On Windows in the wsl-ubuntu distribution run the following command<br/>
 <br/>
-`openssl req -config keycloak-cert.config -newkey rsa -x509 -days 3650 -out keycloak.crt`
+`openssl req -config keycloak-cert.config -newkey rsa -x509 -days 3650 -out keycloak.crt`<br/>
 <br/>
 NB: it requires a config file called keycloak-cert.config. A sample copy of this [file can be found here](./generating-self-signed-certificate/keycloak-cert.config)<br/>
