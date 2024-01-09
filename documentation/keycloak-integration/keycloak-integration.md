@@ -84,6 +84,30 @@ Test using the `SSLPoke` test utility.
  -  `server.ssl.key-store-type` is set to *pkcs12* format. Hence we need to get a self signed certificate in this format
  - We can use the self-signed certificates generated in *step 1.1* earlier, but need to convert it to *pkcs12* format first
  
+#### 2.1 Convert self signed certificates to pkcs12 format
+  - change into the directory where the self signed certs were generated with `openssl` command in *step 1.1*
+  - run the conversion command `openssl pkcs12 -export -out keycloak.p12 -inkey keycloak.key -in keycloak.crt`<br/>
+  You will be prompted for an export password. Make a note of it as it will be needed to set the spring-boot-app `server.ssl.key-store-password` property<br/>
+  ![Converting to pkcs12](./10-convert-to-pkcs12.png)
+  
+#### 2.2 Set up TLS/SSL
+  - copy the *keycloak.p12* file created in the previous step to `......./policy-engine/docker/policy-engine/api/certs` folder
+  - the docker-compose script should be setup to use this file by default
+
+#### 2.3 Startup the database used by policy-engine-api
+  - `cd ......./policy-engine/docker/policy-engine/db` folder
+  - run `docker compose up -d` to start up the database required by the policy-engine-api application
+
+#### 2.4 Startup the policy-engine-api application
+  - `cd ......./policy-engine/docker/policy-engine/api` folder
+  - run `docker compose up -d` to start up the application
+  
+#### 2.5 Test the APIs are only accessible over https
+  - In the browser try the [non secured url](http://localhost:9998/policy-engine/api/asset-type)<br/>
+  ![Test http access to API](./11-test-http-access-to-api.png)
+  - repeat the test with the [secured url](https://localhost:9998/policy-engine/api/asset-type)<br/>
+  ![Test https access to API](./12-test-https-access-to-api.png)
+ 
  
 ## Setting up and starting Policy-Engine-UI
 
