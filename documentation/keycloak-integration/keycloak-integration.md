@@ -76,6 +76,13 @@ Test using the `SSLPoke` test utility.
  
 
 ## 2. Setting up and starting Policy-Engine-API
+### Points to note
+ - TLS/SSL is enabled by setting the following three properties in the policy-engine-api spring-boot-app
+ 	- `server.ssl.key-store`
+ 	- `server.ssl.key-store-password`
+ 	- `server.ssl.key-store-type`
+ -  `server.ssl.key-store-type` is set to *pkcs12* format. Hence we need to get a self signed certificate in this format
+ - We can use the self-signed certificates generated in *step 1.1* earlier, but need to convert it to *pkcs12* format first
  
  
 ## Setting up and starting Policy-Engine-UI
