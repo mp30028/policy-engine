@@ -37,15 +37,13 @@ Copy the the two generated files to the `/policy-engine/docker/keycloak/certs` f
 #### 1.3: Start up Keycloak
 - `cd /policy-engine/docker/keycloak` folder.
 - run `docker compose up -d` and wait for the container to come up
-- Once the docker-compose script completes, check everything is ok with `docker ps`. You should see output as per below
-
+- Once the docker-compose script completes, check everything is ok with `docker ps`. You should see output as per below<br/>
 ![Docker Keycloak containers](./02-keycloak-docker-ps.png)
 
 #### 1.4: Check SSL is enabled and working on Keycloak
 Test using the `SSLPoke` test utility.
 - `cd \policy-engine\docker\policy-engine\ui\SSLPoke`
-- run `java SSLPoke localhost 4499`. Now because the self-signed certificate is not yet trusted you should see an error like the one below
-
+- run `java SSLPoke localhost 4499`. Now because the self-signed certificate is not yet trusted you should see an error like the one below<br/>
 ![untrusted cert error](./03-signature-check-failed.png)
 
 - To fix the error we need to trust the self signed certificate, but before we can do that we need to get a copy of the client certificate as shown in the next step
