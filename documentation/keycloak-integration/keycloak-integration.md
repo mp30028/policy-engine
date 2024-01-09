@@ -109,7 +109,36 @@ Test using the `SSLPoke` test utility.
   ![Test https access to API](./12-test-https-access-to-api.png)
  
  
-## Setting up and starting Policy-Engine-UI
+## 3. Setting up and starting Policy-Engine-UI
+### Points to note
+ - Like policy-engine-api TLS/SSL is enabled by setting the following three properties in the policy-engine-ui spring-boot-app
+ 	- `server.ssl.key-store`
+ 	- `server.ssl.key-store-password`
+ 	- `server.ssl.key-store-type`
+ -  `server.ssl.key-store-type` is set to *pkcs12* format. Hence we need to get a self signed certificate in this format
+ - We can use the converted self-signed certificates generated in *step 2.1* earlier
+ - To get an good overview of how the UI interacts with the different component the following diagram may help<br/>
+ ![UI Interaction](./13-ui-interactions.png)
+ 
+#### 3.1 Set up TLS/SSL
+  - copy the *keycloak.p12* file created in the previous step to `......./policy-engine/docker/policy-engine/ui/certs` folder
+  - the docker-compose script should be setup to use this file by default
+
+#### 3.2 Startup policy-engine-api if not already started
+  - See *step 2.3*, *step 2.4*  and *step 2.5* 
+
+#### 3.3 Startup the policy-engine-ui application
+  - `cd ......./policy-engine/docker/policy-engine/ui` folder
+  - run `docker compose up -d` to start up the application
+  
+#### 3.4 Test the Application is running by accessing it in the browser
+  - In the browser try the [non secured url](http://localhost:9999/policy-engine/api/asset-type)<br/>
+  ![Test http access to API](./11-test-http-access-to-api.png)
+  - repeat the test with the [secured url](https://localhost:9999/policy-engine/api/asset-type)<br/>
+  ![Test https access to API](./12-test-https-access-to-api.png)
+  - The tests should fail as policy-engine-ui application is not able to trust both Keycloak and policy-engine-api. So it is necessary to set policy-engine-ui to trust the self signed certificates used by both these components
+ 
+#### 3.5 Get the required Client Certificates and set them up for policy-engine-ui
 
 
-## Configuring the Application and Keycloak for Authentication
+## 4. Configuring the Application and Keycloak for Authentication
