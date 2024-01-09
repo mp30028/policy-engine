@@ -17,11 +17,11 @@ services:
        - ${MYSQL_TCP_PORT:-3333}:${MYSQL_TCP_PORT:-3333}
     volumes:
       - type: bind
-        source: ${KC_DB_DATAFILES_DIR:-~/tmp/kc-data-files}
+        source: ${KC_DB_DATAFILES_DIR:-../../../keycloak-data-files}
         target: /var/lib/mysql
         read_only: false
       - type: bind
-        source: ${DB_INIT_SCRIPT:-./initdb.sql}
+        source: ${MYSQL_DB_INIT_SCRIPT:-./initdb.sql}
         target: /docker-entrypoint-initdb.d/initdb.sql
         read_only: true
     healthcheck:
@@ -33,13 +33,13 @@ services:
 
   keycloak-app:
     container_name: keycloak-app
-    #image: quay.io/keycloak/keycloak:21.1.0
     image: quay.io/keycloak/keycloak:23.0.3
     stdin_open: false
     tty: false
     environment:
-      KC_HTTPS_CERTIFICATE_FILE: ${CERTIFICATE_FILE:-/certs/fullchain.pem}
-      KC_HTTPS_CERTIFICATE_KEY_FILE: ${CERTIFICATE_KEY_FILE:-/certs/privkey.pemy}
+      KC_HTTPS_CERTIFICATE_FILE: ${CERTIFICATE_FILE:-/certs/keycloak.crt}
+      KC_HTTPS_CERTIFICATE_KEY_FILE: ${CERTIFICATE_KEY_FILE:-/certs/keycloak.key}
+      KC_HTTPS_PORT: ${KC_HTTPS_PORT:-4499}
       KC_DB: ${KC_DB:-mysql}
       KC_DB_URL_HOST: ${KC_DB_URL_HOST:-keycloak-db}
       KC_DB_URL_DATABASE: ${KC_DB_URL_DATABASE:-kc_db}
@@ -48,18 +48,18 @@ services:
       KC_HOSTNAME: ${KC_HOSTNAME:-localhost}
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-IAmAnAdmin}
+      KEYCLOAK_HTTPS_CLIENT_AUTH: none
+      #KEYCLOAK_FRONTEND_URL: https://${KC_HOSTNAME:-localhost}:${KC_HTTPS_PORT:-4499}/auth
+      #KEYCLOAK_FRONTEND_URL: https://localhost:4499/login/oauth2/code/policy-engine-ui
       KC_DB_URL_PORT: ${KC_DB_URL_PORT:-3333}
     networks:
       - kcnet
     volumes:
-      - ${HOST_CERTIFICATE_FILE:-./certs/fullchain.pem}:${CERTIFICATE_FILE:-/certs/fullchain.pem}
-      - ${HOST_CERTIFICATE_KEY_FILE:-./certs/privkey.pem}:${CERTIFICATE_KEY_FILE:-/certs/privkey.pem}
+      - ${HOST_CERTIFICATE_FILE:-./certs/keycloak.crt}:${CERTIFICATE_FILE:-/certs/keycloak.crt}
+      - ${HOST_CERTIFICATE_KEY_FILE:-./certs/keycloak.key}:${CERTIFICATE_KEY_FILE:-/certs/keycloak.key}
     ports:
-      - ${KC_HTTPS_PORT:-4499}:8443
-      - ${KC_HTTP_PORT:-8880}:8080
-    command: ${KEYCLOAK_START_COMMAND}    
-#    command: --verbose start --hostname-port=${KC_HTTPS_PORT:-4499}
-#    command: --verbose start-dev
+      - ${KC_HTTPS_PORT:-4499}:${KC_HTTPS_PORT:-4499}
+    command: ${KEYCLOAK_START_COMMAND:---verbose start-dev --hostname-port=${KC_HTTPS_PORT:-4499}}
 
     depends_on:
       keycloak-db:

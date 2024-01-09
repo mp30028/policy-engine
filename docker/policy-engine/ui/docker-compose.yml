@@ -3,45 +3,67 @@ services:
   policy-engine-ui:
     container_name: policy-engine-ui
     image: eclipse-temurin:21.0.1_12-jre
-    command: java -jar /policy-engine-ui/policy-engine-ui.jar
+#    command: java -jar /policy-engine-ui/policy-engine-ui.jar
+    command:
+      - /bin/bash
+      - -c
+      - |
+        keytool -import -trustcacerts -cacerts -storepass changeit -noprompt -alias ${KC_CLIENT_CERT_ALIAS:-keycloak-client-cert} -file /certificates/${KC_CLIENT_CERT:-kc-client.crt};
+        keytool -import -trustcacerts -cacerts -storepass changeit -noprompt -alias ${P_ENGINE_CLIENT_CERT_ALIAS:-p-engine-client-cert} -file /certificates/${P_ENGINE_CLIENT_CERT:-p-engine-client.crt};
+        java -jar /policy-engine-ui/policy-engine-ui.jar;
+        # java -jar -Djavax.net.debug=ssl /policy-engine-ui/policy-engine-ui.jar;
+        
     stdin_open: false
     tty: false
     environment:
-      ENV_HTTP_PORT: ${HTTP_PORT:-1111}
-#      ENV_HTTPS_PORT: ${HTTPS_PORT:-8447}
+      ENV_HTTPS_PORT: ${HTTPS_PORT:-9999}
       ENV_HTTP_HOST: ${HTTP_HOST:-localhost}
-      ENV_HTTP_PROTOCOL: ${HTTP_PROTOCOL:-http}
-      REACT_APP_ENV_API_PROTOCOL: ${API_PROTOCOL:-http}
-      REACT_APP_ENV_API_HOST: ${API_HOST:-localhost}
-      REACT_APP_ENV_API_PORT: ${API_PORT:-8083}
-      REACT_APP_ENV_API_CONTEXT_PATH: ${API_CONTEXT_PATH:-/policy-engine/api}
-      ENV_KEYCLOAK_HTTP_PORT: ${KEYCLOAK_HTTP_PORT:-8880}
-      ENV_KEYCLOAK_HTTP_HOST: ${KEYCLOAK_HTTP_HOST:-localhost}
-      ENV_KEYCLOAK_HTTP_PROTOCOL: ${KEYCLOAK_HTTP_PROTOCOL:-http}
+      ENV_HTTP_PROTOCOL: ${HTTP_PROTOCOL:-https}
+      
+      ENV_KEYCLOAK_HTTP_PORT: ${KEYCLOAK_HTTP_PORT:-4499}
+#      ENV_KEYCLOAK_HTTP_HOST: ${KEYCLOAK_HTTP_HOST:-localhost}
+#      ENV_KEYCLOAK_HTTP_HOST: ${KEYCLOAK_HTTP_HOST:-keycloak-app}
+      ENV_KEYCLOAK_HTTP_HOST: ${KEYCLOAK_HTTP_HOST:-host.docker.internal}
+      ENV_KEYCLOAK_HTTP_PROTOCOL: ${KEYCLOAK_HTTP_PROTOCOL:-https}
       ENV_KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-policy-engine-ui}
       ENV_KEYCLOAK_REALM: ${KEYCLOAK_REALM:-policy-engine-realm}
-#      ENV_API_USER: ${API_USER:-policy_engine_api_user}
-#      ENV_API_PASSWORD: ${API_PASSWORD:-ApiU5erPa55word}
-#      ENV_KEY_STORE_TYPE: ${KEY_STORE_TYPE:-PKCS12}
-#      ENV_KEY_STORE_PASSWORD: ${KEY_STORE_PASSWORD:-alligator*001}
-# The following setting should never need to change
-#      ENV_KEY_STORE_FILE: /policy-engine/certs.p12
+      
+      REACT_APP_ENV_API_PROTOCOL: ${API_PROTOCOL:-https}
+      REACT_APP_ENV_API_HOST: ${API_HOST:-localhost}
+      REACT_APP_ENV_API_PORT: ${API_PORT:-9998}
+      REACT_APP_ENV_API_CONTEXT_PATH: ${API_CONTEXT_PATH:-/policy-engine/api}
 
+      ENV_KEY_STORE: ${KEY_STORE:-/certs/keycloak.p12}
+      ENV_KEY_STORE_TYPE: ${KEY_STORE_TYPE:-pkcs12}
+      ENV_KEY_STORE_PASSWORD: ${KEY_STORE_PASSWORD:-alligator*001}
+      
+#      USE_SYSTEM_CA_CERTS: 1
     ports:
-      - ${HTTP_PORT:-1111}:${HTTP_PORT:-1111}
-#      - ${HTTPS_PORT:-8447}:${HTTPS_PORT:-8447}
+      - ${HTTPS_PORT:-9999}:${HTTPS_PORT:-9999}
     volumes:
       - type: bind
         source: ${APP_JAR_FILEPATH:-../../../policy-engine-modules/policy-engine-ui/target/policy-engine-ui-0.0.1-SNAPSHOT.jar}
         target: /policy-engine-ui/policy-engine-ui.jar
         read_only: true
- #     - type: bind
- #       source: ${KEY_STORE_FILEPATH:-../../../swot-modules/swot-app/src/main/resources/localhost-certs/localhost.p12}
- #       target: /swot-app/certs.p12
- #       read_only: true
+        
+      - type: bind
+        source: ${KEY_STORE_HOST_FILEPATH:-./certs/keycloak.p12}
+        target: ${KEY_STORE:-/certs/keycloak.p12}
+        read_only: true
+        
+#      - type: bind
+#        source: ./certs
+#        target: /certs
+#        read_only: false
+#        
+      - type: bind
+        source: ./certs/cacert
+        target: /certificates/
+        read_only: false
     networks:
       - policyenginenet
       - api_policyenginenet
+#      - kcnet
 
 #    depends_on:
 #      db_swot-db:
@@ -54,3 +76,7 @@ networks:
   api_policyenginenet:
     name: ${API_DOCKER_NETWORK:-api_policyenginenet}
     external: true
+    
+#  kcnet:
+#    name: db_kcnet
+#    external: true
