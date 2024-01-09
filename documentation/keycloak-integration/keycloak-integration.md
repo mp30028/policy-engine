@@ -11,7 +11,7 @@ These components are setup to run within docker containers. Docker compose scrip
 ![Orchestration using docker compose](./01-orchestration.png)
 
 
-## Setting up and starting Keycloak
+## 1. Setting up and starting Keycloak with SSL/TLS on developers local machine
 
 ### Points to note
  - The Keycloak setup for this project uses a MySql database for it's datastore. 
@@ -22,9 +22,8 @@ These components are setup to run within docker containers. Docker compose scrip
  	 - Endpoints to access Policy-Engine-Api
  	 - Endpoints to access Policy-Engine-Ui
 
-### Setting SSL/TLS protection for Keycloak on developers local machine
 
-#### Step-1: Generate a self signed certificate	using openssl
+#### 1.1: Generate a self signed certificate	using openssl
 On Windows in the wsl-ubuntu distribution run the following command<br/>
 <br/>
 `openssl req -config keycloak-cert.config -newkey rsa -x509 -days 3650 -out keycloak.crt`<br/>
@@ -32,17 +31,17 @@ On Windows in the wsl-ubuntu distribution run the following command<br/>
 NB: it requires a config file called keycloak-cert.config. A sample copy of this [file can be found here](./generating-self-signed-certificate/keycloak-cert.config)<br/>
 This will generate two files called `keycloak.crt` and `keycloak.key`
 
-#### Step-2: Add the self signed certificates to Keycloak
+#### 1.2: Add the self signed certificates to Keycloak
 Copy the the two generated files to the `/policy-engine/docker/keycloak/certs` folder. The docker-compose script is setup to map to these files and use them to enable tls/ssl on keycloak
 
-#### Step-3: Start up Keycloak
+#### 1.3: Start up Keycloak
 - `cd /policy-engine/docker/keycloak` folder.
 - run `docker compose up -d` and wait for the container to come up
 - Once the docker-compose script completes, check everything is ok with `docker ps`. You should see output as per below
 
 ![Docker Keycloak containers](./02-keycloak-docker-ps.png)
 
-#### Step-4: Check SSL is enabled and working on Keycloak
+#### 1.4: Check SSL is enabled and working on Keycloak
 Test using the `SSLPoke` test utility.
 - `cd \policy-engine\docker\policy-engine\ui\SSLPoke`
 - run `java SSLPoke localhost 4499`. Now because the self-signed certificate is not yet trusted you should see an error like the one below
@@ -51,40 +50,34 @@ Test using the `SSLPoke` test utility.
 
 - To fix the error we need to trust the self signed certificate, but before we can do that we need to get a copy of the client certificate as shown in the next step
 
-#### Step-5: Get a copy of the client certificate
-- navigate to the Keycloak url (https://localhost:4499/) in a browser
-
+#### 1.5: Get a copy of the client certificate
+- navigate to the Keycloak url (https://localhost:4499/) in a browser<br/>
 ![Keycloak UI](./04-navigate-to-keycloak.png)
 
-- Click on the *Not-Secure* indicator in the address bar
-
+- Click on the *Not-Secure* indicator in the address bar<br/>
 ![Not Secure Indicator](./05-not-secure-indicator.png)
 
-- You should now see a pop up with a message and a link to view the certificate details
-
+- You should now see a pop up with a message and a link to view the certificate details<br/>
 ![Not Secure Pop-Up Message](./06-not-secure-pop-up.png)
 
-- Clicking on export to save the client certificate
-
+- Clicking on export to save the client certificate<br/>
 ![Export the client certificate](./07-show-certificate.png)
 
-#### Step-6: Add the client certificate to the jre keystore
+#### 1.6: Add the client certificate to the jre keystore
 
 - run the following command to import the client certificate saved in the previous step<br/>
-`keytool -import -trustcacerts -cacerts -storepass changeit -noprompt -alias zonesoft-dev -file C:\Users\mebs_\Downloads\_.zonesoft.dev.crt`
-
+`keytool -import -trustcacerts -cacerts -storepass changeit -noprompt -alias zonesoft-dev -file C:\Users\mebs_\Downloads\_.zonesoft.dev.crt`<br/>
 ![Client certificate import](./08-cert-successfully-added.png)
 
 - in case there is already a certificate with the same alias and you want to update it with the latest one then you can delete the existing certificate in the keystore with the following command <br/>
 `keytool -delete -noprompt -alias zonesoft-dev  -cacerts  -storepass changeit`
 
-#### Step-7: Redo the check (Step-4) to see if SSL is enabled and working on Keycloak
- - This time the check should succeed
- 
+#### 1.7: Redo the check (Step-1.4 above) to see if SSL is enabled and working on Keycloak
+ - This time the check should succeed<br/>
  ![Successful poke](./09-redo-check.png)
  
 
-## Setting up and starting Policy-Engine-API
+## 2. Setting up and starting Policy-Engine-API
  
  
 ## Setting up and starting Policy-Engine-UI
