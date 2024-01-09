@@ -74,7 +74,10 @@ Test using the `SSLPoke` test utility.
  - This time the check should succeed<br/>
  ![Successful poke](./09-redo-check.png)
  
-
+#### 1.8 Startup Keycloak
+  - `cd ......./policy-engine/docker/keycloak` folder
+  - run `docker compose up -d` to start up the application
+  
 ## 2. Setting up and starting Policy-Engine-API
 ### Points to note
  - TLS/SSL is enabled by setting the following three properties in the policy-engine-api spring-boot-app
@@ -124,21 +127,26 @@ Test using the `SSLPoke` test utility.
   - copy the *keycloak.p12* file created in the previous step to `......./policy-engine/docker/policy-engine/ui/certs` folder
   - the docker-compose script should be setup to use this file by default
 
-#### 3.2 Startup policy-engine-api if not already started
+#### 3.2 Startup Keycloak if not already started
+  - See *step 1.8*
+
+#### 3.3 Startup policy-engine-api if not already started
   - See *step 2.3*, *step 2.4*  and *step 2.5* 
 
-#### 3.3 Startup the policy-engine-ui application
+#### 3.4 Startup the policy-engine-ui application
   - `cd ......./policy-engine/docker/policy-engine/ui` folder
-  - run `docker compose up -d` to start up the application
+  - run `docker compose up` to start up the application
+  - It should fail to start as it needs valid client certs for both keycloak and the policy-engine-api<br/>
+  ![startup failure](./14-ui-start-fail.png)<br/>
   
-#### 3.4 Test the Application is running by accessing it in the browser
-  - In the browser try the [non secured url](http://localhost:9999/policy-engine/api/asset-type)<br/>
-  ![Test http access to API](./11-test-http-access-to-api.png)
-  - repeat the test with the [secured url](https://localhost:9999/policy-engine/api/asset-type)<br/>
-  ![Test https access to API](./12-test-https-access-to-api.png)
-  - The tests should fail as policy-engine-ui application is not able to trust both Keycloak and policy-engine-api. So it is necessary to set policy-engine-ui to trust the self signed certificates used by both these components
- 
 #### 3.5 Get the required Client Certificates and set them up for policy-engine-ui
-
+  - To fix the start up issue, copy the previously generated client certificate (see *step 1.5*) to `......\policy-engine\docker\policy-engine\ui\certs\cacert`
+  - rename the file to **kc-client.crt**
+  - make another copy of the same file in the same folder and rename it to **p-engine-client.crt**
+  - you should have a certs folder that looks something like the following
+  ![certs folder](./15-certs-folder.png)
+  - run `docker compose up` to start up the application. This time it should start without issues
+  
+#### 3.6 Test the Application is running by accessing it in the browser
 
 ## 4. Configuring the Application and Keycloak for Authentication

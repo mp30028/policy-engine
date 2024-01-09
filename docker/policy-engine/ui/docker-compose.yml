@@ -8,15 +8,10 @@ services:
       - /bin/bash
       - -c
       - |
-        keytool -import -trustcacerts -cacerts -storepass changeit -noprompt -alias zonesoft-dev -file /certificates/zonesoft.dev.crt
-        keytool -import -trustcacerts -cacerts -storepass changeit -noprompt -alias api-dev -file /certificates/localhost.crt
-        java -jar /policy-engine-ui/policy-engine-ui.jar
-        #java -jar -Djavax.net.debug=ssl /policy-engine-ui/policy-engine-ui.jar
-        
-#        keytool -import -trustcacerts -cacerts -storepass changeit -noprompt -alias zonesoft-dev -file /certificates/zonesoft.dev.crt
-#        java -jar /policy-engine-ui/policy-engine-ui.jar
-#        keytool -importcert -file /certs/keycloak-localhost.crt -alias localhost_cert -cacerts -noprompt -storepass changeit
-#        echo "----------- Starting up UI -------------------"
+        keytool -import -trustcacerts -cacerts -storepass changeit -noprompt -alias ${KC_CLIENT_CERT_ALIAS:-keycloak-client-cert} -file /certificates/${KC_CLIENT_CERT:-kc-client.crt};
+        keytool -import -trustcacerts -cacerts -storepass changeit -noprompt -alias ${P_ENGINE_CLIENT_CERT_ALIAS:-p-engine-client-cert} -file /certificates/${P_ENGINE_CLIENT_CERT:-p-engine-client.crt};
+        java -jar /policy-engine-ui/policy-engine-ui.jar;
+        # java -jar -Djavax.net.debug=ssl /policy-engine-ui/policy-engine-ui.jar;
         
     stdin_open: false
     tty: false
@@ -41,7 +36,8 @@ services:
       ENV_KEY_STORE: ${KEY_STORE:-/certs/keycloak.p12}
       ENV_KEY_STORE_TYPE: ${KEY_STORE_TYPE:-pkcs12}
       ENV_KEY_STORE_PASSWORD: ${KEY_STORE_PASSWORD:-alligator*001}
-#      USE_SYSTEM_CA_CERTS: 0
+      
+#      USE_SYSTEM_CA_CERTS: 1
     ports:
       - ${HTTPS_PORT:-9999}:${HTTPS_PORT:-9999}
     volumes:
@@ -63,11 +59,11 @@ services:
       - type: bind
         source: ./certs/cacert
         target: /certificates/
-        read_only: false   
+        read_only: false
     networks:
       - policyenginenet
       - api_policyenginenet
-      - kcnet
+#      - kcnet
 
 #    depends_on:
 #      db_swot-db:
@@ -81,6 +77,6 @@ networks:
     name: ${API_DOCKER_NETWORK:-api_policyenginenet}
     external: true
     
-  kcnet:
-    name: db_kcnet
-    external: true
+#  kcnet:
+#    name: db_kcnet
+#    external: true
