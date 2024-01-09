@@ -14,9 +14,9 @@ services:
       ENV_DB_USER: ${DB_USER:-policy_engine_db_user}
       ENV_DB_PASSWORD: ${DB_PASSWORD:-U5erPa55word}
       ENV_ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-https://localhost:9999}
-      ENV_KEY_STORE_TYPE: ${KEY_STORE_TYPE:-PKCS12}
+      ENV_KEY_STORE_TYPE: ${KEY_STORE_TYPE:-pkcs12}
       ENV_KEY_STORE_PASSWORD: ${KEY_STORE_PASSWORD:-alligator*001}
-      ENV_KEY_STORE: ${KEY_STORE:-/certs/localhost.p12}
+      ENV_KEY_STORE: ${KEY_STORE:-/certs/keycloak.p12}
 
     ports:
       - ${HTTPS_PORT:-9998}:${HTTPS_PORT:-9998}
@@ -26,8 +26,8 @@ services:
         target: /policy-engine-api/policy-engine-api.jar
         read_only: true
       - type: bind
-        source: ${KEY_STORE_HOST_FILEPATH:-./certs/localhost.p12}
-        target: ${KEY_STORE:-/certs/localhost.p12}
+        source: ${KEY_STORE_HOST_FILEPATH:-./certs/keycloak.p12}
+        target: ${KEY_STORE:-/certs/keycloak.p12}
         read_only: true
     networks:
       - policyenginenet
