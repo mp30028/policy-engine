@@ -53,13 +53,13 @@ Test using the `SSLPoke` test utility.
 #### 1.5: Get a copy of the client certificate
 - navigate to the Keycloak url (https://localhost:4499/) in a browser<br/>
 ![Keycloak UI](./04-navigate-to-keycloak.png)
-
+---
 - Click on the *Not-Secure* indicator in the address bar<br/>
 ![Not Secure Indicator](./05-not-secure-indicator.png)
-
+---
 - You should now see a pop up with a message and a link to view the certificate details<br/>
 ![Not Secure Pop-Up Message](./06-not-secure-pop-up.png)
-
+---
 - Clicking on export to save the client certificate<br/>
 ![Export the client certificate](./07-show-certificate.png)
 
