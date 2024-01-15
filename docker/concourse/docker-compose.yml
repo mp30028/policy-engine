@@ -1,0 +1,79 @@
+version: "3.8"
+
+services:
+  concourse-db:
+    image: postgres:16.1
+    volumes:
+      - ${DB_DATA_FILES:-../../../concourse-data-files}:/database
+    environment:
+      POSTGRES_DB: ${DB_SCHEMA_NAME:-concourse_db}
+      POSTGRES_USER: ${DB_USERNAME:-concourse_app}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-TheDbPassword}
+      PGDATA: /database
+    restart: ${DB_RESTART:-always}
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "20"
+        max-size: "10m"
+
+  concourse-ui:
+    image: concourse/concourse:7.11
+    links: 
+      - concourse-db 
+    command: web
+    ports: 
+      - ${PORT:-9443}:${PORT:-9443}
+    volumes: 
+      - ${KEYS:-./concourse-keys}:/concourse-keys
+    environment:
+      CONCOURSE_EXTERNAL_URL: https://${DOMAIN:-localhost}:${PORT:-9443}
+      CONCOURSE_POSTGRES_HOST: concourse-db
+      CONCOURSE_POSTGRES_USER: ${DB_USERNAME:-concourse_app}
+      CONCOURSE_POSTGRES_PASSWORD: ${DB_PASSWORD:-TheDbPassword}
+      CONCOURSE_POSTGRES_DATABASE: ${DB_SCHEMA_NAME:-concourse_db}
+      CONCOURSE_ADD_LOCAL_USER: ${UID:-TheUsername}:${PASSWORD:-ThePassword}
+      CONCOURSE_MAIN_TEAM_LOCAL_USER: ${UID:-TheUsername}
+      
+      CONCOURSE_SESSION_SIGNING_KEY: /concourse-keys/web/session_signing_key
+      CONCOURSE_TSA_HOST_KEY: /concourse-keys/web/tsa_host_key
+      CONCOURSE_TSA_AUTHORIZED_KEYS: /concourse-keys/web/authorized_worker_keys
+
+      CONCOURSE_TLS_BIND_PORT: ${PORT:-9443}
+      CONCOURSE_TLS_CERT: /concourse-keys/${TLS_CERT_FILE:-localhost.crt}
+      CONCOURSE_TLS_KEY: /concourse-keys/${TLS_KEY_FILE:-localhost.key}      
+#      CONCOURSE_TLS_CERT: /concourse-keys/${TLS_CERT_FILE:-cert.pem}
+#      CONCOURSE_TLS_KEY: /concourse-keys/${TLS_KEY_FILE:-privkey.pem}
+          
+    restart: ${WEB_RESTART:-always}
+    depends_on: [concourse-db]
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "20"
+        max-size: "10m"
+  
+  concourse-worker:
+    image: concourse/concourse:7.11
+    command: worker
+    privileged: true 
+    depends_on: [concourse-ui]
+    volumes: 
+     - ${KEYS:-./concourse-keys}:/concourse-keys
+     - ${WORK_DIR:-../../../concourse-work}:/concourse-work
+    links: [concourse-ui] 
+    stop_signal: SIGUSR2
+    environment:
+      CONCOURSE_WORK_DIR: /concourse-work
+      CONCOURSE_TSA_HOST: concourse-ui:2222
+      CONCOURSE_TSA_PUBLIC_KEY: /concourse-keys/web/tsa_host_key.pub
+      CONCOURSE_TSA_WORKER_PRIVATE_KEY: /concourse-keys/worker/worker_key
+      # enable DNS proxy to support Docker's 127.x.x.x DNS server
+      CONCOURSE_GARDEN_DNS_PROXY_ENABLE: "true"      
+    restart: ${WORKER_RESTART:-always}
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "20"
+        max-size: "10m"
+ 
