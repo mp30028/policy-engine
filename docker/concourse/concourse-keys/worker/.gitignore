@@ -1,0 +1,11 @@
+###############################################################
+##  ignoring keys but not the folder
+###############################################################
+## The `*` tells git to ignore all files in the folder, 
+## but `!.gitignore` tells git to still include the .gitignore file.
+## So the local repository and any other clones of the repository 
+## get the empty folder and the .gitignore needed. 
+
+###############################################################
+*
+!.gitignore
