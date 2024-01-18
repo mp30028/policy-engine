@@ -2,52 +2,86 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:${POSTGRES_TAG:-16.1}
+    image: postgres:${DB_VERSION:-16.1}
     shm_size: 1gb
-    ports: [6543:5432]
+    volumes:
+      - type: bind
+        source: ${DB_DATA_FILES:-../../../concourse-data-files}
+        target: /database
+        read_only: false
+    ports: 
+      - ${DB_PORT:-6543}:5432
     environment:
-      POSTGRES_DB: concourse
-      POSTGRES_USER: dev
-      POSTGRES_PASSWORD: dev
-
+      POSTGRES_DB: ${DB_SCHEMA_NAME:-concourse_db}
+      POSTGRES_USER: ${DB_USERNAME:-concourse_app}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-TheDbPassword}
+      PGDATA: /database
+    restart: ${DB_RESTART:-no}
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "20"
+        max-size: "10m"
+      
   web:
-#    build: .
-    image: concourse/concourse:7.11
+    image: concourse/concourse:${WEB_VERSION:-7.11}
     command: web
     depends_on: [db]
-    ports: [8080:8080]
+    ports: 
+      - ${WEB_PORT:-9943}:${WEB_PORT:-9943}
     volumes:
-#    - .:/src
-    - "./keys:/concourse-keys"
+      - type: bind
+        source: ${KEYS:-./keys}
+        target: /concourse-keys
+        read_only: false
+      - type: bind
+        source: ${TLS_KEY_FILE_ON_HOST:-./certs/localhost.key}
+        target: ${TLS_KEY_FILE:-/certs/localhost.key}
+        read_only: true        
+      - type: bind
+        source: ${TLS_CERT_FILE_ON_HOST:-./certs/localhost.crt}
+        target: ${TLS_CERT_FILE:-/certs/localhost.crt}
+        read_only: true
     environment:
       CONCOURSE_SESSION_SIGNING_KEY: /concourse-keys/web/session_signing_key
       CONCOURSE_TSA_AUTHORIZED_KEYS: /concourse-keys/web/authorized_worker_keys
       CONCOURSE_TSA_HOST_KEY: /concourse-keys/web/tsa_host_key
 
-      CONCOURSE_LOG_LEVEL: debug
+      CONCOURSE_LOG_LEVEL: info
       CONCOURSE_POSTGRES_HOST: db
-      CONCOURSE_POSTGRES_USER: dev
-      CONCOURSE_POSTGRES_PASSWORD: dev
-      CONCOURSE_POSTGRES_DATABASE: concourse
-      CONCOURSE_EXTERNAL_URL: http://localhost:8080
-      CONCOURSE_ADD_LOCAL_USER: test:test,guest:guest
-      CONCOURSE_MAIN_TEAM_LOCAL_USER: test
+      CONCOURSE_POSTGRES_USER: ${DB_USERNAME:-concourse_app}
+      CONCOURSE_POSTGRES_PASSWORD: ${DB_PASSWORD:-TheDbPassword}
+      CONCOURSE_POSTGRES_DATABASE: ${DB_SCHEMA_NAME:-concourse_db}
+      CONCOURSE_EXTERNAL_URL: ${WEB_PROTOCOL:-https}://${WEB_DOMAIN:-localhost}:${WEB_PORT:-9943}
+      CONCOURSE_ADD_LOCAL_USER: ${WEB_UID:-test}:${WEB_PASSWORD:-test}
+      CONCOURSE_MAIN_TEAM_LOCAL_USER: ${WEB_UID:-test}
       CONCOURSE_CLUSTER_NAME: dev
       CONCOURSE_ENABLE_PIPELINE_INSTANCES: "true"
       CONCOURSE_ENABLE_ACROSS_STEP: "true"
       CONCOURSE_ENABLE_CACHE_STREAMED_VOLUMES: "true"
       CONCOURSE_ENABLE_RESOURCE_CAUSALITY: "true"
+      CONCOURSE_TLS_BIND_PORT: ${PORT:-9943}
+      CONCOURSE_TLS_CERT: ${TLS_CERT_FILE:-/certs/localhost.crt}
+      CONCOURSE_TLS_KEY: ${TLS_KEY_FILE:-/certs/localhost.key}      
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "20"
+        max-size: "10m"
 
   worker:
-#    build: .
-    image: concourse/concourse:7.11
+    image: concourse/concourse:${WEB_VERSION:-7.11}
     command: worker
     privileged: true
     depends_on: [web]
     ports:
     - 7777:7777
     - 7788:7788
-    volumes: ["./keys:/concourse-keys"]
+    volumes:
+      - type: bind
+        source: ${KEYS:-./keys}
+        target: /concourse-keys
+        read_only: false
     stop_signal: SIGUSR2
     environment:
       CONCOURSE_RUNTIME: containerd
@@ -55,7 +89,7 @@ services:
       CONCOURSE_TSA_PUBLIC_KEY: /concourse-keys/worker/tsa_host_key.pub
       CONCOURSE_TSA_WORKER_PRIVATE_KEY: /concourse-keys/worker/worker_key
 
-      CONCOURSE_LOG_LEVEL: debug
+      CONCOURSE_LOG_LEVEL: info
       CONCOURSE_TSA_HOST: web:2222
 
       CONCOURSE_BIND_IP: 0.0.0.0
@@ -66,3 +100,8 @@ services:
 
       # work with docker-compose's dns
       CONCOURSE_CONTAINERD_DNS_PROXY_ENABLE: "true"
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "20"
+        max-size: "10m"

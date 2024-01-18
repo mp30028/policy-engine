@@ -3,11 +3,7 @@ See documentation at [Concourse Documentation](https://concourse-ci.org/docs.htm
 [Local Instance started up with docker compose defaults](https://localhost:9443/)
 
 ### Logging in with fly on localhost
-fly -t example_01 login -c https://localhost:9443 --ca-cert G:\dev\java-projects\wksp-swot\policy-engine\docker\concourse\concourse-keys\localhost.crt
-
-fly -t example_01 login -c http://localhost:8080
-
-fly -t example_01 login -c http://mp30028.com
+fly -t example_01 login -c https://localhost:9943 --ca-cert ..\..\docker\concourse\certs\localhost.crt
 
 ### create and run hello world
 1. `cd ..\.pipelines\hello-world`
